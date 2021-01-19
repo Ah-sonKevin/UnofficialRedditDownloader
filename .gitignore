@@ -23,7 +23,7 @@ pnpm-debug.log*
 *.sw?
 
 # JS File
-*.js
+app/**/*.js
 *.js.map
 
 #LocalData
