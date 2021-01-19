@@ -1,0 +1,47 @@
+{
+    "env": {
+        "browser": true,
+        "es2020": true
+    },
+    "extends": [
+        "eslint:recommended",
+        "plugin:vue/essential",
+        "plugin:vue/vue3-recommended",
+        "plugin:vue/vue3-strongly-recommended",
+        "plugin:@typescript-eslint/recommended",
+        
+        
+        "prettier"
+    ],
+    "parser": "vue-eslint-parser",
+    "parserOptions": {
+        "ecmaVersion": 2020,
+        "parser": "@typescript-eslint/parser",
+        "sourceType": "module"
+    },
+    "plugins": [
+        "prettier",
+        "vue",
+        "@typescript-eslint"
+    ],
+    "rules": {
+        "prettier/prettier": "warn",
+        "vue/no-multiple-template-root": "off",
+        "no-magic-numbers": ["warn", {
+            "ignore": [-1, 0, 1, 401],
+            "ignoreArrayIndexes": true,
+            "enforceConst": true,
+            "detectObjects": true
+            // "ignoreDefaultValues": true
+        }],
+        "vue/max-attributes-per-line":"off",
+        "vue/html-self-closing":"off",
+        "vue/singleline-html-element-content-newline":"off"
+    },
+    "overrides": [{
+        "files": ["**/enum/**"],
+        "rules": {
+            "no-magic-numbers": "off"
+        }
+    }]
+}
