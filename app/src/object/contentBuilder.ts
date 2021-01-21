@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { postType } from "@/enum/postType";
-import { R_BadLinkError } from "@/errors/error";
+import { R_BadLinkError } from "@/errors/restartError";
 import SavedContent from "./savedContent";
 
 const parser = new DOMParser();
@@ -14,7 +14,7 @@ function cleanURL(url: string): string {
   const res = parser.parseFromString(url, "text/html").documentElement
     .textContent;
   if (!res) {
-    throw new R_BadLinkError("Cleaning URL Error  " + url);
+    throw new R_BadLinkError("Cleaning URL Error  " + url); //tocheck
   }
   return res;
 }

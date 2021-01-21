@@ -58,15 +58,17 @@
       </el-main>
       <el-footer height="auto" class="buttonGroup">
         <template v-if="!item.isDeleted">
-          <el-button type="text" @click="unsave()">Unsave</el-button>
-          <el-button v-if="item.isLink" type="text" @click="openLink">
+          <el-button @click="unsave">Unsave</el-button>
+          <el-button v-if="item.isLink" @click="openLink">
             Open link
           </el-button>
-          <el-button v-else type="text" @click="download()">Download</el-button>
-          <el-button type="text" @click="changeCollapse()">
+          <el-button v-else @click="download">
+            Download
+          </el-button>
+          <el-button @click="changeCollapse">
             {{ collapseMessage }}
           </el-button>
-          <el-button type="text" @click="seeOnReddit()">
+          <el-button @click="seeOnReddit">
             See on Reddit
           </el-button>
         </template>
@@ -79,6 +81,7 @@
   <el-Divider></el-Divider>
 </template>
 <script lang="ts">
+import ButtonTooltip from "../General/ButtonTooltip.vue";
 import ManagerLineListListImage from "./ManagerLineListListImage.vue";
 "use strict";
 import {

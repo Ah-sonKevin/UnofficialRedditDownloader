@@ -19,9 +19,8 @@
 <script lang="ts">
 import { defineComponent, ref } from "vue";
 import { buildContent } from "@/object/contentBuilder";
-import { R_BadLinkError } from "@/errors/error";
-import { R_DownloadError } from "@/errors/errorLight";
 import { download } from "@/helper/objectDownloader";
+import { R_BadLinkError, R_DownloadError } from "@/errors/restartError";
 
 export default defineComponent({
   name: "HomeDownloadLink",
@@ -46,7 +45,7 @@ export default defineComponent({
             if (el.ok) {
               return el.json();
             } else {
-              throw new R_BadLinkError("Couldn't access link");
+              throw new R_BadLinkError("Couldn't access link"); //tocheck
             }
           })
           .then(json => {
@@ -55,8 +54,6 @@ export default defineComponent({
           })
           .then(item => download(item))
           .catch(err => {
-            console.log(err); //todo console error
-            //todo redo error Management
             throw new R_DownloadError();
           });
       }

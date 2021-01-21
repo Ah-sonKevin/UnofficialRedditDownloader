@@ -1,4 +1,4 @@
-import { R_DataNotFoundError, R_NetworkError } from "@/errors/error";
+import { R_DataNotFoundError, R_NetworkError } from "@/errors/restartError";
 import { store } from "@/store";
 import AuthStore from "@/store/authStore";
 import { useRouter } from "vue-router";

@@ -1,4 +1,4 @@
-import { R_NetworkError } from "@/errors/error";
+import { R_NetworkError } from "@/errors/restartError";
 import { buildContent } from "@/object/contentBuilder";
 import SavedContent from "@/object/savedContent";
 import User from "@/object/User";

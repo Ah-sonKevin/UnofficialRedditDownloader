@@ -89,9 +89,7 @@ import { sorter } from "@/enum/sorter";
 import SavedContent from "@/object/savedContent";
 import { ElLoading, ElMessage } from "element-plus";
 import User from "@/object/User";
-import { R_NetworkError } from "@/errors/error";
 import { itemPerPageList } from "@/enum/itemPerPageList";
-import { R_UnauthorizedAccess } from "@/errors/errorLight";
 import { download } from "@/helper/objectDownloader";
 import {
   recGetSave,
@@ -108,6 +106,7 @@ import {
   hideDeleted,
   setFilter
 } from "../helper/filter";
+import { R_NetworkError, R_UnauthorizedAccess } from "@/errors/restartError";
 
 export default defineComponent({
   components: {
@@ -170,7 +169,7 @@ export default defineComponent({
           if (isGold.value === true) {
             void fetchCategories();
           }
-          subredditList.value = setSubredditList;
+          subredditList.value = setSubredditList(fetchedItems);
           loading.value = false;
         })
         .catch(reason => {

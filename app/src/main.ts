@@ -1,12 +1,11 @@
+import { managerErrors } from "@/errors/manageError";
+import router from "@/router";
+import { store } from "@/store";
 import App from "@/views/App.vue";
 import ElementPlus from "element-plus";
 import "element-plus/lib/theme-chalk/index.css";
 import { createApp } from "vue";
-import { R_Error } from "@/errors/error";
-import { R_ErrorLight } from "@/errors/errorLight";
-import { managerErrors } from "@/errors/manageError";
-import router from "@/router";
-import { store } from "@/store";
+import { R_Error } from "./errors/error";
 
 const app = createApp(App);
 app
@@ -17,7 +16,7 @@ app
 
 window.onunhandledrejection = (promiseEvent: PromiseRejectionEvent) => {
   const error = promiseEvent.reason;
-  if (error instanceof R_ErrorLight || error instanceof R_Error) {
+  if (error instanceof R_Error) {
     promiseEvent.preventDefault(); // message still show on firefox, bug
     managerErrors(error);
   } else {

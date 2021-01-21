@@ -6,10 +6,10 @@
 "use strict";
 
 import router from "@/router";
-import { R_NetworkError } from "@/errors/error";
 import { onBeforeMount, defineComponent } from "vue";
 import { generateAccessToken } from "@/helper/authHelper";
 import { useRoute } from "vue-router";
+import { R_NetworkError } from "@/errors/restartError";
 
 export default defineComponent({
   setup() {

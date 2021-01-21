@@ -1,8 +1,8 @@
 /* eslint-disable no-magic-numbers */
 
 import { postType } from "@/enum/postType";
-import { R_UnknowTypeError } from "@/errors/error";
-import { R_DownloadError, R_PartialDownloadError } from "@/errors/errorLight";
+import { R_PartialDownloadError } from "@/errors/notifError";
+import { R_DownloadError, R_UnknowTypeError } from "@/errors/restartError";
 import SavedContent from "@/object/savedContent";
 import { ElLoading } from "element-plus";
 import { ILoadingInstance } from "element-plus/lib/el-loading/src/loading.type";
@@ -279,6 +279,6 @@ export async function singleDownload(item: SavedContent): Promise<void> {
   } else if (itemType === postType.IMAGE || itemType === postType.VIDEO) {
     downloadMedia(item);
   } else {
-    throw new R_UnknowTypeError("Unknow type " + itemType + "  " + item.title);
+    throw new R_UnknowTypeError("Unknow type " + itemType + "  " + item.title); //todo switch without default
   }
 }

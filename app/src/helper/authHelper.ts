@@ -1,4 +1,4 @@
-import { R_AuthError, R_NetworkError } from "@/errors/error";
+import { R_AuthError, R_NetworkError } from "@/errors/restartError";
 import AuthStore from "@/store/authStore";
 import { useStore } from "vuex";
 import { getModule } from "vuex-module-decorators";

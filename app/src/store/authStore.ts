@@ -1,4 +1,4 @@
-import { R_AuthError, R_DataNotFoundError } from "@/errors/error";
+import { R_AuthError, R_DataNotFoundError } from "@/errors/restartError";
 import Auth from "@/object/Auth";
 import { Module, Mutation, VuexModule } from "vuex-module-decorators";
 

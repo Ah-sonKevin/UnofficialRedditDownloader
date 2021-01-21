@@ -1,38 +1,63 @@
 import router from "@/router";
 import { ElMessage, ElMessageBox } from "element-plus";
+import { IMessageOptions } from "element-plus/lib/el-message/src/types";
 import { R_Error } from "./error";
-import { R_ErrorLight } from "./errorLight";
+import { R_NotifError, R_PartialDownloadError } from "./notifError";
+import { R_RestartError } from "./restartError";
 
 const messageDuration = 10000;
 
-export function managerErrors(err: Error): void {
-  if (err instanceof R_Error) {
-    ElMessageBox.alert(
-      (err as R_Error).popupMessage +
-        "\n" +
-        err.postErrorTxt +
-        "\n" +
-        "You will be redirected to the homepage",
-      err.name,
-      {
-        callback: () => {
-          router.push({ name: "Home" });
+function getMessage(msg: string, html = false): IMessageOptions {
+  return {
+    message: msg,
+    duration: messageDuration,
+    showClose: true,
+    dangerouslyUseHTMLString: html
+  };
+}
+export function managerErrors(err: R_Error): void {
+  console.log(err);
+  if (err instanceof R_RestartError) {
+    router.push({ name: "Home" });
+    ElMessage({ message: err.popupMessage, showClose: true });
+  } else if (err instanceof R_NotifError) {
+    if (err instanceof R_PartialDownloadError) {
+      if (err.success.length === 0) {
+        ElMessage(getMessage("The files couldn't be downloaded"));
+      } else if (err.fail.length > 0) {
+        if (err.fail.length === 1) {
+          ElMessage(
+            getMessage("The file " + err.fail[0] + " couldn't be downloaded")
+          );
+        } else {
+          const showPopup = () => {
+            if (err instanceof R_PartialDownloadError) {
+              let message = "";
+              let title = "";
+              message = "The following files couldn't be downloaded \n<ul>";
+              err.fail.forEach(el => {
+                message += "<li>" + el + "</li>";
+              });
+              message += "</ul>";
+              title = "Some files couldn't be downloaded";
+              ElMessageBox({
+                message: message,
+                showClose: true,
+                dangerouslyUseHTMLString: true,
+                title: title
+              });
+            }
+          };
+          ElMessage(
+            getMessage(
+              'Some files couldn\'t be download <el-button onclick="showPopup()" > See which one </el-button> ', //tocheck
+              true
+            )
+          );
         }
       }
-    );
-  } else if (err instanceof R_ErrorLight) {
-    if (err.popup) {
-      const option = err.html ? { dangerouslyUseHTMLString: true } : {};
-      ElMessageBox.alert(err.message, err.title, option);
     } else {
-      ElMessage.info({
-        type: "info",
-        message: err.message,
-        duration: messageDuration
-      });
-    }
-    if (err.redirect) {
-      router.push({ name: "Home" });
+      throw err;
     }
   } else throw err;
 }
