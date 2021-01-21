@@ -25,6 +25,7 @@ pnpm-debug.log*
 # JS File
 app/**/*.js
 *.js.map
+!*.config.js
 
 #LocalData
 app/_Local
