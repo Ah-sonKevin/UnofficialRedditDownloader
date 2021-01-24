@@ -4,6 +4,7 @@ import SavedContent from "@/object/savedContent";
 import User from "@/object/User";
 import { Couple } from "./couple";
 import { fetchOapi, postOapi } from "./fetchHelper";
+import { rawItem } from "./rawItemInterface";
 
 export async function recGetSave(
   username: string,
@@ -19,16 +20,18 @@ export async function recGetSave(
     throw new R_NetworkError(res.statusText);
   }
 
-  const result = await res.json();
-  result.data.children.forEach(async function(el: {
-    kind: string;
-    data: unknown;
-  }) {
-    const item = await buildContent(el);
-    items.push(item);
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  const result: rawItem = await res.json();
+  result.data.children.forEach(function(el) {
+    buildContent(el)
+      .then(item => items.push(item))
+      .catch(err => {
+        throw err;
+      });
   });
   if (result.data.after) {
-    return recGetSave(username, result.data.after, items);
+    //todo return recGetSave(username, result.data.after, items);
+    return items;
   } else {
     return items;
   }
@@ -58,9 +61,11 @@ export function setSubredditList(items: SavedContent[]): string[] {
 }
 
 export async function fetchCategories(): Promise<string[]> {
+  //todo
   const res = await fetchOapi("/api/saved_categories");
+  console.log(res);
   if (res.ok) {
-    return res.json().then(json => json);
+    return res.json().then(() => []);
   } else {
     return [];
   }

@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-
+//todo
 import { postType } from "@/enum/postType";
 
 const parser = new DOMParser();
@@ -68,7 +70,7 @@ export default class SavedContent {
     this.title = data.title;
     this.category = data.category;
     this.creationDate = new Date(data.created_utc);
-    this.redditUrl = "https://www.reddit.com" + data.permalink;
+    this.redditUrl = "https://www.reddit.com" + (data.permalink as string); //tocheck
 
     this.type = _type;
     this.imageLink = _imageLink;

@@ -32,7 +32,7 @@ export default defineComponent({
   setup(props) {
     const context = useContext();
 
-    async function downloadSelected() {
+    function downloadSelected() {
       context.emit("downloadSelected");
     }
 

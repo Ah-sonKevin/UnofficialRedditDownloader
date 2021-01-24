@@ -27,7 +27,7 @@ export default defineComponent({
         authModule.setAuth(permission.createAuthData());
         window.location.href = authModule.auth.AUTH_LINK;
       } else {
-        router.push({ name: "Manager" });
+        void router.push({ name: "Manager" });
       }
     }
 

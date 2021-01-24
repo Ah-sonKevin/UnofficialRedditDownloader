@@ -5,7 +5,7 @@
       placeholder="Enter item's URL"
       required
       pattern="(((http(s)?:\/\/)?www\.)?reddit\.com\/r\/(\w|\/)+)"
-      @input="checkOnChange"
+      @input="checkValidity"
     >
       <template #append>
         <el-button type="primary" @click="downloadItem"> Download </el-button>
@@ -21,6 +21,7 @@ import { defineComponent, ref } from "vue";
 import { buildContent } from "@/object/contentBuilder";
 import { download } from "@/helper/objectDownloader";
 import { R_BadLinkError, R_DownloadError } from "@/errors/restartError";
+import { rawItem } from "@/helper/rawItemInterface";
 
 export default defineComponent({
   name: "HomeDownloadLink",
@@ -29,16 +30,15 @@ export default defineComponent({
     const urlInput = ref("");
     const isValid = ref(true);
 
-    function checkOnChange() {
-      isValid.value = (document.getElementById(
-        "input"
-      ) as HTMLFormElement).check();
+    function checkValidity() {
+      const element = document.getElementById("input"); //todo put on beforeMount
+      if (element) {
+        isValid.value = (element as HTMLFormElement).reportValidity();
+      }
     }
 
     function downloadItem() {
-      isValid.value = (document.getElementById(
-        "input"
-      ) as HTMLFormElement).reportValidity();
+      checkValidity();
       if (isValid.value) {
         fetch(urlInput.value + ".json")
           .then(el => {
@@ -48,7 +48,7 @@ export default defineComponent({
               throw new R_BadLinkError("Couldn't access link"); //tocheck
             }
           })
-          .then(json => {
+          .then((json: rawItem[]) => {
             const content = json[0].data.children[0];
             return buildContent({ kind: content.kind, data: content.data });
           })
@@ -60,7 +60,7 @@ export default defineComponent({
     }
 
     return {
-      checkOnChange,
+      checkValidity,
       downloadItem,
       urlInput,
       isValid

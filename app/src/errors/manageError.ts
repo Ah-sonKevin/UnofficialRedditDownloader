@@ -18,7 +18,7 @@ function getMessage(msg: string, html = false): IMessageOptions {
 export function managerErrors(err: R_Error): void {
   console.log(err);
   if (err instanceof R_RestartError) {
-    router.push({ name: "Home" });
+    void router.push({ name: "Home" });
     ElMessage({ message: err.popupMessage, showClose: true });
   } else if (err instanceof R_NotifError) {
     if (err instanceof R_PartialDownloadError) {
@@ -27,7 +27,7 @@ export function managerErrors(err: R_Error): void {
       } else if (err.fail.length > 0) {
         if (err.fail.length === 1) {
           ElMessage(
-            getMessage("The file " + err.fail[0] + " couldn't be downloaded")
+            getMessage(`The file ${err.fail[0].name} +  couldn't be downloaded`)
           );
         } else {
           const showPopup = () => {
@@ -36,11 +36,11 @@ export function managerErrors(err: R_Error): void {
               let title = "";
               message = "The following files couldn't be downloaded \n<ul>";
               err.fail.forEach(el => {
-                message += "<li>" + el + "</li>";
+                message += "<li>" + el.name + "</li>";
               });
               message += "</ul>";
               title = "Some files couldn't be downloaded";
-              ElMessageBox({
+              void ElMessageBox({
                 message: message,
                 showClose: true,
                 dangerouslyUseHTMLString: true,

@@ -4,9 +4,9 @@
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link>
       <router-link to="/manager">Manager</router-link>
-      <el-button v-if="isConnected" type="text" @click="disconnect()"
-        >Disconnect</el-button
-      >
+      <el-button v-if="isConnected" type="text" @click="disconnect()">
+        Disconnect
+      </el-button>
     </nav>
   </header>
 </template>

@@ -9,15 +9,20 @@
         "plugin:vue/vue3-recommended",
         "plugin:vue/vue3-strongly-recommended",
         "plugin:@typescript-eslint/recommended",
-        
-        
+        "plugin:@typescript-eslint/recommended-requiring-type-checking",        
         "prettier"
     ],
+
     "parser": "vue-eslint-parser",
-    "parserOptions": {
+    "parserOptions": {        
         "ecmaVersion": 2020,
         "parser": "@typescript-eslint/parser",
-        "sourceType": "module"
+        "sourceType": "module",
+        "project":"tsconfig.json",
+        "extraFileExtensions": [".vue"],
+        "ecmaFeatures": {
+            "impliedStrict": true
+        }
     },
     "plugins": [
         "prettier",
@@ -36,7 +41,15 @@
         }],
         "vue/max-attributes-per-line":"off",
         "vue/html-self-closing":"off",
-        "vue/singleline-html-element-content-newline":"off"
+        "vue/singleline-html-element-content-newline":"off",        
+              "@typescript-eslint/restrict-template-expressions":["error",
+            {
+             "allowNumber": true,
+            "allowBoolean": true
+            }]
+        
+
+  
     },
     "overrides": [{
         "files": ["**/enum/**"],

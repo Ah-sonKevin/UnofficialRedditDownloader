@@ -52,7 +52,8 @@ export default class ItemStore extends VuexModule {
   async fetchCategories(): Promise<string[]> {
     const res = await fetchOapi("/api/saved_categories");
     if (res.ok) {
-      return res.json().then(json => json);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      return res.json();
     } else {
       return [];
     }

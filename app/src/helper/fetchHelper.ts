@@ -54,12 +54,13 @@ export async function refreshAccessToken(): Promise<void> {
     tokenBody = `grant_type=refresh_token&refresh_token=${refreshToken}`;
     const result = await postRedditAPI("/api/v1/access_token", tokenBody);
     if (result.ok) {
-      const res = await result.json();
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      const res: { access_token: string } = await result.json();
       const API_TOKEN: string = res.access_token;
       authModule.setToken(API_TOKEN);
     } else {
       authModule.resetToken();
-      useRouter().push({ name: "Home" });
+      void useRouter().push({ name: "Home" });
     }
   } else {
     throw new R_DataNotFoundError("Refresh Token Not Found ");
@@ -122,7 +123,7 @@ export async function postOapi(
       throw new R_NetworkError(response.statusText);
     }
   }
-  const result = await response.json();
+  const result: unknown = await response.json();
   return result;
 }
 

@@ -1,16 +1,15 @@
 /* eslint-disable no-magic-numbers */
 
 import { postType } from "@/enum/postType";
-import { R_PartialDownloadError } from "@/errors/notifError";
-import { R_DownloadError, R_UnknowTypeError } from "@/errors/restartError";
+import {
+  R_DownloadError,
+  R_NetworkError,
+  R_UnknowTypeError
+} from "@/errors/restartError";
 import SavedContent from "@/object/savedContent";
 import { ElLoading } from "element-plus";
 import { ILoadingInstance } from "element-plus/lib/el-loading/src/loading.type";
-import {
-  fetchBatchMediaFile,
-  fetchBatchMediaInfo,
-  fetchMedia
-} from "./fetchHelper";
+import { fetchBatchMediaInfo, fetchMedia } from "./fetchHelper";
 
 function cleanString(text: string) {
   //no ' !!
@@ -28,10 +27,15 @@ function downloadPageAsText(item: SavedContent): void {
 
   let res = "";
   if (item.type === postType.COMMENT) {
-    res = `A comment  by '${item.author}' of the post '${item.title}' by '${item.author}' from
-         ${item.subreddit} at ${item.redditUrl} \n\n\n\n ${stringContent}`;
+    res = `A comment  by '${item.author}' of the post '${item.title}' by '${
+      item.author
+    }' from
+         ${item.subreddit} at ${item.redditUrl} \n\n\n\n ${stringContent ??
+      ""}`;
   } else {
-    res = `'${item.title}' by '${item.author}' from ${item.subreddit} at ${item.redditUrl} \n\n\n\n ${stringContent}`;
+    res = `'${item.title}' by '${item.author}' from ${item.subreddit} at ${
+      item.redditUrl
+    } \n\n\n\n ${stringContent ?? ""}`;
   }
 
   downloadObject(new Blob([res]), getName(item.title, "html"));
@@ -47,7 +51,6 @@ function startDownload(x: Response) {
   const ordreDeGrandeur = Math.floor(length.length / 3);
   const divider = byteSize * ordreDeGrandeur * 1000;
   let extension = "";
-  console.log(ordreDeGrandeur + "  " + length);
   switch (ordreDeGrandeur) {
     case 0:
       extension = "B";
@@ -78,9 +81,9 @@ function updateDownloadSpinner(
 ) {
   downloadIndicator.setText(
     "Downloading : " +
-      receivedData / divider +
+      String(receivedData / divider) +
       "/" +
-      totalData / divider +
+      String(totalData / divider) +
       " " +
       extension
   );
@@ -93,6 +96,7 @@ async function fetchData(
 ) {
   if (x.ok) {
     const tmpRes = startDownload(x);
+    console.log("started");
 
     const { divider, extension, length } = tmpRes
       ? tmpRes
@@ -148,6 +152,7 @@ async function fetchData(
 }
 
 async function downloadMedia(item: SavedContent) {
+  const time = new Date().getTime();
   console.log("Download Image");
   const downloadIndicator = ElLoading.service({
     fullscreen: true,
@@ -155,13 +160,18 @@ async function downloadMedia(item: SavedContent) {
   });
 
   const url = item.externalUrl;
+  console.log(url);
+  console.log("fetchmedia");
   const x = await fetchMedia(url, item.needYtDl);
-  fetchData(
+  console.log("fetch data");
+  await fetchData(
     x,
     downloadIndicator,
     getName(item.title, url.split(".").slice(-1)[0])
   );
+  console.log(new Date().getTime() - time);
 }
+
 function downloadObject(object: Blob, nom: string): void {
   const img = URL.createObjectURL(object);
   const linkDown = document.createElement("a");
@@ -175,6 +185,8 @@ function downloadObject(object: Blob, nom: string): void {
 function getURL(
   item: SavedContent
 ): { url: string; name: string; needYtDl: boolean; folder: string } {
+  // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+  console.log(item.title + "   " + item.needYtDl);
   if (item.isGallery) {
     throw Error("Need Batch Download");
   }
@@ -184,7 +196,7 @@ function getURL(
     item.type === postType.LINK
   ) {
     return {
-      url: item.redditUrl,
+      url: item.externalUrl,
       name: getName(item.title, "html"),
       folder: "",
       needYtDl: false
@@ -192,12 +204,14 @@ function getURL(
   } else {
     return {
       url: item.externalUrl,
-      name: getName(item.title, item.externalUrl.split(".").slice(-1)[0]),
+      // name: getName(item.title, item.externalUrl.split(".").slice(-1)[0]),
+      name: cleanString(item.title),
       folder: "",
       needYtDl: item.needYtDl
     };
   }
 }
+//todo unit test (ex clean name function )
 
 function getBatchUrl(
   item: SavedContent
@@ -207,7 +221,7 @@ function getBatchUrl(
       return {
         url: el,
         name: getName(
-          item.title + "_" + (index + 1),
+          item.title + "_" + String(index + 1), //todo format nale
           el.split(".").slice(-1)[0]
         ),
         folder: cleanString(item.title),
@@ -219,31 +233,31 @@ function getBatchUrl(
   }
 }
 
-//todo use
-export async function download(
-  items: SavedContent | SavedContent[]
-): Promise<void> {
+export function download(items: SavedContent | SavedContent[]): void {
+  console.log("DOwnload");
   if (Array.isArray(items)) {
     if (items.length === 0) {
       return; //todo
     } else if (items.length === 1) {
-      singleDownload(items[0]);
+      void singleDownload(items[0]);
     } else {
-      batchDownload(items);
+      console.log("batch");
+      void batchDownload(items);
     }
   } else {
-    singleDownload(items);
+    void singleDownload(items);
   }
 }
 
+//todo check batch text
 export async function batchDownload(items: SavedContent[]): Promise<void> {
-  console.log("batchDownload : " + items.length);
+  console.log(`batchDownload :  + ${items.length}`);
 
   const downloadIndicator = ElLoading.service({
     fullscreen: true,
     text: "Download Preparation"
   });
-
+  //todo ux show list selected
   const urls: {
     url: string;
     name: string;
@@ -253,23 +267,34 @@ export async function batchDownload(items: SavedContent[]): Promise<void> {
   items.forEach(el => {
     urls.push(...getBatchUrl(el));
   });
+  console.log(urls);
+  console.log("GotUrl");
   const x = await fetchBatchMediaInfo(urls);
-  const arrays: {
-    success: { path: string; name: string }[];
-    fail: { path: string; name: string }[];
-  } = await x.json();
-  if (arrays.success.length > 0) {
-    const res = await fetchBatchMediaFile(arrays.success);
-    await fetchData(res, downloadIndicator, getName("archive", ".zip"));
+  void fetchData(x, downloadIndicator, "a.zip");
+  if (x.ok) {
+    console.log("GotMediaInfo");
+    console.log(x);
+    /*const arrays: {
+      success: { path: string; name: string }[];
+      fail: { path: string; name: string }[];
+    } = await x.json();
+    console.log("GotJson");
+    console.log(arrays);
+    if (arrays.success.length > 0) {
+      const res = await fetchBatchMediaFile(arrays.success);
+      await fetchData(res, downloadIndicator, getName("archive", ".zip"));
+    } else {
+      throw new R_PartialDownloadError(arrays);
+    }*/
   } else {
-    throw new R_PartialDownloadError(arrays);
+    throw new R_NetworkError(x.statusText);
   }
 }
 
-export async function singleDownload(item: SavedContent): Promise<void> {
+export function singleDownload(item: SavedContent): void {
   const itemType: string = item.type;
   if (item.isGallery) {
-    batchDownload([item]);
+    void batchDownload([item]);
   } else if (
     itemType === postType.TEXT ||
     itemType === postType.LINK ||
@@ -277,7 +302,7 @@ export async function singleDownload(item: SavedContent): Promise<void> {
   ) {
     downloadPageAsText(item);
   } else if (itemType === postType.IMAGE || itemType === postType.VIDEO) {
-    downloadMedia(item);
+    void downloadMedia(item);
   } else {
     throw new R_UnknowTypeError("Unknow type " + itemType + "  " + item.title); //todo switch without default
   }

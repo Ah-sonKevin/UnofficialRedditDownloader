@@ -32,7 +32,7 @@ import { defineComponent } from 'vue'
           @unsave="unsave($event)"
           @selectAll="selectAll"
           @unselectAll="unselectAll"
-          @downloadSelect="downloadSelected"
+          @downloadSelected="downloadSelected"
         />
         <ManagerSearch
           :filtered-items="partiallyFilteredItems"
@@ -173,11 +173,12 @@ export default defineComponent({
           loading.value = false;
         })
         .catch(reason => {
-          throw new R_NetworkError("Fail when getting data " + reason);
+          throw new R_NetworkError("Fail when getting data " + String(reason));
         });
     }
 
-    async function downloadSelected() {
+    function downloadSelected() {
+      console.log("downloadSelected");
       if (selectedItem.length === 0) {
         ElMessage.error("Selection is empty");
         return;
@@ -195,7 +196,7 @@ export default defineComponent({
       fetchUser()
         .then(user => {
           isGold.value = user.isGold;
-          getItems(user);
+          void getItems(user);
         })
         .catch(() => {
           throw new R_UnauthorizedAccess();

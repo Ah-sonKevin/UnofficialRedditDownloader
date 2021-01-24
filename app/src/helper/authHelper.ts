@@ -22,12 +22,17 @@ export function resetToken(): void {
   postOapi("/api/v1/revoke_token", [
     new Couple("token", authModule.token),
     new Couple("token_type_hint", "access_token")
-  ]);
-  postOapi("/api/v1/revoke_token", [
-    new Couple("token", authModule.refreshToken),
-    new Couple("token_type_hint", "refresh_token")
-  ]);
-  authModule.resetToken();
+  ])
+    .then(() =>
+      postOapi("/api/v1/revoke_token", [
+        new Couple("token", authModule.refreshToken),
+        new Couple("token_type_hint", "refresh_token")
+      ])
+    )
+    .then(() => authModule.resetToken())
+    .catch(err => {
+      throw new R_AuthError(err);
+    });
 }
 
 export async function generateAccessToken(received: CodeTruple): Promise<void> {
@@ -38,7 +43,9 @@ export async function generateAccessToken(received: CodeTruple): Promise<void> {
     !received.code
   ) {
     throw new R_AuthError(
-      `Error: ${received.error},  State:${received.state} = ${authModule.auth.AUTH_STRING},  Code:${received.code}`
+      `Error: ${received.error ?? "No Error"},  State:${received.state} = ${
+        authModule.auth.AUTH_STRING
+      },  Code:${received.code}`
     );
   }
   const tokenBody = `grant_type=authorization_code&code=${received.code}&redirect_uri=${authModule.auth.AUTH_REDIRECT}`;
@@ -47,9 +54,14 @@ export async function generateAccessToken(received: CodeTruple): Promise<void> {
     tokenBody
   );
   if (result.ok) {
-    const res = await result.json();
-    authModule.setToken(res.access_token as string);
-    authModule.setRefreshToken(res.refresh_token as string);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const res: {
+      access_token: string;
+      refresh_token: string;
+    } = await result.json();
+
+    authModule.setToken(res.access_token);
+    authModule.setRefreshToken(res.refresh_token);
   } else {
     throw new R_NetworkError(result.statusText);
   }

@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -29,7 +31,9 @@ async function isDownloadable(url: string): Promise<boolean> {
     headers: authHeaders
   });
   if (res.ok) {
-    const txt = await res.json();
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const txt: boolean = await res.json();
+    console.log(txt); //tocheck
     return txt;
   } else {
     return false;
@@ -90,11 +94,11 @@ const imageExtensionList = ["jpg", "jpeg", "png", "gif"];
 const videoExtensionList = ["mp4", "gifv"];
 
 function getImage(data: any): string {
-  const tempImage = data.preview?.images[0]?.source?.url;
+  const tempImage: string = data.preview?.images[0]?.source?.url;
   if (tempImage) {
     return tempImage;
   }
-  const tempImage2 = data?.media?.oembed?.thumbnail_url;
+  const tempImage2: string = data?.media?.oembed?.thumbnail_url;
   if (tempImage2) {
     return tempImage2;
   }
@@ -103,9 +107,9 @@ function getImage(data: any): string {
 
 function getEmbed(data: any): string {
   if (data?.media_embed?.content) {
-    return data?.media_embed?.content;
+    return data?.media_embed?.content as string;
   } else if (data?.media?.oembed?.html) {
-    return data.media.html;
+    return data.media.html as string;
   }
   return "";
 }

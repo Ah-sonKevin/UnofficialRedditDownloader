@@ -68,7 +68,7 @@ export default defineComponent({
     });
     //https://stackoverflow.com/questions/57350092/string-cant-be-used-to-index-type
     //Typescript typing for  array[key] (ici (key)(array))
-    const getValueByKey = (key: string) => (obj: Record<string, any>) =>
+    const getValueByKey = (key: string) => (obj: Record<string, string>) =>
       obj[key];
 
     onBeforeMount(() => {

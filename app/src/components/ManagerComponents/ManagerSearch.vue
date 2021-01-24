@@ -48,7 +48,7 @@ export default defineComponent({
       return [...array].sort((el1, el2) => el1.localeCompare(el2));
     });
 
-    function getSuggestion(query: string, cb: any) {
+    function getSuggestion(query: string, cb: (arg: unknown) => unknown) {
       const array: string[] = [];
       array.push(...listTitle.value);
 
