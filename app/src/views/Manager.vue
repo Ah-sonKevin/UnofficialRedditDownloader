@@ -118,7 +118,6 @@ export default defineComponent({
     ManagerSearch
   },
   setup() {
-    //todo fetch locally
     //todo get Size first
     console.log("Manager");
 

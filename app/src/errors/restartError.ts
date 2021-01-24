@@ -27,7 +27,6 @@ export class R_UnauthorizedAccess extends R_RestartError {
 }
 
 export class R_NetworkError extends R_RestartError {
-  //tocheck
   constructor(msg: string) {
     super(msg);
     this.nameError = "Network Error";
@@ -51,7 +50,6 @@ export class R_UnknowTypeError extends R_RestartError {
 
 export class R_DataNotFoundError extends R_RestartError {
   //tocheck
-  //todo
   constructor(msg: string) {
     super(msg);
     this.nameError = "Data not found Error";

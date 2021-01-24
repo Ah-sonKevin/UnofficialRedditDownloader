@@ -13,9 +13,10 @@ app
   .use(router)
   .use(ElementPlus)
   .mount("#app");
-
+//todo textContent/MEdiaContent class
+//todo precise if (!= null) instead of if()
 window.onunhandledrejection = (promiseEvent: PromiseRejectionEvent) => {
-  const error = promiseEvent.reason;
+  const error: unknown = promiseEvent.reason;
   if (error instanceof R_Error) {
     promiseEvent.preventDefault(); // message still show on firefox, bug
     managerErrors(error);

@@ -33,6 +33,8 @@ async function isDownloadable(url: string): Promise<boolean> {
   if (res.ok) {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const txt: boolean = await res.json();
+    console.log("Is Downloadable");
+    console.log(typeof txt);
     console.log(txt); //tocheck
     return txt;
   } else {

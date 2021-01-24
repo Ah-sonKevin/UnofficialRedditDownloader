@@ -17,7 +17,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, onBeforeMount } from "vue";
 import { buildContent } from "@/object/contentBuilder";
 import { download } from "@/helper/objectDownloader";
 import { R_BadLinkError, R_DownloadError } from "@/errors/restartError";
@@ -29,11 +29,15 @@ export default defineComponent({
   setup() {
     const urlInput = ref("");
     const isValid = ref(true);
+    let inputElement;
+
+    onBeforeMount(() => {
+      inputElement = document.getElementById("input");
+    });
 
     function checkValidity() {
-      const element = document.getElementById("input"); //todo put on beforeMount
-      if (element) {
-        isValid.value = (element as HTMLFormElement).reportValidity();
+      if (inputElement) {
+        isValid.value = (inputElement as HTMLFormElement).reportValidity();
       }
     }
 
@@ -45,7 +49,7 @@ export default defineComponent({
             if (el.ok) {
               return el.json();
             } else {
-              throw new R_BadLinkError("Couldn't access link"); //tocheck
+              throw new R_BadLinkError("Couldn't access link"); //todo change error
             }
           })
           .then((json: rawItem[]) => {

@@ -48,7 +48,7 @@ export async function fetchUser(): Promise<User> {
     throw new R_NetworkError(userRes.statusText);
   }
 }
-//tocheck file
+
 export function setSubredditList(items: SavedContent[]): string[] {
   const listSub: string[] = [];
   items.forEach((post: SavedContent) => {
@@ -61,7 +61,7 @@ export function setSubredditList(items: SavedContent[]): string[] {
 }
 
 export async function fetchCategories(): Promise<string[]> {
-  //todo
+  //later
   const res = await fetchOapi("/api/saved_categories");
   console.log(res);
   if (res.ok) {

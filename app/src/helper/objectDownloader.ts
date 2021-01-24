@@ -221,7 +221,7 @@ function getBatchUrl(
       return {
         url: el,
         name: getName(
-          item.title + "_" + String(index + 1), //todo format nale
+          item.title + "_" + String(index + 1), 
           el.split(".").slice(-1)[0]
         ),
         folder: cleanString(item.title),

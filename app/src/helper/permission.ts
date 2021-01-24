@@ -25,6 +25,6 @@ state=${AUTH_STRING}&redirect_uri=${AUTH_REDIRECT}&duration=permanent&scope=${AU
     );
   }
 };
-//todo readme
-//todo support me
-//todo explanation token
+//later readme
+//later support me
+//later explanation token
