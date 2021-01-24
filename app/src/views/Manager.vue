@@ -1,4 +1,3 @@
-import { defineComponent } from 'vue'
 <template>
   Due to Reddit's restrictions you can't access more than 1000 saved posts.
   <el-container class="pageContainer">
