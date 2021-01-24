@@ -1,8 +1,9 @@
+import { RedditRawData } from "../object/redditDataInterface";
 export interface rawItem {
   data: {
     children: {
       kind: string;
-      data: unknown;
+      data: RedditRawData;
     }[];
     after: string;
   };

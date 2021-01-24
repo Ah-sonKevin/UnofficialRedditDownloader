@@ -4,6 +4,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 //todo
 import { postType } from "@/enum/postType";
+import { RedditRawData } from "./redditDataInterface";
 
 const parser = new DOMParser();
 
@@ -54,7 +55,7 @@ export default class SavedContent {
 
   constructor(
     kind: string,
-    _data: any,
+    _data: RedditRawData,
     _externalUrl: string,
     _imageLink: string,
     _type: string,
@@ -70,7 +71,7 @@ export default class SavedContent {
     this.title = data.title;
     this.category = data.category;
     this.creationDate = new Date(data.created_utc);
-    this.redditUrl = "https://www.reddit.com" + (data.permalink as string); //tocheck
+    this.redditUrl = "https://www.reddit.com" + data.permalink; //tocheck
 
     this.type = _type;
     this.imageLink = _imageLink;
@@ -80,15 +81,15 @@ export default class SavedContent {
 
     if (kind === "t1") {
       this.type = postType.COMMENT;
-      this.text = data.body;
-      this.htmlText = decodeHtml(data.body_html);
+      this.text = data.body ?? ""; //tocheck
+      this.htmlText = decodeHtml(data.body_html ?? "");
       this.title = data.link_title;
       this.postAuthor = data.link_author;
       this.postLink = data.link_url;
     } else if (data.is_self) {
       this.type = postType.TEXT; //Self post does not link outside of reddit (pure text)
       this.text = data.selftext;
-      this.htmlText = decodeHtml(data.selftext_html);
+      this.htmlText = decodeHtml(data.selftext_html ?? "");
     } else if (data.is_gallery) {
       this.type = postType.IMAGE;
       this.isGallery = data.is_gallery;
