@@ -12,7 +12,7 @@ function cleanURL(url: string): string {
   const res = parser.parseFromString(url, "text/html").documentElement
     .textContent;
   if (!res) {
-    throw new R_BadLinkError("Cleaning URL Error  " + url); //tocheck
+    throw new R_BadLinkError("Cleaning URL Error  " + url); //tocheck list element couldn't load
   }
   return res;
 }

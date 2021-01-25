@@ -41,7 +41,7 @@ export class R_BadLinkError extends R_RestartError {
 }
 
 export class R_UnknowTypeError extends R_RestartError {
-  //todo sendError
+  //todo sendError / LogLevel
   constructor(msg: string) {
     super(msg);
     this.nameError = "Unknow type Error";
@@ -61,3 +61,5 @@ export class R_DownloadError extends R_RestartError {
     super("");
   }
 }
+
+

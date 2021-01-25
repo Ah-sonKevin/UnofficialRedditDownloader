@@ -14,7 +14,7 @@ app
   .use(ElementPlus)
   .mount("#app");
 //todo textContent/MEdiaContent class
-//todo precise if (!= null) instead of if()
+
 window.onunhandledrejection = (promiseEvent: PromiseRejectionEvent) => {
   const error: unknown = promiseEvent.reason;
   if (error instanceof R_Error) {
