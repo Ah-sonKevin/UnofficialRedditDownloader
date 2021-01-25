@@ -9,6 +9,8 @@ import {
 import SavedContent from "@/object/savedContent";
 import { ElLoading } from "element-plus";
 import { ILoadingInstance } from "element-plus/lib/el-loading/src/loading.type";
+import { loadAsync } from "jszip";
+import { R_PartialDownloadError } from "../errors/notifError";
 import { fetchBatchMediaInfo, fetchMedia } from "./fetchHelper";
 
 function cleanString(text: string) {
@@ -141,9 +143,11 @@ async function fetchData(
       }
     }
 
-    downloadObject(new Blob(fileChunks), name);
     downloadIndicator.close();
     clearInterval(updateSpinner);
+    const file = new Blob(fileChunks);
+    downloadObject(file, name);
+    return file;
   } else {
     downloadIndicator.close();
     console.log("Bad response");
@@ -221,7 +225,7 @@ function getBatchUrl(
       return {
         url: el,
         name: getName(
-          item.title + "_" + String(index + 1), 
+          item.title + "_" + String(index + 1),
           el.split(".").slice(-1)[0]
         ),
         folder: cleanString(item.title),
@@ -236,9 +240,7 @@ function getBatchUrl(
 export function download(items: SavedContent | SavedContent[]): void {
   console.log("DOwnload");
   if (Array.isArray(items)) {
-    if (items.length === 0) {
-      return; //todo
-    } else if (items.length === 1) {
+    if (items.length === 1) {
       void singleDownload(items[0]);
     } else {
       console.log("batch");
@@ -247,6 +249,11 @@ export function download(items: SavedContent | SavedContent[]): void {
   } else {
     void singleDownload(items);
   }
+}
+
+interface SuccessList {
+  success: { path: string; name: string }[];
+  fail: { path: string; name: string }[];
 }
 
 //todo check batch text
@@ -270,22 +277,20 @@ export async function batchDownload(items: SavedContent[]): Promise<void> {
   console.log(urls);
   console.log("GotUrl");
   const x = await fetchBatchMediaInfo(urls);
-  void fetchData(x, downloadIndicator, "a.zip");
-  if (x.ok) {
-    console.log("GotMediaInfo");
-    console.log(x);
-    /*const arrays: {
-      success: { path: string; name: string }[];
-      fail: { path: string; name: string }[];
-    } = await x.json();
-    console.log("GotJson");
-    console.log(arrays);
-    if (arrays.success.length > 0) {
-      const res = await fetchBatchMediaFile(arrays.success);
-      await fetchData(res, downloadIndicator, getName("archive", ".zip"));
-    } else {
-      throw new R_PartialDownloadError(arrays);
-    }*/
+  const blob = await fetchData(x, downloadIndicator, "a.zip");
+  if (blob) {
+
+    void loadAsync(blob).then(el => {
+      console.log(el);
+      void el.files["result.json"].async("string").then(res => {
+        //tocheck eslint disabled line
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        const arrays: SuccessList = JSON.parse(res);
+        if (arrays.fail.length > 0) {
+          throw new R_PartialDownloadError(arrays);
+        }
+      });
+    });
   } else {
     throw new R_NetworkError(x.statusText);
   }
