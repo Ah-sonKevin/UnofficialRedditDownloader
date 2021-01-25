@@ -9,9 +9,6 @@ require("node-fetch");
 const cors = require("cors");
 const ffmpeg = require("fluent-ffmpeg");
 const compression = require("compression"); //todo migrate from request
-const archiver = require("archiver");
-const unzipper = require("unzipper");
-const { PassThrough } = require("stream");
 const Packer = require("zip-stream");
 const Stream = require("stream");
 
@@ -234,6 +231,7 @@ app.post("/api/downBatchInfo/", (req, res, next) => {
   });
   archive.on("finish", () => {
     console.log("archive finish");
+    //   console.log(JSON.stringify(archive))
     res.end();
   });
 
