@@ -36,6 +36,12 @@ export default defineComponent({
     };
   }
 });
+//tocheck
+/*
+  // partie de code facultative pour l'approximation des multiples
+  for (var aMultiples = ["KiB", "MiB", "GiB", "TiB", "PiB", "EiB", "ZiB", "YiB"], nMultiple = 0, nApprox = nBytes / 1024; nApprox > 1; nApprox /= 1024, nMultiple++) {
+    sOutput = nApprox.toFixed(3) + " " + aMultiples[nMultiple] + " (" + nBytes + " bytes)";
+    */
 </script>
 <style scoped>
 input:valid {

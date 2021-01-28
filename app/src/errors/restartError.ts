@@ -61,5 +61,3 @@ export class R_DownloadError extends R_RestartError {
     super("");
   }
 }
-
-
