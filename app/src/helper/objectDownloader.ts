@@ -278,7 +278,7 @@ export async function batchDownload(items: SavedContent[]): Promise<void> {
     fullscreen: true,
     text: "Download Preparation"
   });
-  //todo ux show list selected
+ 
   const urls: {
     url: string;
     name: string;

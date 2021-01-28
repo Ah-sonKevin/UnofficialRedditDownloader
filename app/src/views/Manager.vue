@@ -32,6 +32,7 @@
           @selectAll="selectAll"
           @unselectAll="unselectAll"
           @downloadSelected="downloadSelected"
+          @showSelectedDialog="showSelectedDialog"
         />
         <ManagerSearch
           :filtered-items="partiallyFilteredItems"
@@ -73,6 +74,13 @@
       </el-footer>
     </el-container>
   </el-container>
+  <el-dialog title='Items selected' v-model="showSelectedDialog">
+    <ul>
+    <li v-for='item in selectedItem'> //tocheck allwo to unselect
+      {{item.title}}
+    </li>
+    </ul>
+  </el-dialog>
 </template>
 <script lang="ts">
 "use strict";
@@ -131,6 +139,12 @@ export default defineComponent({
     const typeFilter: Ref<string[]> = ref([]);
     const categoryFilter: Ref<string[]> = ref([]);
     const subredditFilter: Ref<string[]> = ref([]);
+
+    const showSelectedDialog = ref(false)
+
+    function showSelected(){
+      showSelectedDialog.value = !showSelectedDialog.value
+    }
 
     function changePage(_page: number) {
       page.value = _page;
@@ -301,6 +315,8 @@ export default defineComponent({
       searchInput,
       updateInput,
       partiallyFilteredItems
+
+      showSelectedDialog
     };
   }
 });

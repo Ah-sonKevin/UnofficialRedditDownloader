@@ -8,6 +8,7 @@
   >
 
   {{ "Selected items: " + selectedItem.length }}
+  <el-button type='text' @click='showSelectedDialog'>See selected</el-button>
 </template>
 
 <script lang="ts">
@@ -34,6 +35,9 @@ export default defineComponent({
 
     function downloadSelected() {
       context.emit("downloadSelected");
+    }
+    function showSelectedDialog(){
+      context.emit('showSelectedDialog')
     }
 
     function unsave() {
@@ -70,7 +74,8 @@ export default defineComponent({
       context,
       unsave,
       applyFunctionToArray,
-      unselectAll
+      unselectAll,
+      showSelectedDialog
     };
   }
 });
