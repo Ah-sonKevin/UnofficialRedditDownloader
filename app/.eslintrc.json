@@ -10,7 +10,9 @@
         "plugin:vue/vue3-strongly-recommended",
         "plugin:@typescript-eslint/recommended",
         "plugin:@typescript-eslint/recommended-requiring-type-checking",        
-        "prettier"
+        "prettier",
+        "plugin:jest/recommended",
+        "plugin:jest/style"
     ],
 
     "parser": "vue-eslint-parser",
@@ -27,7 +29,8 @@
     "plugins": [
         "prettier",
         "vue",
-        "@typescript-eslint"
+        "@typescript-eslint",
+        "jest"
     ],
     "rules": {
         "prettier/prettier": "warn",

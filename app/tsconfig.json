@@ -19,7 +19,7 @@
     "resolveJsonModule": true,
     "baseUrl": ".",
     "types": [
-      "webpack-env"
+      "webpack-env","jest", "node" //tocheck
     ],
     "paths": {
       "@/*": [
@@ -41,7 +41,7 @@
     "src/**/*.ts",
     "src/**/*.vue",
     "src/**/*.d.ts"
-  ],
+, "src/tests/styleMock.ts"  ],
   "exclude": [
     "node_modules"
   ]
