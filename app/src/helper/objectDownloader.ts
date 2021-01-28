@@ -1,6 +1,6 @@
 /* eslint-disable no-magic-numbers */
 
-import { postType } from "@/enum/postType";
+import { postType } from '@/enum/postType';
 import {
   R_DownloadError,
   R_NetworkError,
@@ -29,17 +29,19 @@ export interface ItemInfo {
   folder: string;
 }
 
-function cleanString(text: string) {
+export function cleanString(text: string) {
   //no ' !!
   return text
     .replace(/\W/gi, "_")
     .replace(/_+/gi, "_")
+    .replace(/^_/,"")
+    .replace(/_$/,'')
     .substr(0, 100);
 }
 function getName(text: string, extension: string): string {
   return cleanString(text) + "." + extension;
 }
-
+//tocheck lint staged
 function downloadPageAsText(item: SavedContent): void {
   const parser = new DOMParser();
 
@@ -234,7 +236,7 @@ function getURL(
     };
   }
 }
-//todo unit test (ex clean name function )
+//todo test private ?
 
 function getBatchUrl(item: SavedContent): ItemInfo[] {
   if (item.isGallery) {

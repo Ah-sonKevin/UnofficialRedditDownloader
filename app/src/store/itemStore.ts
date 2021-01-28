@@ -1,6 +1,6 @@
 import { Couple } from "@/helper/couple";
 import { fetchOapi, postOapi } from "@/helper/fetchHelper";
-import SavedContent from "@/object/savedContent";
+import SavedContent from '@/object/savedContent';
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 
 //@Module({ dynamic: true, store, name: 'item' })
