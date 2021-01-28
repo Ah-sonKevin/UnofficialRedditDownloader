@@ -13,6 +13,11 @@ module.exports = {
         config.resolve.alias.set('@managerComponents', path.resolve(__dirname, 'src/components/ManagerComponents'));
         config.resolve.alias.set('@', path.resolve(__dirname, 'src'));
     },
+      pluginOptions: {
+    webpackBundleAnalyzer: {
+      openAnalyzer: false
+    }
+  }
 
     
 };
