@@ -13,9 +13,28 @@ import { loadAsync } from "jszip";
 import { R_PartialDownloadError } from "../errors/notifError";
 import { fetchBatchMediaInfo, fetchMedia } from "./fetchHelper";
 
+interface Item {
+  path: string;
+  name: string;
+}
+interface SuccessList {
+  success: Item[];
+  fail: Item[];
+}
+
+export interface ItemInfo {
+  url: string;
+  name: string;
+  needYtDl: boolean;
+  folder: string;
+}
+
 function cleanString(text: string) {
   //no ' !!
-  return text.replace(/\W/gi, "_");
+  return text
+    .replace(/\W/gi, "_")
+    .replace(/_+/gi, "_")
+    .substr(0, 100);
 }
 function getName(text: string, extension: string): string {
   return cleanString(text) + "." + extension;
@@ -217,9 +236,7 @@ function getURL(
 }
 //todo unit test (ex clean name function )
 
-function getBatchUrl(
-  item: SavedContent
-): { url: string; name: string; needYtDl: boolean; folder: string }[] {
+function getBatchUrl(item: SavedContent): ItemInfo[] {
   if (item.isGallery) {
     return item.galleryURLs.map((el, index) => {
       return {
@@ -251,11 +268,6 @@ export function download(items: SavedContent | SavedContent[]): void {
   }
 }
 
-interface SuccessList {
-  success: { path: string; name: string }[];
-  fail: { path: string; name: string }[];
-}
-
 //todo check batch text
 export async function batchDownload(items: SavedContent[]): Promise<void> {
   console.log(`batchDownload :  + ${items.length}`);
@@ -279,7 +291,6 @@ export async function batchDownload(items: SavedContent[]): Promise<void> {
   const x = await fetchBatchMediaInfo(urls);
   const blob = await fetchData(x, downloadIndicator, "a.zip");
   if (blob) {
-
     void loadAsync(blob).then(el => {
       console.log(el);
       void el.files["result.json"].async("string").then(res => {
@@ -309,6 +320,6 @@ export function singleDownload(item: SavedContent): void {
   } else if (itemType === postType.IMAGE || itemType === postType.VIDEO) {
     void downloadMedia(item);
   } else {
-    throw new R_UnknowTypeError("Unknow type " + itemType + "  " + item.title); //todo switch without default
+    throw new R_UnknowTypeError("Unknow type " + itemType + "  " + item.title); 
   }
 }

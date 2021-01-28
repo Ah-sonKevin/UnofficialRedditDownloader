@@ -29,15 +29,15 @@ export default defineComponent({
   setup() {
     const urlInput = ref("");
     const isValid = ref(true);
-    let inputElement;
+    let inputElement: HTMLFormElement;
 
     onBeforeMount(() => {
-      inputElement = document.getElementById("input");
+      inputElement = document.getElementById("input") as HTMLFormElement;
     });
 
     function checkValidity() {
       if (inputElement) {
-        isValid.value = (inputElement as HTMLFormElement).reportValidity();
+        isValid.value = inputElement.reportValidity();
       }
     }
 
@@ -49,7 +49,7 @@ export default defineComponent({
             if (el.ok) {
               return el.json();
             } else {
-              throw new R_BadLinkError("Couldn't access link"); //todo change error
+              throw new R_BadLinkError("Couldn't access link");
             }
           })
           .then((json: rawItem[]) => {
