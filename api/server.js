@@ -8,7 +8,7 @@ const youtubeDl = require("youtube-dl");
 require("node-fetch");
 const cors = require("cors");
 const ffmpeg = require("fluent-ffmpeg");
-const compression = require("compression"); //todo migrate from request
+const compression = require("compression");
 const Packer = require("zip-stream");
 const Stream = require("stream");
 
@@ -71,14 +71,14 @@ function youtubeDlDownload(url, name, next, res, callback, failCallback) {
         .audioCodec("copy")
         .videoCodec("copy")
         .saveToFile(name + "." + videoExt) // cant directly output stream for mp4 format
-        .on("error", (err) => {
+        .on("error", () => {
           clean();
           console.log("ffmpeg error");
         })
         .on("end", () => {
           clean();
           const stream = createReadStream(name + "." + videoExt)
-            .on("error", (err) => {
+            .on("error", () => {
               unlink(name + "." + videoExt, () => {});
               stream.destroy();
             })
@@ -130,9 +130,8 @@ function youtubeDlDownload(url, name, next, res, callback, failCallback) {
       stream.pause();
       callback(stream);
     },
-    (err) => {
+    () => {
       failCallback();
-
       getInfoFormat(
         formatVideoOnlyStream,
         (videoInfo) => {
@@ -176,12 +175,12 @@ function youtubeDlDownload(url, name, next, res, callback, failCallback) {
                   failCallback(err);
                 });
             },
-            (err) => {
-              failback(new Error("Can't get audio data"));
+            () => {
+              failCallback(new Error("Can't get audio data"));
             }
           );
         },
-        (err) => {
+        () => {
           failCallback(new Error("Get Info Video Error"));
         }
       );
@@ -256,7 +255,7 @@ app.post("/api/downBatchInfo/", (req, res, next) => {
   let toZipList = [];
   let zipping = false;
 
-  const archive = new Packer({ store: true, level: 0 }); //todo option
+  const archive = new Packer({ store: true, level: 0 });
   archive
     .on("error", (err) => {
       console.log("archive error");
@@ -270,13 +269,7 @@ app.post("/api/downBatchInfo/", (req, res, next) => {
       //   console.log(JSON.stringify(archive))
       res.end();
       archive.destroy();
-    })
-    .on("end", () => console.log("Archive End"))
-    .on("unpipe", () => console.log("Archive unpipe"))
-    .on("end", () => console.log("Archive End"));
-
-  //todo unpipe
-  res.on("error", () => console.log("resError"));
+    });
 
   function startZip() {
     console.log("startZip  " + toZipList.length);
@@ -288,7 +281,7 @@ app.post("/api/downBatchInfo/", (req, res, next) => {
       console.log("startArchiving " + el.name.substr(0, 30));
       const name = el.name.substr(0, 30);
       const stream = el.stream
-        .on("error", (err) => {
+        .on("error", () => {
           console.log("Reject  Stream Error Zip " + name); //tocheck why not called
           el.reject();
           failArray.push(name); //tocheck
@@ -304,33 +297,25 @@ app.post("/api/downBatchInfo/", (req, res, next) => {
           console.log(toZipList.length);
           toZipList.splice(0, 1);
           console.log(toZipList.length);
-          //todo when received strream check if already closed
-          //todo asynchroine
-          //todo event not immediate
           startZip();
         });
       //todo add extensino to name
-      archive.entry(
-        stream,
-        { name: el.name.substr(0, 30) },
-        function (err, entry) {
-          if (err) {
-            compressed = false;
-            // console.log(" RejectCompression Error  " + name + "  " + err);
+      archive.entry(stream, { name: el.name.substr(0, 30) }, function (err) {
+        if (err) {
+          compressed = false;
+          // console.log(" RejectCompression Error  " + name + "  " + err);
 
-            failArray.push(name);
-            //  stream.on("close", () => el.reject());
+          failArray.push(name);
+          //  stream.on("close", () => el.reject());
 
-            //startZip();
-          } else {
-            compressed = true;
-            fileArray.push({
-              //todo Move
-              name: name,
-            });
-          }
+          //startZip();
+        } else {
+          compressed = true;
+          fileArray.push({
+            name: name,
+          });
         }
-      );
+      });
     } else {
       console.log("STOP");
       zipping = false;
@@ -341,14 +326,14 @@ app.post("/api/downBatchInfo/", (req, res, next) => {
     next(err);
     archive.destroy();
   });
-  //todo
+
   req.body.forEach((element) => {
     const folder = element.folder ? `${element.folder}/` : "";
     const nameFile = folder + element.name.substr(0, 30);
     const path = `media/${element.name}`;
     console.log(nameFile);
 
-    const needYtdl = element.needYtDl ? JSON.parse(element.needYtDl) : false; //todo no undefined
+    const needYtdl = element.needYtDl ? JSON.parse(element.needYtDl) : false;
     if (needYtdl) {
       promiseArray.push(
         new Promise((promise, reject) =>
@@ -359,20 +344,15 @@ app.post("/api/downBatchInfo/", (req, res, next) => {
             next,
             res,
             (stream) => {
-              stream
-                .on("error", (err) => {
-                  failArray.push(nameFile);
-                  reject();
-                  console.log(
-                    "Reject ERROR Callbaback " + nameFile + "   " + err
-                  );
+              stream.on("error", (err) => {
+                failArray.push(nameFile);
+                reject();
+                console.log(
+                  "Reject ERROR Callbaback " + nameFile + "   " + err
+                );
+              });
 
-                  //   stream.resume().destroy(); //todo check destroy
-                })
-                .on("close", () => console.log("close " + nameFile))
-                .on("end", () => console.log("end " + nameFile));
               if (zipping) {
-                //todo try do it without recursion
                 toZipList.push({
                   stream: stream,
                   name: nameFile,
@@ -413,17 +393,15 @@ app.post("/api/downBatchInfo/", (req, res, next) => {
       resultPromises.forEach((el) => console.log(el.status));
 
       const stream = new Stream.Readable();
-      stream
-        .on("error", (err) => {
-          console.log("Stream Error");
-          stream.destroy();
-          //next(err);
-        })
-        .on("close", () => console.log("stream success")); //todo on open
+      stream.on("error", () => {
+        console.log("Stream Error");
+        stream.destroy();
+        //next(err);
+      });
       stream.push(JSON.stringify({ success: fileArray, fail: failArray }));
       stream.push(null);
 
-      archive.entry(stream, { name: "result.json" }, function (err, entry) {
+      archive.entry(stream, { name: "result.json" }, function (err) {
         if (err) {
           console.log("compression error " + "result.json" + "   " + err);
         } else {
@@ -432,15 +410,10 @@ app.post("/api/downBatchInfo/", (req, res, next) => {
         archive.finish();
       });
     }, 10000);
-
-    //todo make lisot at compression time
-    //todo test different type video / extention / type/ need ytdl
   });
 });
 //TODO SELECT all page // all filtered
-//todo confirm /undo last batch delete
 //todo cancel download
-//todo popup xxx donwload done
 //tocheck pipeline send error and make sure to clean all stream
 app.post("/api/downBatchList", function (req, res) {
   const list = req.body;
@@ -449,7 +422,7 @@ app.post("/api/downBatchList", function (req, res) {
   list.forEach((el) => unlink(el.name, () => {}));
 });
 
-app.use(function (err, req, res, next) {
+app.use(function (err, req, res) {
   if (req.xhr) {
     console.log("Error caught");
     // console.log(err);
