@@ -1,12 +1,16 @@
 {
     "env": {
         "node": true,
-        "commonjs": true,
         "es2020": true
     },
     "extends": ["eslint:recommended", "prettier", "plugin:node/recommended"],
+    "parser":"@babel/eslint-parser",
     "parserOptions": {
-        "ecmaVersion": 2020
+        "sourceType": "module",
+        "ecmaVersion": 2020,
+        "ecmaFeatures": {
+            "impliedStrict": true
+        }
     },
     "rules": {
         "prettier/prettier": "error",
