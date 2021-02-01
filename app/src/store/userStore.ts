@@ -1,5 +1,5 @@
 import { R_DataNotFoundError } from "@/errors/restartError";
-import User from "@/object/User";
+import User from "@/User/User";
 import { Module, Mutation, VuexModule } from "vuex-module-decorators";
 
 // @Module({ dynamic: true, store, name: 'user' })

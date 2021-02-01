@@ -4,15 +4,15 @@ import {
 	R_NetworkError,
 	R_UnknowTypeError,
 } from "@/errors/restartError";
-import SavedContent from "@/object/savedContent";
+import SavedContent from "@/savedContent/savedContent";
 import { ElLoading } from "element-plus";
 import { ILoadingInstance } from "element-plus/lib/el-loading/src/loading.type";
 import { loadAsync } from "jszip";
-import { R_PartialDownloadError } from "../errors/notifError";
-import { fetchBatchMediaInfo, fetchMedia } from "./fetchHelper";
-import { ItemInfo, SuccessList } from "./ItemInterface";
-import { notify } from "./notifier";
-import { cleanString } from "./stringHelper";
+import { R_PartialDownloadError } from "../../errors/notifError";
+import { fetchBatchMediaInfo, fetchMedia } from "../fetchHelper/fetchHelper";
+import { ItemInfo, SuccessList } from "../../savedContent/ItemInterface";
+import { notify } from "../notifierHelper";
+import { cleanString } from "../stringHelper";
 
 let downloading = false;
 
@@ -131,6 +131,7 @@ async function fetchData(
 				downloadIndicator.setText("Downloading ...");
 			}
 		}, 1000);
+		// eslint-disable-next-line no-loops/no-loops
 		while (reading && downloading) {
 			// replace no for loop
 			// eslint-disable-next-line no-await-in-loop

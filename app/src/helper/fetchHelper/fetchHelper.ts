@@ -3,7 +3,7 @@ import { store } from "@/store";
 import AuthStore from "@/store/authStore";
 import { useRouter } from "vue-router";
 import { getModule } from "vuex-module-decorators";
-import { Couple } from "./couple";
+import { Couple } from "./requestArgument";
 
 const REDDIT_API = "https://www.reddit.com";
 const OAUTH_API = "https://oauth.reddit.com";

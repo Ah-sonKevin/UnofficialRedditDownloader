@@ -1,4 +1,4 @@
-import SavedContent from "@/object/savedContent";
+import SavedContent from "@/savedContent/savedContent";
 
 export function filterItems(
 	items: SavedContent[],

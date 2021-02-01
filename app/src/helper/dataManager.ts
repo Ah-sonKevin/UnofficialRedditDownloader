@@ -1,10 +1,10 @@
 import { R_NetworkError } from "@/errors/restartError";
-import { buildContent } from "@/object/contentBuilder";
-import SavedContent from "@/object/savedContent";
-import User from "@/object/User";
-import { Couple } from "./couple";
-import { fetchOapi, postOapi } from "./fetchHelper";
-import { RawItem, RawItemUnit } from "./rawItemInterface";
+import { buildContent } from "@/savedContent/contentBuilder";
+import SavedContent from "@/savedContent/savedContent";
+import User from "@/User/User";
+import { Couple } from "./fetchHelper/requestArgument";
+import { fetchOapi, postOapi } from "./fetchHelper/fetchHelper";
+import { RawItem, RawItemUnit } from "../savedContent/rawItemInterface";
 
 export async function recGetSave(
 	username: string,

@@ -2,8 +2,8 @@ import { R_AuthError, R_NetworkError } from "@/errors/restartError";
 import AuthStore from "@/store/authStore";
 import { useStore } from "vuex";
 import { getModule } from "vuex-module-decorators";
-import { Couple } from "./couple";
-import { postOapi, postRedditAPI } from "./fetchHelper";
+import { Couple } from "../helper/fetchHelper/requestArgument";
+import { postOapi, postRedditAPI } from "../helper/fetchHelper/fetchHelper";
 
 export class CodeTruple {
 	state: string;

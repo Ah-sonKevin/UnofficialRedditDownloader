@@ -1,5 +1,5 @@
 import { sorter } from "@/enum/sorter";
-import SavedContent from "@/object/savedContent";
+import SavedContent from "@/savedContent/savedContent";
 
 export function getSortedContent(
 	content: SavedContent[],

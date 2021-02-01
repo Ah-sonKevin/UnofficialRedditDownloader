@@ -1,5 +1,5 @@
 import { R_AuthError, R_DataNotFoundError } from "@/errors/restartError";
-import Auth from "@/object/Auth";
+import Auth from "@/User/Auth";
 import { Module, Mutation, VuexModule } from "vuex-module-decorators";
 
 // @Module({ dynamic: true, store, name: 'auth', preserveState: true })

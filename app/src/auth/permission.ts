@@ -1,4 +1,4 @@
-import Auth from "@/object/Auth";
+import Auth from "@/User/Auth";
 import { AUTH_ID, AUTH_SECRET } from "./redditAppsIDs";
 
 export default {
