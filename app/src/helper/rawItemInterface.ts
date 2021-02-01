@@ -1,4 +1,5 @@
-import { RedditRawData } from "../object/redditDataInterface";
+import { RedditRawData } from '../object/redditDataInterface';
+
 export interface rawItem {
   data: {
     children: {

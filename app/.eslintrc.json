@@ -10,9 +10,16 @@
         "plugin:vue/vue3-strongly-recommended",
         "plugin:@typescript-eslint/recommended",
         "plugin:@typescript-eslint/recommended-requiring-type-checking",        
-        "prettier",
         "plugin:jest/recommended",
-        "plugin:jest/style"
+        "plugin:jest/style",
+        "plugin:security/recommended",
+        "plugin:regexp/recommended",
+        "plugin:promise/recommended",         
+        "plugin:array-func/recommended",
+        "plugin:eslint-comments/recommended",
+        "airbnb-typescript/base",
+        "plugin:jest-formatting/recommended",
+        "prettier"
     ],
 
     "parser": "vue-eslint-parser",
@@ -26,15 +33,19 @@
             "impliedStrict": true
         }
     },
-    "plugins": [
-        "prettier",
+    "plugins": [        
         "vue",
         "@typescript-eslint",
-        "jest"
+        "jest",
+       "jest-formatting",
+        "const-case",
+        "no-secrets",
+       // "xss",
+        "security",
+        "optimize-regex","promise","no-loops","prettier"
     ],
     "rules": {
-        "prettier/prettier": "warn",
-        "vue/no-multiple-template-root": "off",
+      "vue/no-multiple-template-root": "off",
         "no-magic-numbers": ["warn", {
             "ignore": [-1, 0, 1, 401],
             "ignoreArrayIndexes": true,
@@ -49,11 +60,34 @@
             {
              "allowNumber": true,
             "allowBoolean": true
-            }]
+            }],
+            "quotes": "off",
+            "@typescript-eslint/quotes": ["error","double"],
+            "import/extensions":"off",
+            "import/no-unresolved":"off",
+            "prefer-destructuring":"off",//tocheck
+            "no-unused-vars": "off",
+  "@typescript-eslint/no-unused-vars": ["warn"],
+  "no-param-reassign":"off",
+  "no-void":"off",
+  "promise/catch-or-return":["error",{"allowFinally":true}],
+            "const-case/uppercase": "error",
+            "no-secrets/no-secrets":"error",
+          //  "xss/no-mixed-html":"error",
+            //"xss/no-location-href-assign":"error",
+            "optimize-regex/optimize-regex": "warn",
+            "no-loops/no-loops":"warn",
+            "no-use-before-define": "off",
+            "@typescript-eslint/no-use-before-define": "off",
+            "import/prefer-default-export":"off",
+            "prettier/prettier": ["error", {"singleQuote": false,"trailingComma": "all"}]//tocheck
+        
+            
         
 
   
     },
+        
     "overrides": [{
         "files": ["**/enum/**"],
         "rules": {

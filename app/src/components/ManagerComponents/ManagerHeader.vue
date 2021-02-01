@@ -25,28 +25,28 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, useContext, computed, onBeforeMount } from "vue";
-import { itemPerPageList } from "@/enum/itemPerPageList";
-import { sorter } from "@/enum/sorter";
+import { defineComponent, useContext, computed, onBeforeMount } from 'vue';
+import { itemPerPageList } from '@/enum/itemPerPageList';
+import { sorter } from '@/enum/sorter';
 
 export default defineComponent({
-  name: "ManagerHeader",
+  name: 'ManagerHeader',
   props: {
     showDeleted: {
       required: true,
-      type: Boolean
+      type: Boolean,
     },
     itemPerPage: {
       required: true,
-      type: Number
+      type: Number,
     },
 
     selectedSorter: {
       required: true,
-      type: String
-    }
+      type: String,
+    },
   },
-  emits: ["changeShowDelete", "changeItemPerPage", "changeSelectedSorter"],
+  emits: ['changeShowDelete', 'changeItemPerPage', 'changeSelectedSorter'],
 
   setup(props) {
     const sorterList: string[] = [];
@@ -54,20 +54,20 @@ export default defineComponent({
     const context = useContext();
     const showDeletedComp = computed({
       get: () => props.showDeleted,
-      set: val => context.emit("changeShowDelete", val)
+      set: val => context.emit('changeShowDelete', val),
     });
 
     const itemPerPageComp = computed({
       get: () => props.itemPerPage,
-      set: val => context.emit("changeItemPerPage", val)
+      set: val => context.emit('changeItemPerPage', val),
     });
 
     const selectedSorterComp = computed({
       get: () => props.selectedSorter,
-      set: val => context.emit("changeSelectedSorter", val)
+      set: val => context.emit('changeSelectedSorter', val),
     });
-    //https://stackoverflow.com/questions/57350092/string-cant-be-used-to-index-type
-    //Typescript typing for  array[key] (ici (key)(array))
+    // https://stackoverflow.com/questions/57350092/string-cant-be-used-to-index-type
+    // Typescript typing for  array[key] (ici (key)(array))
     const getValueByKey = (key: string) => (obj: Record<string, any>) =>
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       obj[key];
@@ -78,7 +78,7 @@ export default defineComponent({
       }
       for (const el in itemPerPageList) {
         activesElementListNumberElement.push(
-          getValueByKey(el)(itemPerPageList)
+          getValueByKey(el)(itemPerPageList),
         );
       }
     });
@@ -88,9 +88,9 @@ export default defineComponent({
       itemPerPageComp,
       selectedSorterComp,
       activesElementListNumberElement,
-      sorterList
+      sorterList,
     };
-  }
+  },
 });
 </script>
 

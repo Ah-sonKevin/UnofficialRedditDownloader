@@ -17,22 +17,22 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onBeforeMount } from "vue";
-import { buildContent } from "@/object/contentBuilder";
-import { download } from "@/helper/objectDownloader";
-import { R_BadLinkError, R_DownloadError } from "@/errors/restartError";
-import { rawItem } from "@/helper/rawItemInterface";
+import { defineComponent, ref, onBeforeMount } from 'vue';
+import { buildContent } from '@/object/contentBuilder';
+import { download } from '@/helper/objectDownloader';
+import { R_BadLinkError, R_DownloadError } from '@/errors/restartError';
+import { rawItem } from '@/helper/rawItemInterface';
 
 export default defineComponent({
-  name: "HomeDownloadLink",
+  name: 'HomeDownloadLink',
 
   setup() {
-    const urlInput = ref("");
+    const urlInput = ref('');
     const isValid = ref(true);
     let inputElement: HTMLFormElement;
 
     onBeforeMount(() => {
-      inputElement = document.getElementById("input") as HTMLFormElement;
+      inputElement = document.getElementById('input') as HTMLFormElement;
     });
 
     function checkValidity() {
@@ -44,13 +44,12 @@ export default defineComponent({
     function downloadItem() {
       checkValidity();
       if (isValid.value) {
-        fetch(urlInput.value + ".json")
+        fetch(`${urlInput.value}.json`)
           .then(el => {
             if (el.ok) {
               return el.json();
-            } else {
-              throw new R_BadLinkError("Couldn't access link");
             }
+            throw new R_BadLinkError('Couldn\'t access link');
           })
           .then((json: rawItem[]) => {
             const content = json[0].data.children[0];
@@ -67,9 +66,9 @@ export default defineComponent({
       checkValidity,
       downloadItem,
       urlInput,
-      isValid
+      isValid,
     };
-  }
+  },
 });
 </script>
 

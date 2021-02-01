@@ -7,52 +7,52 @@
     >Change Category</el-button-->
   >
 
-  {{ "Selected items: " + selectedItem.length }}
-  <el-button type='text' @click='showSelectedDialog'>See selected</el-button>
+  {{ 'Selected items: ' + selectedItem.length }}
+  <el-button type="text" @click="showSelectedDialog">See selected</el-button>
 </template>
 
 <script lang="ts">
-import { useContext, defineComponent, PropType } from "vue";
-import { ElMessage } from "element-plus";
-import SavedContent from "@/object/savedContent";
-import { download, batchDownload } from "@/helper/objectDownloader";
+import { useContext, defineComponent, PropType } from 'vue';
+import { ElMessage } from 'element-plus';
+import SavedContent from '@/object/savedContent';
+import { download, batchDownload } from '@/helper/objectDownloader';
 
 export default defineComponent({
-  name: "ManagerTools",
+  name: 'ManagerTools',
   props: {
     selectedItem: {
       required: true,
-      type: Array as PropType<SavedContent[]>
+      type: Array as PropType<SavedContent[]>,
     },
     isGold: {
       required: true,
-      type: Boolean
-    }
+      type: Boolean,
+    },
   },
-  emits: ["unsave", "selectAll", "unselectAll", "downloadSelected"],
+  emits: ['unsave', 'selectAll', 'unselectAll', 'downloadSelected'],
   setup(props) {
     const context = useContext();
 
     function downloadSelected() {
-      context.emit("downloadSelected");
+      context.emit('downloadSelected');
     }
-    function showSelectedDialog(){
-      context.emit('showSelectedDialog')
+    function showSelectedDialog() {
+      context.emit('showSelectedDialog');
     }
 
     function unsave() {
-      context.emit("unsave");
+      context.emit('unsave');
     }
     function applyFunctionToArray(
       array: SavedContent[],
-      func: (el: SavedContent) => void
+      func: (el: SavedContent) => void,
     ): void {
       array.forEach(el => func(el));
     }
 
     function applyToSelected(func: (el: SavedContent) => void) {
       if (props.selectedItem.length === 0) {
-        ElMessage.error("Selection is empty");
+        ElMessage.error('Selection is empty');
         return;
       }
       applyFunctionToArray(props.selectedItem, func);
@@ -60,11 +60,11 @@ export default defineComponent({
     }
 
     function selectAll(): void {
-      context.emit("selectAll");
+      context.emit('selectAll');
     }
 
     function unselectAll() {
-      context.emit("unselectAll");
+      context.emit('unselectAll');
     }
 
     return {
@@ -75,9 +75,9 @@ export default defineComponent({
       unsave,
       applyFunctionToArray,
       unselectAll,
-      showSelectedDialog
+      showSelectedDialog,
     };
-  }
+  },
 });
 </script>
 

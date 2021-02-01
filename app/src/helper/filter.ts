@@ -1,10 +1,10 @@
-import SavedContent from "@/object/savedContent";
+import SavedContent from '@/object/savedContent';
 
 export function filterItems(
   items: SavedContent[],
   typeFilter: string[],
   categoryFilter: string[],
-  subredditFilter: string[]
+  subredditFilter: string[],
 ): SavedContent[] {
   if (
     typeFilter.length === 0 &&
@@ -20,15 +20,14 @@ export function filterItems(
       subredditFilter.includes(el.subreddit)
     ) {
       return true;
-    } else {
-      return false;
     }
+    return false;
   });
   return res;
 }
 export function searchByText(
   items: SavedContent[],
-  searchInput: string
+  searchInput: string,
 ): SavedContent[] {
   return items.filter(item => {
     return item.title.toLowerCase().includes(searchInput.toLowerCase());
@@ -36,7 +35,7 @@ export function searchByText(
 }
 export function hideDeleted(
   items: SavedContent[],
-  showDeleted: boolean
+  showDeleted: boolean,
 ): SavedContent[] {
   let res = [];
   if (showDeleted) {

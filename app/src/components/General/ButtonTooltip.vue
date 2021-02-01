@@ -8,22 +8,22 @@
 
 <script>
 export default {
-  name: "ButtonTooltip",
+  name: 'ButtonTooltip',
   props: {
     buttonType: {
       type: String,
-      default: "text"
+      default: 'text',
     },
     content: {
       required: true,
-      type: String
+      type: String,
     },
     placement: {
       type: String,
-      default: "top"
-    }
+      default: 'top',
+    },
   },
-  emits: ["onClick"]
+  emits: ['onClick'],
 };
 </script>
 

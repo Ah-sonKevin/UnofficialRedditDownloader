@@ -52,59 +52,56 @@
 </template>
 
 <script lang="ts">
-"use strict";
-
-import { defineComponent, PropType, useContext } from "vue";
-import { postType } from "@/enum/postType";
+import { defineComponent, PropType, useContext } from 'vue';
+import { postType } from '@/enum/postType';
 
 export default defineComponent({
-  name: "ManagerSideMenu",
+  name: 'ManagerSideMenu',
   props: {
     isGold: {
       required: true,
-      type: Boolean
+      type: Boolean,
     },
     typeFilter: {
       required: true,
-      type: Array as PropType<string[]>
+      type: Array as PropType<string[]>,
     },
     categoryFilter: {
       required: true,
-      type: Array as PropType<string[]>
+      type: Array as PropType<string[]>,
     },
     subredditFilter: {
       required: true,
-      type: Array as PropType<string[]>
+      type: Array as PropType<string[]>,
     },
     subredditList: {
       required: true,
-      type: Array as PropType<string[]>
-    }
+      type: Array as PropType<string[]>,
+    },
   },
-  emits: ["changeFilter"],
+  emits: ['changeFilter'],
   setup() {
     const type: string[] = Object.keys(postType);
     const context = useContext();
 
     function changeFilter(el: string, list: string[]) {
-      context.emit("changeFilter", el, list);
+      context.emit('changeFilter', el, list);
     }
 
     function isSelected(el: string, array: string[]): boolean {
       if (array) {
         return array.includes(el);
-      } else {
-        return false;
       }
+      return false;
     }
 
     return {
       type,
       postType,
       isSelected,
-      changeFilter
+      changeFilter,
     };
-  }
+  },
 });
 </script>
 

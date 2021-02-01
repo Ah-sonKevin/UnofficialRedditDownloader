@@ -12,14 +12,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, ComputedRef } from "vue";
-import { getModule } from "vuex-module-decorators";
-import { useStore } from "vuex";
-import AuthStore from "@/store/authStore";
-import { useRouter } from "vue-router";
+import { defineComponent, computed, ComputedRef } from 'vue';
+import { getModule } from 'vuex-module-decorators';
+import { useStore } from 'vuex';
+import AuthStore from '@/store/authStore';
+import { useRouter } from 'vue-router';
 
 export default defineComponent({
-  name: "TheNavigation",
+  name: 'TheNavigation',
   setup() {
     const authModule = getModule(AuthStore, useStore());
     const isConnected: ComputedRef<boolean> = computed(() => {
@@ -27,12 +27,12 @@ export default defineComponent({
     });
     function disconnect() {
       authModule.resetToken();
-      void useRouter().push({ name: "Home" });
+      void useRouter().push({ name: 'Home' });
     }
     return {
       disconnect,
-      isConnected
+      isConnected,
     };
-  }
+  },
 });
 </script>

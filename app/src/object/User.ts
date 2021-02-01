@@ -1,7 +1,9 @@
-//todo standardize data send signel download / batch
+// todo standardize data send signel download / batch
 export default class User {
   name: string;
+
   id: string;
+
   isGold: boolean;
 
   constructor(redditUser: { name: string; id: string; is_gold: boolean }) {

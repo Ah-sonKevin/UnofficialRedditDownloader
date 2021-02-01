@@ -1,34 +1,34 @@
-import { R_DataNotFoundError, R_NetworkError } from "@/errors/restartError";
-import { store } from "@/store";
-import AuthStore from "@/store/authStore";
-import { useRouter } from "vue-router";
-import { getModule } from "vuex-module-decorators";
-import { Couple } from "./couple";
-import { fetchMethod } from "./fetchInterface";
+import { R_DataNotFoundError, R_NetworkError } from '@/errors/restartError';
+import { store } from '@/store';
+import AuthStore from '@/store/authStore';
+import { useRouter } from 'vue-router';
+import { getModule } from 'vuex-module-decorators';
+import { Couple } from './couple';
+import { fetchMethod } from './fetchInterface';
 
-const REDDIT_API = "https://www.reddit.com";
-const OAUTH_API = "https://oauth.reddit.com";
+const REDDIT_API = 'https://www.reddit.com';
+const OAUTH_API = 'https://oauth.reddit.com';
 
 function getRedditHeader(): Headers {
   const authModule = getModule(AuthStore, store);
   const authHeaders = new Headers();
   authHeaders.append(
-    "Authorization",
-    `Basic ${authModule.auth.AUTH_AUTHORIZATION}`
+    'Authorization',
+    `Basic ${authModule.auth.AUTH_AUTHORIZATION}`,
   );
-  authHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+  authHeaders.append('Content-Type', 'application/x-www-form-urlencoded');
   return authHeaders;
 }
 
 export async function postRedditAPI(
   endpoint: string,
-  grant: string
+  grant: string,
 ): Promise<Response> {
   const authHeaders = getRedditHeader();
   const myInit = {
-    method: "POST",
+    method: 'POST',
     headers: authHeaders,
-    body: grant
+    body: grant,
   };
 
   const request = new Request(`${REDDIT_API}${endpoint}`, myInit);
@@ -39,8 +39,8 @@ function getOauthHeader(): Headers {
   const authModule = getModule(AuthStore, store);
   const authHeaders = new Headers();
   const API_TOKEN = authModule.token;
-  authHeaders.append("Authorization", `Bearer ${API_TOKEN}`);
-  authHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+  authHeaders.append('Authorization', `Bearer ${API_TOKEN}`);
+  authHeaders.append('Content-Type', 'application/x-www-form-urlencoded');
 
   return authHeaders;
 }
@@ -52,7 +52,7 @@ export async function refreshAccessToken(): Promise<void> {
 
   if (refreshToken) {
     tokenBody = `grant_type=refresh_token&refresh_token=${refreshToken}`;
-    const result = await postRedditAPI("/api/v1/access_token", tokenBody);
+    const result = await postRedditAPI('/api/v1/access_token', tokenBody);
     if (result.ok) {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const res: { access_token: string } = await result.json();
@@ -60,20 +60,20 @@ export async function refreshAccessToken(): Promise<void> {
       authModule.setToken(API_TOKEN);
     } else {
       authModule.resetToken();
-      void useRouter().push({ name: "Home" });
+      void useRouter().push({ name: 'Home' });
     }
   } else {
-    throw new R_DataNotFoundError("Refresh Token Not Found ");
+    throw new R_DataNotFoundError('Refresh Token Not Found ');
   }
 }
 
 export async function fetchOapi(
   endpoint: string,
-  retry = false
+  retry = false,
 ): Promise<Response> {
   const init = {
-    method: "GET",
-    headers: getOauthHeader()
+    method: 'GET',
+    headers: getOauthHeader(),
   };
   const request = new Request(`${OAUTH_API}${endpoint}`, init);
   const response = await fetch(request);
@@ -82,9 +82,8 @@ export async function fetchOapi(
       console.error(response);
       await refreshAccessToken();
       return fetchOapi(endpoint, true);
-    } else {
-      throw new R_NetworkError(response.statusText);
     }
+    throw new R_NetworkError(response.statusText);
   } else {
     return response;
   }
@@ -93,19 +92,19 @@ export async function fetchOapi(
 export async function postOapi(
   endpoint: string,
   args: Couple[],
-  retry = false
+  retry = false,
 ): Promise<any> {
   const authHeaders = getOauthHeader();
-  let body = "";
+  let body = '';
   for (let i = 0; i < args.length; i++) {
     body += `${args[i].key}=${args[i].value}`;
-    if (i !== args.length - 1) body += "&";
+    if (i !== args.length - 1) body += '&';
   }
 
   const myInit = {
-    method: "POST",
+    method: 'POST',
     headers: authHeaders,
-    body: body
+    body,
   };
 
   const request = new Request(`${OAUTH_API}${endpoint}`, myInit);
@@ -116,9 +115,8 @@ export async function postOapi(
         console.error(response);
         await refreshAccessToken();
         return postOapi(endpoint, args, true);
-      } else {
-        throw new R_NetworkError("Refresh Token Error");
       }
+      throw new R_NetworkError('Refresh Token Error');
     } else {
       throw new R_NetworkError(response.statusText);
     }
@@ -129,36 +127,36 @@ export async function postOapi(
 
 export function fetchMedia(url: string, needYtDl = false): Promise<Response> {
   const authHeaders = new Headers();
-  authHeaders.append("Content-Type", "application/x-www-form-urlencoded");
-  return fetch("/api/downItem/", {
+  authHeaders.append('Content-Type', 'application/x-www-form-urlencoded');
+  return fetch('/api/downItem/', {
     method: fetchMethod.POST,
     body: `url=${url}&needYdl=${needYtDl}`,
-    headers: authHeaders
+    headers: authHeaders,
   });
 }
 
 export function fetchBatchMediaInfo(
-  urls: { url: string; name: string; needYtDl: boolean }[]
+  urls: { url: string; name: string; needYtDl: boolean }[],
 ): Promise<Response> {
   const authHeaders = new Headers();
-  authHeaders.append("Content-Type", "application/json");
+  authHeaders.append('Content-Type', 'application/json');
   const jsonUrls = JSON.stringify(urls);
-  return fetch("/api/downBatchInfo/", {
+  return fetch('/api/downBatchInfo/', {
     method: fetchMethod.POST,
     body: jsonUrls,
-    headers: authHeaders
+    headers: authHeaders,
   });
 }
 
 export function fetchBatchMediaFile(
-  list: { path: string; name: string }[]
+  list: { path: string; name: string }[],
 ): Promise<Response> {
   const authHeaders = new Headers();
-  authHeaders.append("Content-Type", "application/json");
+  authHeaders.append('Content-Type', 'application/json');
   const jsonList = JSON.stringify(list);
-  return fetch("/api/downBatchList/", {
+  return fetch('/api/downBatchList/', {
     method: fetchMethod.POST,
     body: jsonList,
-    headers: authHeaders
+    headers: authHeaders,
   });
 }

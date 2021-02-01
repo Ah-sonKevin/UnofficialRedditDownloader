@@ -1,13 +1,13 @@
-import { createStore } from "vuex";
-import createPersistedState from "vuex-persistedstate";
-import AuthStore from "./authStore";
-import ItemStore from "./itemStore";
-import userStore from "./userStore";
+import { createStore } from 'vuex';
+import createPersistedState from 'vuex-persistedstate';
+import AuthStore from './authStore';
+import ItemStore from './itemStore';
+import userStore from './userStore';
 
 const pathsArray =
-  process.env.NODE_ENV === "production"
-    ? ["auth", "user"]
-    : ["auth", "item", "user"];
+  process.env.NODE_ENV === 'production'
+    ? ['auth', 'user']
+    : ['auth', 'item', 'user'];
 export const store = createStore({
   state: {},
   actions: {},
@@ -16,14 +16,14 @@ export const store = createStore({
   modules: {
     user: userStore,
     item: ItemStore,
-    auth: AuthStore
+    auth: AuthStore,
   },
   plugins: [
     createPersistedState({
       paths: pathsArray,
-      storage: window.sessionStorage
-    })
-  ]
+      storage: window.sessionStorage,
+    }),
+  ],
 
   // strict: true
 });

@@ -20,8 +20,8 @@
       <el-main>
         <h2 class="titleArea">{{ item.title }}</h2>
         <div class="tags">
-          <el-tag type="info" size="mini">{{ "Type: " + item.type }}</el-tag>
-          <el-tag type="info" size="mini">{{ "/r/" + item.subreddit }}</el-tag>
+          <el-tag type="info" size="mini">{{ 'Type: ' + item.type }}</el-tag>
+          <el-tag type="info" size="mini">{{ '/r/' + item.subreddit }}</el-tag>
         </div>
 
         <div v-if="!item.isDeleted" class="infoLine">
@@ -81,63 +81,63 @@
   <el-Divider></el-Divider>
 </template>
 <script lang="ts">
-import ButtonTooltip from "../General/ButtonTooltip.vue";
-import ManagerLineListListImage from "./ManagerLineListListImage.vue";
-"use strict";
 import {
   defineComponent,
   useContext,
   computed,
   PropType,
   ref,
-  nextTick
-} from "vue";
-import SavedContent from "@/object/savedContent";
+  nextTick,
+} from 'vue';
+import SavedContent from '@/object/savedContent';
+import ButtonTooltip from '../General/ButtonTooltip.vue';
+import ManagerLineListListImage from './ManagerLineListListImage.vue';
+
+'use strict';
 
 export default defineComponent({
-  name: "ManagerLineList",
+  name: 'ManagerLineList',
   components: { ManagerLineListListImage },
   props: {
     item: {
       required: true,
-      type: Object as PropType<SavedContent>
+      type: Object as PropType<SavedContent>,
     },
     isGold: {
       required: true,
-      type: Boolean
-    }
+      type: Boolean,
+    },
   },
-  emits: ["unsave", "save", "download", "select", "setItemCategory"],
+  emits: ['unsave', 'save', 'download', 'select', 'setItemCategory'],
   setup(props) {
     const context = useContext();
     const isChecked = computed({
       get: () => props.item.isSelected,
       set: (val: boolean) => {
-        context.emit("select", val);
-      }
+        context.emit('select', val);
+      },
     });
 
     const itemCategory = computed({
       get: () => props.item.category,
-      set: val => context.emit("setItemCategory", val)
+      set: val => context.emit('setItemCategory', val),
     });
     const isCollapsed = ref(false);
 
     const collapseMessage = computed(() => {
       if (!isCollapsed.value) {
-        return "See Less";
-      } else {
-        return "See More";
+        return 'See Less';
       }
+      return 'See More';
     });
 
     function unsave(): void {
-      context.emit("unsave", props.item);
+      context.emit('unsave', props.item);
       isCollapsed.value = false;
     }
 
     function save(): void {
-      context.emit("save", props.item);
+      context.emit('save', props.item);
     }
 
     async function changeCollapse() {
@@ -150,7 +150,7 @@ export default defineComponent({
         window.scrollTo({
           left: 0,
           top: window.scrollY + info.top - margin,
-          behavior: "smooth"
+          behavior: 'smooth',
         });
       }
     }
@@ -160,7 +160,7 @@ export default defineComponent({
     }
 
     function download(): void {
-      context.emit("download", props.item);
+      context.emit('download', props.item);
     }
 
     function openLink() {
@@ -178,9 +178,9 @@ export default defineComponent({
       openLink,
 
       collapseMessage,
-      itemCategory
+      itemCategory,
     };
-  }
+  },
 });
 </script>
 <style lang="scss" scoped>
@@ -338,7 +338,7 @@ ul li {
 }
 .textArea:before,
 .titleArea:before {
-  content: "...";
+  content: '...';
   position: absolute;
   /* set position to right bottom corner of block */
   right: 0;
@@ -347,7 +347,7 @@ ul li {
 /* hide ... if we have text, which is less than or equal to max lines */
 .textArea:after,
 .titleArea:after {
-  content: "";
+  content: '';
   position: absolute;
   right: 0;
   /* set width and height */

@@ -1,13 +1,15 @@
-import { R_AuthError, R_NetworkError } from "@/errors/restartError";
-import AuthStore from "@/store/authStore";
-import { useStore } from "vuex";
-import { getModule } from "vuex-module-decorators";
-import { Couple } from "./couple";
-import { postOapi, postRedditAPI } from "./fetchHelper";
+import { R_AuthError, R_NetworkError } from '@/errors/restartError';
+import AuthStore from '@/store/authStore';
+import { useStore } from 'vuex';
+import { getModule } from 'vuex-module-decorators';
+import { Couple } from './couple';
+import { postOapi, postRedditAPI } from './fetchHelper';
 
 export class CodeTruple {
   state: string;
+
   code: string;
+
   error?: string;
 
   constructor(_state: string, _code: string, _error?: string) {
@@ -19,15 +21,15 @@ export class CodeTruple {
 
 export function resetToken(): void {
   const authModule = getModule(AuthStore, useStore());
-  postOapi("/api/v1/revoke_token", [
-    new Couple("token", authModule.token),
-    new Couple("token_type_hint", "access_token")
+  postOapi('/api/v1/revoke_token', [
+    new Couple('token', authModule.token),
+    new Couple('token_type_hint', 'access_token'),
   ])
     .then(() =>
-      postOapi("/api/v1/revoke_token", [
-        new Couple("token", authModule.refreshToken),
-        new Couple("token_type_hint", "refresh_token")
-      ])
+      postOapi('/api/v1/revoke_token', [
+        new Couple('token', authModule.refreshToken),
+        new Couple('token_type_hint', 'refresh_token'),
+      ]),
     )
     .then(() => authModule.resetToken())
     .catch(err => {
@@ -43,15 +45,15 @@ export async function generateAccessToken(received: CodeTruple): Promise<void> {
     !received.code
   ) {
     throw new R_AuthError(
-      `Error: ${received.error ?? "No Error"},  State:${received.state} = ${
+      `Error: ${received.error ?? 'No Error'},  State:${received.state} = ${
         authModule.auth.AUTH_STRING
-      },  Code:${received.code}`
+      },  Code:${received.code}`,
     );
   }
   const tokenBody = `grant_type=authorization_code&code=${received.code}&redirect_uri=${authModule.auth.AUTH_REDIRECT}`;
   const result: Response = await postRedditAPI(
-    "/api/v1/access_token",
-    tokenBody
+    '/api/v1/access_token',
+    tokenBody,
   );
   if (result.ok) {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment

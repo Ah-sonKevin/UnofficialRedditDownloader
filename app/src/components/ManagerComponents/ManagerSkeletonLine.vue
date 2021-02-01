@@ -55,7 +55,7 @@
 
 <script lang="ts">
 export default {
-  name: "ManagerSkeletonLine"
+  name: 'ManagerSkeletonLine',
 };
 </script>
 <style lang="scss" scoped>
@@ -274,7 +274,7 @@ ul li {
 }
 .textArea:before,
 .titleArea:before {
-  content: "...";
+  content: '...';
   position: absolute;
   /* set position to right bottom corner of block */
   right: 0;
@@ -283,7 +283,7 @@ ul li {
 /* hide ... if we have text, which is less than or equal to max lines */
 .textArea:after,
 .titleArea:after {
-  content: "";
+  content: '';
   position: absolute;
   right: 0;
   /* set width and height */

@@ -7,17 +7,18 @@
 </template>
 
 <script lang="ts">
-import HomeDownloadLink from "@/components/HomeDownloadLink.vue";
-"use strict";
+import HomeDownloadLink from '@/components/HomeDownloadLink.vue';
 
-import { defineComponent } from "vue";
-import { getModule } from "vuex-module-decorators";
-import AuthStore from "@/store/authStore";
-import { store } from "@/store";
-import permission from "@/helper/permission";
-import router from "@/router";
+import { defineComponent } from 'vue';
+import { getModule } from 'vuex-module-decorators';
+import AuthStore from '@/store/authStore';
+import { store } from '@/store';
+import permission from '@/helper/permission';
+import router from '@/router';
 
-console.log("LoadHome");
+'use strict';
+
+console.log('LoadHome');
 export default defineComponent({
   components: { HomeDownloadLink },
   setup() {
@@ -27,16 +28,16 @@ export default defineComponent({
         authModule.setAuth(permission.createAuthData());
         window.location.href = authModule.auth.AUTH_LINK;
       } else {
-        void router.push({ name: "Manager" });
+        void router.push({ name: 'Manager' });
       }
     }
 
     return {
-      connectToReddit
+      connectToReddit,
     };
-  }
+  },
 });
-//tocheck
+// tocheck
 /*
   // partie de code facultative pour l'approximation des multiples
   for (var aMultiples = ["KiB", "MiB", "GiB", "TiB", "PiB", "EiB", "ZiB", "YiB"], nMultiple = 0, nApprox = nBytes / 1024; nApprox > 1; nApprox /= 1024, nMultiple++) {

@@ -9,7 +9,7 @@ import { rawItem } from "./rawItemInterface";
 export async function recGetSave(
   username: string,
   after = "",
-  items: SavedContent[] = []
+  items: SavedContent[] = [],
 ): Promise<SavedContent[]> {
   let afterParam = "";
   if (after) {
@@ -22,7 +22,7 @@ export async function recGetSave(
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const result: rawItem = await res.json();
-  result.data.children.forEach(function(el) {
+  result.data.children.forEach(el => {
     buildContent(el)
       .then(item => items.push(item))
       .catch(err => {
@@ -30,11 +30,10 @@ export async function recGetSave(
       });
   });
   if (result.data.after) {
-    //todo return recGetSave(username, result.data.after, items);
-    return items;
-  } else {
+    // todo return recGetSave(username, result.data.after, items);
     return items;
   }
+  return items;
 }
 
 export async function fetchUser(): Promise<User> {
@@ -44,9 +43,8 @@ export async function fetchUser(): Promise<User> {
       const user = new User(userData);
       return user;
     });
-  } else {
-    throw new R_NetworkError(userRes.statusText);
   }
+  throw new R_NetworkError(userRes.statusText);
 }
 
 export function setSubredditList(items: SavedContent[]): string[] {
@@ -61,14 +59,13 @@ export function setSubredditList(items: SavedContent[]): string[] {
 }
 
 export async function fetchCategories(): Promise<string[]> {
-  //later
+  // later
   const res = await fetchOapi("/api/saved_categories");
   console.log(res);
   if (res.ok) {
     return res.json().then(() => []);
-  } else {
-    return [];
   }
+  return [];
 }
 
 export function unsave(toDelete: SavedContent): void {

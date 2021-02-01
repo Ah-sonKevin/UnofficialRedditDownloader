@@ -1,17 +1,19 @@
-import { R_AuthError, R_DataNotFoundError } from "@/errors/restartError";
-import Auth from "@/object/Auth";
-import { Module, Mutation, VuexModule } from "vuex-module-decorators";
+import { R_AuthError, R_DataNotFoundError } from '@/errors/restartError';
+import Auth from '@/object/Auth';
+import { Module, Mutation, VuexModule } from 'vuex-module-decorators';
 
-//@Module({ dynamic: true, store, name: 'auth', preserveState: true })
-@Module({ name: "auth" })
+// @Module({ dynamic: true, store, name: 'auth', preserveState: true })
+@Module({ name: 'auth' })
 export default class AuthStore extends VuexModule {
   _auth?: Auth;
+
   _token?: string;
+
   _refreshToken?: string;
 
   get auth(): Auth {
     if (!this._auth) {
-      throw new R_DataNotFoundError("Auth is undefined");
+      throw new R_DataNotFoundError('Auth is undefined');
     }
     return this._auth;
   }
@@ -34,7 +36,7 @@ export default class AuthStore extends VuexModule {
 
   get token(): string {
     if (!this._token) {
-      throw new R_AuthError("undefined token");
+      throw new R_AuthError('undefined token');
     } else {
       return this._token;
     }
@@ -47,7 +49,7 @@ export default class AuthStore extends VuexModule {
 
   get refreshToken(): string {
     if (!this._refreshToken) {
-      throw new R_AuthError("undefined refresh token");
+      throw new R_AuthError('undefined refresh token');
     } else {
       return this._refreshToken;
     }

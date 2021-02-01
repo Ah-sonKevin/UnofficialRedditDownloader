@@ -14,49 +14,47 @@
 </template>
 
 <script lang="ts">
-"use strict";
-import { defineComponent, PropType } from "vue";
-import SavedContent from "@/object/savedContent";
+import { defineComponent, PropType } from 'vue';
+import SavedContent from '@/object/savedContent';
 
 export default defineComponent({
-  name: "ManagerLineListListImage",
+  name: 'ManagerLineListListImage',
   props: {
     item: {
       required: true,
-      type: Object as PropType<SavedContent>
+      type: Object as PropType<SavedContent>,
     },
     isCollapse: {
       required: true,
-      type: Boolean
-    }
+      type: Boolean,
+    },
   },
   setup(props) {
-    const thumbnailSize = "140px";
+    const thumbnailSize = '140px';
 
     function getImage(): string {
       if (props.item.hasImage) {
         return props.item.imageLink;
-      } else {
-        return "https://static.thenounproject.com/png/1134418-200.png";
       }
+      return 'https://static.thenounproject.com/png/1134418-200.png';
     }
 
     function getPreviewImage(): string[] {
       if (props.item.isGallery) {
         return props.item.galleryURLs;
-      } else if (props.item.hasImage) {
-        return [getImage()];
-      } else {
-        return [];
       }
+      if (props.item.hasImage) {
+        return [getImage()];
+      }
+      return [];
     }
 
     return {
       getImage,
       thumbnailSize,
-      getPreviewImage
+      getPreviewImage,
     };
-  }
+  },
 });
 </script>
 

@@ -1,10 +1,16 @@
 export default class Auth {
   AUTH_ID: string;
+
   AUTH_STRING: string;
+
   AUTH_SCOPE: string;
+
   AUTH_REDIRECT: string;
+
   AUTH_SECRET: string;
+
   AUTH_LINK: string;
+
   AUTH_AUTHORIZATION: string;
 
   constructor(
@@ -13,7 +19,7 @@ export default class Auth {
     scope: string,
     redirects: string,
     secret: string,
-    link: string
+    link: string,
   ) {
     this.AUTH_ID = id;
     this.AUTH_STRING = authString;

@@ -16,28 +16,28 @@ import {
   computed,
   ComputedRef,
   PropType,
-  useContext
-} from "vue";
-import SavedContent from "@/object/savedContent";
+  useContext,
+} from 'vue';
+import SavedContent from '@/object/savedContent';
 
 export default defineComponent({
-  name: "ManagerSearch",
+  name: 'ManagerSearch',
   props: {
     filteredItems: {
       required: true,
-      type: Array as PropType<SavedContent[]>
+      type: Array as PropType<SavedContent[]>,
     },
     searchInput: {
       required: true,
-      type: String
-    }
+      type: String,
+    },
   },
-  emits: ["updateInput"],
+  emits: ['updateInput'],
   setup(props) {
     const context = useContext();
     const searchInputCompt = computed({
       get: () => props.searchInput,
-      set: val => context.emit("updateInput", val)
+      set: val => context.emit('updateInput', val),
     });
 
     const listTitle: ComputedRef<string[]> = computed(() => {
@@ -45,7 +45,7 @@ export default defineComponent({
       props.filteredItems.forEach((el: SavedContent) => {
         array.add(el.title);
       });
-      return [...array].sort((el1, el2) => el1.localeCompare(el2));
+      return Array.from(array).sort((el1, el2) => el1.localeCompare(el2));
     });
 
     function getSuggestion(query: string, cb: (arg: unknown) => unknown) {
@@ -66,15 +66,15 @@ export default defineComponent({
     }
 
     function clear() {
-      searchInputCompt.value = "";
+      searchInputCompt.value = '';
     }
 
     return {
       getSuggestion,
       clear,
-      searchInputCompt
+      searchInputCompt,
     };
-  }
+  },
 });
 </script>
 

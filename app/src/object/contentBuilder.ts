@@ -1,48 +1,47 @@
-import { postType } from "@/enum/postType";
-import { R_BadLinkError } from "@/errors/restartError";
-import { RedditRawData } from "./redditDataInterface";
-import SavedContent from "./savedContent";
+import { postType } from '@/enum/postType';
+import { R_BadLinkError } from '@/errors/restartError';
+import { RedditRawData } from './redditDataInterface';
+import SavedContent from './savedContent';
 
 const parser = new DOMParser();
 
 function cleanURL(url: string): string {
-  if (url === "") {
+  if (url === '') {
     return url;
   }
-  const res = parser.parseFromString(url, "text/html").documentElement
+  const res = parser.parseFromString(url, 'text/html').documentElement
     .textContent;
   if (!res) {
-    throw new R_BadLinkError("Cleaning URL Error  " + url); //tocheck list element couldn't load
+    throw new R_BadLinkError(`Cleaning URL Error  ${url}`); // tocheck list element couldn't load
   }
   return res;
 }
 
 async function isDownloadable(url: string): Promise<boolean> {
   const authHeaders = new Headers();
-  authHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+  authHeaders.append('Content-Type', 'application/x-www-form-urlencoded');
 
-  const res = await fetch("/api/getHead/", {
-    method: "POST",
+  const res = await fetch('/api/getHead/', {
+    method: 'POST',
     body: `url=${cleanURL(url)}`,
-    headers: authHeaders
+    headers: authHeaders,
   });
   if (res.ok) {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const txt: boolean = await res.json();
-    console.log("Is Downloadable");
+    console.log('Is Downloadable');
     console.log(typeof txt);
-    console.log(txt); //tocheck
+    console.log(txt); // tocheck
     return txt;
-  } else {
-    return false;
   }
+  return false;
 }
 
 function cleanFallback(url: string) {
   return url
-    .split("/")
+    .split('/')
     .slice(0, -1)
-    .join("/");
+    .join('/');
 }
 
 function returnMedia(
@@ -50,7 +49,7 @@ function returnMedia(
   externalUrl: string,
   imageLink: string,
   needYtDl = false,
-  embeddedUrl = ""
+  embeddedUrl = '',
 ): {
   type: string;
   externalUrl: string;
@@ -63,33 +62,33 @@ function returnMedia(
     imageLink: cleanURL(imageLink),
     externalUrl: cleanURL(externalUrl),
     needYtDl,
-    embeddedUrl: cleanURL(embeddedUrl)
+    embeddedUrl: cleanURL(embeddedUrl),
   };
 }
 
 function getExtension(url: string): string {
-  const urlExtension = url.split(".").slice(-1)[0];
-  if (urlExtension[urlExtension.length - 1] === "/") {
+  const urlExtension = url.split('.').slice(-1)[0];
+  if (urlExtension[urlExtension.length - 1] === '/') {
     urlExtension.slice(0, urlExtension.length - 1);
   }
   return urlExtension;
 }
 const webExtensionsList = [
-  "html",
-  "org",
-  "fr",
-  "net",
-  "co",
-  "us",
-  "uk",
-  "io",
-  "gov",
-  "gouv",
-  "info",
-  "biz"
+  'html',
+  'org',
+  'fr',
+  'net',
+  'co',
+  'us',
+  'uk',
+  'io',
+  'gov',
+  'gouv',
+  'info',
+  'biz',
 ];
-const imageExtensionList = ["jpg", "jpeg", "png", "gif"];
-const videoExtensionList = ["mp4", "gifv"];
+const imageExtensionList = ['jpg', 'jpeg', 'png', 'gif'];
+const videoExtensionList = ['mp4', 'gifv'];
 
 function getImage(data: RedditRawData): string {
   const tempImage = data.preview?.images[0]?.source?.url;
@@ -100,16 +99,17 @@ function getImage(data: RedditRawData): string {
   if (tempImage2) {
     return tempImage2;
   }
-  return "";
+  return '';
 }
 
 function getEmbed(data: RedditRawData): string {
   if (data?.media_embed?.content) {
     return data?.media_embed?.content;
-  } else if (data?.media?.oembed?.html) {
+  }
+  if (data?.media?.oembed?.html) {
     return data?.media?.oembed?.html;
   }
-  return "";
+  return '';
 }
 
 export async function buildMedia(
@@ -133,20 +133,20 @@ export async function buildMedia(
     const parentList = data.crosspost_parent_list;
     if (parentList && parentList[0]) {
       return buildMedia(parentList[0]);
-    } else {
+    } 
       return returnMedia(
         postType.LINK,
         data.url_overridden_by_dest,
         getImage(data)
       );
-    }
-  } else if (webExtensionsList.some(el => urlExtension === el)) {
+    
+  } if (webExtensionsList.some(el => urlExtension === el)) {
     return returnMedia(
       postType.LINK,
       data.url_overridden_by_dest,
       getImage(data)
     );
-  } else if (
+  } if (
     postHint === "image" ||
     imageExtensionList.some(el => urlExtension === el)
   ) {
@@ -156,7 +156,7 @@ export async function buildMedia(
       data.url_overridden_by_dest,
       false
     );
-  } else if (postHint === "rich:video" || postHint === "hosted:video") {
+  } if (postHint === "rich:video" || postHint === "hosted:video") {
     if (data.domain === "youtube.com" || data.domain === "youtu.be") {
       return returnMedia(
         postType.VIDEO,
@@ -165,7 +165,7 @@ export async function buildMedia(
         true,
         getEmbed(data)
       );
-    } else if (
+    } if (
       data.is_reddit_media_domain &&
       data?.media?.reddit_video?.fallback_url
     ) {
@@ -176,7 +176,7 @@ export async function buildMedia(
         true,
         data?.media?.reddit_video?.fallback_url
       );
-    } else if (data?.media?.oembed?.thumbnail_url) {
+    } if (data?.media?.oembed?.thumbnail_url) {
       let embed = "";
       if (data?.media?.oembed?.html) {
         embed = data?.media?.oembed?.html;
@@ -189,7 +189,7 @@ export async function buildMedia(
         false,
         embed
       );
-    } else {
+    } 
       return returnMedia(
         postType.VIDEO,
         data.url_overridden_by_dest,
@@ -197,8 +197,8 @@ export async function buildMedia(
         true,
         getEmbed(data)
       );
-    }
-  } else if (
+    
+  } if (
     videoExtensionList.some(el => urlExtension === el) ||
     data?.media?.oembed?.type === "video"
   ) {
@@ -209,7 +209,7 @@ export async function buildMedia(
       false,
       getEmbed(data)
     );
-  } else {
+  } 
     const fallback = data.preview?.reddit_video_preview?.fallback_url;
     if (fallback) {
       return returnMedia(
@@ -219,7 +219,7 @@ export async function buildMedia(
         true,
         fallback
       );
-    } else if (data?.media?.reddit_video?.fallback_url) {
+    } if (data?.media?.reddit_video?.fallback_url) {
       return returnMedia(
         postType.VIDEO,
         cleanFallback(data?.media?.reddit_video?.fallback_url),
@@ -244,15 +244,15 @@ export async function buildMedia(
         );
       }
     }
-  }
+  
 }
 
 export async function buildContent(saved: {
   kind: string;
   data: RedditRawData;
 }): Promise<SavedContent> {
-  if (saved.kind === "t1" || saved.data.is_self) {
-    return new SavedContent(saved.kind, saved.data, "", "", "", "", false);
+  if (saved.kind === 't1' || saved.data.is_self) {
+    return new SavedContent(saved.kind, saved.data, '', '', '', '', false);
   }
   const media = await buildMedia(saved.data);
   return new SavedContent(
@@ -262,6 +262,6 @@ export async function buildContent(saved: {
     media.imageLink,
     media.type,
     media.embeddedUrl,
-    media.needYtDl
+    media.needYtDl,
   );
 }

@@ -1,10 +1,8 @@
-/* eslint-disable no-magic-numbers */
-
-import { postType } from '@/enum/postType';
+import { postType } from "@/enum/postType";
 import {
   R_DownloadError,
   R_NetworkError,
-  R_UnknowTypeError
+  R_UnknowTypeError,
 } from "@/errors/restartError";
 import SavedContent from "@/object/savedContent";
 import { ElLoading } from "element-plus";
@@ -12,36 +10,21 @@ import { ILoadingInstance } from "element-plus/lib/el-loading/src/loading.type";
 import { loadAsync } from "jszip";
 import { R_PartialDownloadError } from "../errors/notifError";
 import { fetchBatchMediaInfo, fetchMedia } from "./fetchHelper";
+import { ItemInfo, SuccessList } from "./ItemInterface";
+import { notify } from "./notifier";
+import { cleanString } from "./stringHelper";
 
-interface Item {
-  path: string;
-  name: string;
-}
-interface SuccessList {
-  success: Item[];
-  fail: Item[];
-}
+let downloading = false;
 
-export interface ItemInfo {
-  url: string;
-  name: string;
-  needYtDl: boolean;
-  folder: string;
+function cancelDownload() {
+  notify("Download Canceled");
+  downloading = false;
 }
 
-export function cleanString(text: string) {
-  //no ' !!
-  return text
-    .replace(/\W/gi, "_")
-    .replace(/_+/gi, "_")
-    .replace(/^_/,"")
-    .replace(/_$/,'')
-    .substr(0, 100);
-}
 function getName(text: string, extension: string): string {
-  return cleanString(text) + "." + extension;
+  return `${cleanString(text)}.${extension}`;
 }
-//tocheck lint staged
+// tocheck lint staged
 function downloadPageAsText(item: SavedContent): void {
   const parser = new DOMParser();
 
@@ -65,14 +48,15 @@ function downloadPageAsText(item: SavedContent): void {
 }
 
 function startDownload(x: Response) {
-  const length = x.headers.get("Content-Length");
+  let length = x.headers.get("Content-Length");
   if (!length) {
     console.log("LengthError");
-    return;
+    // return;
+    length = "1";
   }
-  const byteSize = 8;
+  const BYTE_SIZE = 8;
   const ordreDeGrandeur = Math.floor(length.length / 3);
-  const divider = byteSize * ordreDeGrandeur * 1000;
+  const divider = BYTE_SIZE * ordreDeGrandeur * 1000;
   let extension = "";
   switch (ordreDeGrandeur) {
     case 0:
@@ -100,35 +84,39 @@ function updateDownloadSpinner(
   receivedData: number,
   totalData: number,
   divider: number,
-  extension: string
+  extension: string,
 ) {
   downloadIndicator.setText(
-    "Downloading : " +
-      String(receivedData / divider) +
-      "/" +
-      String(totalData / divider) +
-      " " +
-      extension
+    `Downloading : ${String(receivedData / divider)}/${String(
+      totalData / divider,
+    )} ${extension}`,
   );
 }
 
 async function fetchData(
   x: Response,
   downloadIndicator: ILoadingInstance,
-  name: string
+  name: string,
 ) {
+  // downloading= true
+  console.log("fetchData downloading ");
+  console.log(downloading);
   if (x.ok) {
+    console.log("fetchData OK");
     const tmpRes = startDownload(x);
     console.log("started");
 
-    const { divider, extension, length } = tmpRes
-      ? tmpRes
-      : { divider: 1, extension: "", length: 1 };
+    const { divider, extension, length } = tmpRes || {
+      divider: 1,
+      extension: "",
+      length: 1,
+    };
 
     const fileChunks: Uint8Array[] = [];
     let receivedData = 0;
     const totalData: number = length;
     const reader = x.body?.getReader();
+    console.log("fetchData pre reeadr");
     if (!reader) {
       console.log("Bad response");
       downloadIndicator.close();
@@ -142,15 +130,16 @@ async function fetchData(
           receivedData,
           totalData,
           divider,
-          extension
+          extension,
         );
       } else {
         downloadIndicator.setText("Downloading ...");
       }
     }, 1000);
-    while (reading) {
+    while (reading && downloading) {
+      console.log("fetchData reading");
+      // eslint-disable-next-line no-await-in-loop
       const { done, value } = await reader.read();
-
       if (done) {
         reading = false;
       } else {
@@ -163,17 +152,20 @@ async function fetchData(
         receivedData += value.length;
       }
     }
+    console.log("fetchData done reading");
 
     downloadIndicator.close();
     clearInterval(updateSpinner);
-    const file = new Blob(fileChunks);
-    downloadObject(file, name);
-    return file;
-  } else {
-    downloadIndicator.close();
-    console.log("Bad response");
-    throw new R_DownloadError();
+    if (downloading) {
+      const file = new Blob(fileChunks);
+      downloadObject(file, name);
+      return file;
+    }
+    return undefined;
   }
+  downloadIndicator.close();
+  console.log("Bad response");
+  throw new R_DownloadError();
 }
 
 async function downloadMedia(item: SavedContent) {
@@ -181,7 +173,8 @@ async function downloadMedia(item: SavedContent) {
   console.log("Download Image");
   const downloadIndicator = ElLoading.service({
     fullscreen: true,
-    text: "Download Preparation"
+    text: "Download Preparation",
+    target: "#topArea",
   });
 
   const url = item.externalUrl;
@@ -192,7 +185,7 @@ async function downloadMedia(item: SavedContent) {
   await fetchData(
     x,
     downloadIndicator,
-    getName(item.title, url.split(".").slice(-1)[0])
+    getName(item.title, url.split(".").slice(-1)[0]),
   );
   console.log(new Date().getTime() - time);
 }
@@ -208,10 +201,8 @@ function downloadObject(object: Blob, nom: string): void {
 }
 
 function getURL(
-  item: SavedContent
+  item: SavedContent,
 ): { url: string; name: string; needYtDl: boolean; folder: string } {
-  // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
-  console.log(item.title + "   " + item.needYtDl);
   if (item.isGallery) {
     throw Error("Need Batch Download");
   }
@@ -224,19 +215,17 @@ function getURL(
       url: item.externalUrl,
       name: getName(item.title, "html"),
       folder: "",
-      needYtDl: false
-    };
-  } else {
-    return {
-      url: item.externalUrl,
-      // name: getName(item.title, item.externalUrl.split(".").slice(-1)[0]),
-      name: cleanString(item.title),
-      folder: "",
-      needYtDl: item.needYtDl
+      needYtDl: false,
     };
   }
+  return {
+    url: item.externalUrl,
+    // name: getName(item.title, item.externalUrl.split(".").slice(-1)[0]),
+    name: cleanString(item.title),
+    folder: "",
+    needYtDl: item.needYtDl,
+  };
 }
-//todo test private ?
 
 function getBatchUrl(item: SavedContent): ItemInfo[] {
   if (item.isGallery) {
@@ -244,41 +233,53 @@ function getBatchUrl(item: SavedContent): ItemInfo[] {
       return {
         url: el,
         name: getName(
-          item.title + "_" + String(index + 1),
-          el.split(".").slice(-1)[0]
+          `${item.title}_${String(index + 1)}`,
+          el.split(".").slice(-1)[0],
         ),
         folder: cleanString(item.title),
-        needYtDl: item.needYtDl
+        needYtDl: item.needYtDl,
       };
     });
-  } else {
-    return [getURL(item)];
   }
+  return [getURL(item)];
 }
 
 export function download(items: SavedContent | SavedContent[]): void {
   console.log("DOwnload");
   if (Array.isArray(items)) {
     if (items.length === 1) {
-      void singleDownload(items[0]);
+      void singleDownload(items[0])
+        .then(() => {
+          downloading = false;
+          return downloading;
+        })
+        .catch(err => console.log(err));
     } else {
       console.log("batch");
-      void batchDownload(items);
+      void batchDownload(items).then(() => {
+        downloading = false;
+        return downloading;
+      });
     }
   } else {
-    void singleDownload(items);
+    void singleDownload(items).then(() => {
+      downloading = false;
+      return downloading;
+    });
   }
 }
 
-//todo check batch text
+// todo check batch text
 export async function batchDownload(items: SavedContent[]): Promise<void> {
+  downloading = true;
   console.log(`batchDownload :  + ${items.length}`);
 
   const downloadIndicator = ElLoading.service({
     fullscreen: true,
-    text: "Download Preparation"
+    text: "Download Preparation",
+    target: "#topArea",
   });
- 
+
   const urls: {
     url: string;
     name: string;
@@ -289,39 +290,49 @@ export async function batchDownload(items: SavedContent[]): Promise<void> {
     urls.push(...getBatchUrl(el));
   });
   console.log(urls);
-  console.log("GotUrl");
+  console.log("GotUrl ***");
+  console.log(urls);
+  // todo empty screen list
+  console.log("aaa");
   const x = await fetchBatchMediaInfo(urls);
+  console.log("cccc");
+
+  console.log(x);
+  console.log("eee");
   const blob = await fetchData(x, downloadIndicator, "a.zip");
+  console.log("fetchData");
+  console.log(blob);
   if (blob) {
-    void loadAsync(blob).then(el => {
-      console.log(el);
-      void el.files["result.json"].async("string").then(res => {
-        //tocheck eslint disabled line
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        const arrays: SuccessList = JSON.parse(res);
+    void loadAsync(blob)
+      .then(el => el.files["result.json"].async("string"))
+      .then(res => {
+        // tocheck eslint disabled line eslint-disable
+        const arrays = JSON.parse(res) as SuccessList;
         if (arrays.fail.length > 0) {
           throw new R_PartialDownloadError(arrays);
         }
+        return arrays;
       });
-    });
   } else {
     throw new R_NetworkError(x.statusText);
   }
 }
 
-export function singleDownload(item: SavedContent): void {
+export async function singleDownload(item: SavedContent): Promise<void> {
+  downloading = true;
   const itemType: string = item.type;
   if (item.isGallery) {
-    void batchDownload([item]);
+    await batchDownload([item]);
   } else if (
     itemType === postType.TEXT ||
     itemType === postType.LINK ||
     itemType === postType.COMMENT
   ) {
     downloadPageAsText(item);
+    downloading = false;
   } else if (itemType === postType.IMAGE || itemType === postType.VIDEO) {
-    void downloadMedia(item);
+    await downloadMedia(item);
   } else {
-    throw new R_UnknowTypeError("Unknow type " + itemType + "  " + item.title); 
+    throw new R_UnknowTypeError(`Unknow type ${itemType}  ${item.title}`);
   }
 }

@@ -12,7 +12,7 @@
       />
     </el-aside>
     <el-container class="mainArea">
-      <el-header>
+      <el-header id="topArea">
         <ManagerHeader
           :show-deleted="showDeleted"
           :item-per-page="itemPerPage"
@@ -22,9 +22,6 @@
           @changeItemPerPage="changeItemPerPage"
           @changeSelectedSorter="changeSelectedSorter"
         />
-      </el-header>
-
-      <el-main class="listElement">
         <ManagerTools
           :is-gold="isGold"
           :selected-item="selectedItem"
@@ -39,7 +36,9 @@
           :search-input="searchInput"
           @updateInput="updateInput"
         />
+      </el-header>
 
+      <el-main class="listElement">
         <el-skeleton :loading="loading" animated :count="5" :throttle="500">
           <template #template>
             <ManagerSkeletonLine />
@@ -74,46 +73,46 @@
       </el-footer>
     </el-container>
   </el-container>
-  <el-dialog title='Items selected' v-model="showSelectedDialog">
+  <el-dialog v-model="showSelectedDialog" title="Items selected">
     <ul>
-    <li v-for='item in selectedItem'> //tocheck allwo to unselect
-      {{item.title}}
-    </li>
+      <li v-for="item in selectedItem" :key="item.id">
+        //tocheck allwo to unselect
+        {{ item.title }}
+      </li>
     </ul>
   </el-dialog>
 </template>
 <script lang="ts">
-"use strict";
-import ManagerSearch from "@managerComponents/ManagerSearch.vue";
-import ManagerSideMenu from "@managerComponents/ManagerSideMenu.vue";
-import ManagerHeader from "@managerComponents/ManagerHeader.vue";
-import ManagerTools from "@managerComponents/ManagerTools.vue";
-import ManagerSkeletonLine from "@managerComponents/ManagerSkeletonLine.vue";
-import ManagerLineList from "@managerComponents/ManagerLineList.vue";
+import ManagerSearch from '@managerComponents/ManagerSearch.vue';
+import ManagerSideMenu from '@managerComponents/ManagerSideMenu.vue';
+import ManagerHeader from '@managerComponents/ManagerHeader.vue';
+import ManagerTools from '@managerComponents/ManagerTools.vue';
+import ManagerSkeletonLine from '@managerComponents/ManagerSkeletonLine.vue';
+import ManagerLineList from '@managerComponents/ManagerLineList.vue';
 
-import { defineComponent, ref, Ref, onBeforeMount } from "vue";
-import { sorter } from "@/enum/sorter";
-import SavedContent from "@/object/savedContent";
-import { ElLoading, ElMessage } from "element-plus";
-import User from "@/object/User";
-import { itemPerPageList } from "@/enum/itemPerPageList";
-import { download } from "@/helper/objectDownloader";
+import { defineComponent, ref, Ref, onBeforeMount } from 'vue';
+import { sorter } from '@/enum/sorter';
+import SavedContent from '@/object/savedContent';
+import { ElLoading, ElMessage } from 'element-plus';
+import User from '@/object/User';
+import { itemPerPageList } from '@/enum/itemPerPageList';
+import { download } from '@/helper/objectDownloader';
 import {
   recGetSave,
   fetchUser,
   fetchCategories,
   setSubredditList,
   save,
-  unsave
-} from "@/helper/dataManager";
-import { getSortedContent } from "../helper/sorter";
+  unsave,
+} from '@/helper/dataManager';
+import { R_NetworkError, R_UnauthorizedAccess } from '@/errors/restartError';
+import { getSortedContent } from '../helper/sorter';
 import {
   filterItems,
   searchByText,
   hideDeleted,
-  setFilter
-} from "../helper/filter";
-import { R_NetworkError, R_UnauthorizedAccess } from "@/errors/restartError";
+  setFilter,
+} from '../helper/filter';
 
 export default defineComponent({
   components: {
@@ -122,28 +121,28 @@ export default defineComponent({
     ManagerSkeletonLine,
     ManagerHeader,
     ManagerSideMenu,
-    ManagerSearch
+    ManagerSearch,
   },
   setup() {
-    //todo get Size first
-    console.log("Manager");
+    // todo get Size first
+    console.log('Manager');
 
     const selectedSorter = ref(sorter.ADDED_DATE);
     const itemPerPage = ref(itemPerPageList.SMALL);
     const page = ref(1);
-    const searchInput = ref("");
+    const searchInput = ref('');
     const showDeleted = ref(true);
     const loading = ref(true);
-    let isGold = ref(false);
+    const isGold = ref(false);
 
     const typeFilter: Ref<string[]> = ref([]);
     const categoryFilter: Ref<string[]> = ref([]);
     const subredditFilter: Ref<string[]> = ref([]);
 
-    const showSelectedDialog = ref(false)
+    const showSelectedDialog = ref(false);
 
-    function showSelected(){
-      showSelectedDialog.value = !showSelectedDialog.value
+    function showSelected() {
+      showSelectedDialog.value = !showSelectedDialog.value;
     }
 
     function changePage(_page: number) {
@@ -179,62 +178,17 @@ export default defineComponent({
         .then(fetchedItems => {
           items.value = fetchedItems;
           if (isGold.value === true) {
+            // todo move somewhere else
             void fetchCategories();
           }
           subredditList.value = setSubredditList(fetchedItems);
           loading.value = false;
+          return items;
         })
         .catch(reason => {
-          throw new R_NetworkError("Fail when getting data " + String(reason));
+          throw new R_NetworkError(`Fail when getting data ${String(reason)}`);
         });
     }
-
-    function downloadSelected() {
-      console.log("downloadSelected");
-      if (selectedItem.length === 0) {
-        ElMessage.error("Selection is empty");
-        return;
-      } else {
-        download(selectedItem);
-      }
-      unselectAll();
-    }
-
-    onBeforeMount(() => {
-      const loadingSpinner = ElLoading.service({
-        fullscreen: true,
-        text: "Loading Reddit Data"
-      });
-      fetchUser()
-        .then(user => {
-          isGold.value = user.isGold;
-          void getItems(user);
-        })
-        .catch(() => {
-          throw new R_UnauthorizedAccess();
-        })
-        .finally(() => {
-          loadingSpinner.close();
-        });
-    });
-
-    /*function changeCategory(): void {
-      //later change category
-      console.log("changeCategory");
-      postOapi("/api/saved_categories", []);
-    }*/
-
-    function select(content: SavedContent, value: boolean) {
-      content.isSelected = value;
-      if (value) {
-        selectedItem.push(content);
-      } else {
-        const index = selectedItem.indexOf(content);
-        selectedItem.splice(index, 1);
-      }
-    }
-
-    //later accessibilité
 
     function unselectAll() {
       selectedItem.forEach(el => {
@@ -250,10 +204,60 @@ export default defineComponent({
       });
     }
 
-    function getPageElement(items: SavedContent[]) {
-      const res = items.slice(
+    function downloadSelected() {
+      console.log('downloadSelected');
+      if (selectedItem.length === 0) {
+        ElMessage.error('Selection is empty');
+        return;
+      }
+      download(selectedItem);
+
+      unselectAll();
+    }
+
+    onBeforeMount(() => {
+      const loadingSpinner = ElLoading.service({
+        fullscreen: true,
+        text: 'Loading Reddit Data',
+      });
+      fetchUser()
+        .then(user => {
+          isGold.value = user.isGold;
+          return user;
+        })
+        .then(user => {
+          return getItems(user); // tocheck assignment here
+        })
+        .catch(() => {
+          throw new R_UnauthorizedAccess();
+        })
+        .finally(() => {
+          loadingSpinner.close();
+        });
+    });
+
+    /* function changeCategory(): void {
+      //later change category
+      console.log("changeCategory");
+      postOapi("/api/saved_categories", []);
+    } */
+
+    function select(content: SavedContent, value: boolean) {
+      content.isSelected = value;
+      if (value) {
+        selectedItem.push(content);
+      } else {
+        const index = selectedItem.indexOf(content);
+        selectedItem.splice(index, 1);
+      }
+    }
+
+    // later accessibilité
+
+    function getPageElement(itemsList: SavedContent[]) {
+      const res = itemsList.slice(
         (page.value - 1) * itemPerPage.value,
-        page.value * itemPerPage.value
+        page.value * itemPerPage.value,
       );
       return res;
     }
@@ -263,14 +267,14 @@ export default defineComponent({
         items.value,
         typeFilter.value,
         categoryFilter.value,
-        subredditFilter.value
+        subredditFilter.value,
       );
       partiallyFilteredItems.value = filtered;
       const filterInput = searchByText(filtered, searchInput.value);
       const notHidden = hideDeleted(filterInput, showDeleted.value);
       filteredItems.value = notHidden;
       const res = getPageElement(
-        getSortedContent(notHidden, selectedSorter.value)
+        getSortedContent(notHidden, selectedSorter.value),
       );
       return res;
     }
@@ -314,11 +318,11 @@ export default defineComponent({
       selectAll,
       searchInput,
       updateInput,
-      partiallyFilteredItems
+      partiallyFilteredItems,
 
-      showSelectedDialog
+      showSelectedDialog,
     };
-  }
+  },
 });
 </script>
 <style scoped>

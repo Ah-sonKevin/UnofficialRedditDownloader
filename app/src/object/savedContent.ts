@@ -1,52 +1,65 @@
-import { postType } from "@/enum/postType";
-import { RedditRawData } from "./redditDataInterface";
+import { postType } from '@/enum/postType';
+import { RedditRawData } from './redditDataInterface';
 
 const parser = new DOMParser();
 
 function decodeHtml(txt: string): string {
-  const res = parser.parseFromString(txt, "text/html").documentElement
+  const res = parser.parseFromString(txt, 'text/html').documentElement
     .textContent;
-  return res ? res : "";
+  return res || '';
 }
 export default class SavedContent {
   isDeleted = false;
+
   isSelected = false;
 
   kind: string;
+
   id: string;
+
   fullname: string;
 
   author: string;
-  postAuthor = "";
-  postLink = "";
+
+  postAuthor = '';
+
+  postLink = '';
 
   subreddit: string;
+
   creationDate: Date;
-  category = "";
+
+  category = '';
+
   title: string;
 
-  text = "";
-  htmlText = "";
+  text = '';
+
+  htmlText = '';
 
   redditUrl: string;
-  externalUrl = "";
+
+  externalUrl = '';
+
   imageLink: string;
+
   embeddedUrl: string;
 
   hasImage = false;
+
   isVideo = false;
+
   isText = false;
+
   isLink = false;
 
   isGallery = false;
+
   galleryURLs: string[] = [];
 
   type: string;
-  needYtDl = false;
 
-  getRedditLink(permalink: string): string {
-    return "https://www.reddit.com" + permalink;
-  }
+  needYtDl = false;
 
   constructor(
     kind: string,
@@ -55,7 +68,7 @@ export default class SavedContent {
     _imageLink: string,
     _type: string,
     _embeddedUrl: string,
-    _needYtDl: boolean
+    _needYtDl: boolean,
   ) {
     this.kind = kind;
     const data = _data;
@@ -66,7 +79,7 @@ export default class SavedContent {
     this.title = data.title;
     this.category = data.category;
     this.creationDate = new Date(data.created_utc);
-    this.redditUrl = "https://www.reddit.com" + data.permalink; //tocheck
+    this.redditUrl = `https://www.reddit.com${data.permalink}`; // tocheck
 
     this.type = _type;
     this.imageLink = _imageLink;
@@ -74,29 +87,30 @@ export default class SavedContent {
     this.externalUrl = _externalUrl;
     this.embeddedUrl = _embeddedUrl;
 
-    if (kind === "t1") {
+    if (kind === 't1') {
       this.type = postType.COMMENT;
-      this.text = data.body ?? ""; //tocheck
-      this.htmlText = decodeHtml(data.body_html ?? "");
+      this.text = data.body ?? ''; // tocheck
+      this.htmlText = decodeHtml(data.body_html ?? '');
       this.title = data.link_title;
       this.postAuthor = data.link_author;
       this.postLink = data.link_url;
     } else if (data.is_self) {
-      this.type = postType.TEXT; //Self post does not link outside of reddit (pure text)
+      this.type = postType.TEXT; // Self post does not link outside of reddit (pure text)
       this.text = data.selftext;
-      this.htmlText = decodeHtml(data.selftext_html ?? "");
+      this.htmlText = decodeHtml(data.selftext_html ?? '');
     } else if (data.is_gallery) {
       this.type = postType.IMAGE;
       this.isGallery = data.is_gallery;
-      for (const el in data.media_metadata) {
-        this.galleryURLs.push("https://i.redd.it/" + el + ".jpg");
-      }
+      Object.keys(data.media_metadata).forEach(el => {
+        this.galleryURLs.push(`https://i.redd.it/${el}.jpg`);
+      });
       this.imageLink = this.galleryURLs[0];
     }
     this.hasImage =
       this.type === postType.IMAGE ||
       this.type === postType.VIDEO ||
       this.type === postType.LINK;
+
     this.isText = this.type === postType.COMMENT || this.type === postType.TEXT;
     this.isVideo = this.type === postType.VIDEO;
     this.isLink = this.type === postType.LINK;

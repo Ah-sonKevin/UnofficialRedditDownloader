@@ -1,63 +1,66 @@
-import { R_Error } from "./error";
+import { R_Error } from './error';
 
 export class R_RestartError extends R_Error {
-  preMessage = "";
+  preMessage = '';
+
   popupMessage: string;
-  postErrorTxt = "";
+
+  postErrorTxt = '';
+
   nameError: string;
 
   constructor(msg: string) {
     super(msg);
     this.popupMessage = this.preMessage + msg + this.postErrorTxt;
-    this.nameError = "";
+    this.nameError = '';
   }
 }
 
 export class R_AuthError extends R_RestartError {
   constructor(msg: string) {
     super(msg);
-    this.nameError = "Authentication Error";
+    this.nameError = 'Authentication Error';
   }
 }
 
 export class R_UnauthorizedAccess extends R_RestartError {
   constructor() {
-    super("You need to be connect to access this page");
+    super('You need to be connect to access this page');
   }
 }
 
 export class R_NetworkError extends R_RestartError {
   constructor(msg: string) {
     super(msg);
-    this.nameError = "Network Error";
+    this.nameError = 'Network Error';
   }
 }
 export class R_BadLinkError extends R_RestartError {
-  //tocheck
+  // tocheck
   constructor(msg: string) {
     super(msg);
-    this.nameError = "Bad Link Error";
+    this.nameError = 'Bad Link Error';
   }
 }
 
 export class R_UnknowTypeError extends R_RestartError {
-  //todo sendError / LogLevel
+  // todo sendError / LogLevel
   constructor(msg: string) {
     super(msg);
-    this.nameError = "Unknow type Error";
+    this.nameError = 'Unknow type Error';
   }
 }
 
 export class R_DataNotFoundError extends R_RestartError {
-  //tocheck
+  // tocheck
   constructor(msg: string) {
     super(msg);
-    this.nameError = "Data not found Error";
+    this.nameError = 'Data not found Error';
   }
 }
 
 export class R_DownloadError extends R_RestartError {
   constructor() {
-    super("");
+    super('');
   }
 }
