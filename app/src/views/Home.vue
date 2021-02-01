@@ -1,41 +1,41 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="assets/logo.png" />
-    <button @click="connectToReddit">connectToReddit</button>
-    <HomeDownloadLink />
-  </div>
+	<div class="home">
+		<img alt="Vue logo" src="assets/logo.png" />
+		<button @click="connectToReddit">connectToReddit</button>
+		<HomeDownloadLink />
+	</div>
 </template>
 
 <script lang="ts">
-import HomeDownloadLink from '@/components/HomeDownloadLink.vue';
+import HomeDownloadLink from "@/components/HomeDownloadLink.vue";
 
-import { defineComponent } from 'vue';
-import { getModule } from 'vuex-module-decorators';
-import AuthStore from '@/store/authStore';
-import { store } from '@/store';
-import permission from '@/helper/permission';
-import router from '@/router';
+import { defineComponent } from "vue";
+import { getModule } from "vuex-module-decorators";
+import AuthStore from "@/store/authStore";
+import { store } from "@/store";
+import permission from "@/helper/permission";
+import router from "@/router";
 
-'use strict';
+"use strict";
 
-console.log('LoadHome');
+console.log("LoadHome");
 export default defineComponent({
-  components: { HomeDownloadLink },
-  setup() {
-    const authModule = getModule(AuthStore, store);
-    function connectToReddit(): void {
-      if (!authModule.isConnected) {
-        authModule.setAuth(permission.createAuthData());
-        window.location.href = authModule.auth.AUTH_LINK;
-      } else {
-        void router.push({ name: 'Manager' });
-      }
-    }
+	components: { HomeDownloadLink },
+	setup() {
+		const authModule = getModule(AuthStore, store);
+		function connectToReddit(): void {
+			if (!authModule.isConnected) {
+				authModule.setAuth(permission.createAuthData());
+				window.location.href = authModule.auth.AUTH_LINK;
+			} else {
+				void router.push({ name: "Manager" });
+			}
+		}
 
-    return {
-      connectToReddit,
-    };
-  },
+		return {
+			connectToReddit,
+		};
+	},
 });
 // tocheck
 /*
@@ -46,18 +46,18 @@ export default defineComponent({
 </script>
 <style scoped>
 input:valid {
-  border: solid 1px black;
+	border: solid 1px black;
 }
 input:invalid {
-  border: solid 1px red;
+	border: solid 1px red;
 }
 
 label {
-  color: red;
-  visibility: hidden;
+	color: red;
+	visibility: hidden;
 }
 label.active {
-  display: inline;
-  visibility: visible;
+	display: inline;
+	visibility: visible;
 }
 </style>

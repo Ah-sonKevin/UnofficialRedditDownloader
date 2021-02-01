@@ -53,9 +53,9 @@
             "detectObjects": true
             // "ignoreDefaultValues": true
         }],
-        "vue/max-attributes-per-line":"off",
-        "vue/html-self-closing":"off",
-        "vue/singleline-html-element-content-newline":"off",        
+			"vue/max-attributes-per-line":"off",
+			"vue/html-self-closing":"off",
+			"vue/singleline-html-element-content-newline":"off",        
               "@typescript-eslint/restrict-template-expressions":["error",
             {
              "allowNumber": true,
@@ -67,10 +67,10 @@
             "import/no-unresolved":"off",
             "prefer-destructuring":"off",//tocheck
             "no-unused-vars": "off",
-  "@typescript-eslint/no-unused-vars": ["warn"],
-  "no-param-reassign":"off",
-  "no-void":"off",
-  "promise/catch-or-return":["error",{"allowFinally":true}],
+			"@typescript-eslint/no-unused-vars": ["warn"],
+			"no-param-reassign":"off",
+			"no-void":"off",
+			"promise/catch-or-return":["error",{"allowFinally":true}],
             "const-case/uppercase": "error",
             "no-secrets/no-secrets":"error",
           //  "xss/no-mixed-html":"error",
@@ -80,9 +80,11 @@
             "no-use-before-define": "off",
             "@typescript-eslint/no-use-before-define": "off",
             "import/prefer-default-export":"off",
-            "prettier/prettier": ["error", {"singleQuote": false,"trailingComma": "all"}]//tocheck
-        
-            
+            "prettier/prettier": ["error", {"singleQuote": false,"trailingComma": "all","useTabs": true}],//tocheck
+            "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
+            "indent": "off",
+			"@typescript-eslint/indent": "off",
+			"vue/html-indent":"off"
         
 
   

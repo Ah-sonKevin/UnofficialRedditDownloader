@@ -1,11 +1,13 @@
-import { RedditRawData } from '../object/redditDataInterface';
+import { RedditRawData } from "../object/redditDataInterface";
 
-export interface rawItem {
-  data: {
-    children: {
-      kind: string;
-      data: RedditRawData;
-    }[];
-    after: string;
-  };
+export interface RawItem {
+	data: {
+		children: RawItemUnit[];
+		after: string;
+	};
+}
+
+export interface RawItemUnit {
+	kind: string;
+	data: RedditRawData;
 }

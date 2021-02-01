@@ -1,5 +1,5 @@
-import { ElMessage } from 'element-plus';
+import { ElMessage } from "element-plus";
 
 export function notify(msg: string) {
-  ElMessage.info(msg);
+	ElMessage.info(msg);
 }

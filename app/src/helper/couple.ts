@@ -1,10 +1,10 @@
 export class Couple {
-  key: string;
+	key: string;
 
-  value: string;
+	value: string;
 
-  constructor(_key: string, _value: string) {
-    this.key = _key;
-    this.value = _value;
-  }
+	constructor(_key: string, _value: string) {
+		this.key = _key;
+		this.value = _value;
+	}
 }

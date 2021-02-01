@@ -1,64 +1,64 @@
-import { R_AuthError, R_DataNotFoundError } from '@/errors/restartError';
-import Auth from '@/object/Auth';
-import { Module, Mutation, VuexModule } from 'vuex-module-decorators';
+import { R_AuthError, R_DataNotFoundError } from "@/errors/restartError";
+import Auth from "@/object/Auth";
+import { Module, Mutation, VuexModule } from "vuex-module-decorators";
 
 // @Module({ dynamic: true, store, name: 'auth', preserveState: true })
-@Module({ name: 'auth' })
+@Module({ name: "auth" })
 export default class AuthStore extends VuexModule {
-  _auth?: Auth;
+	rawAuth?: Auth;
 
-  _token?: string;
+	rawToken?: string;
 
-  _refreshToken?: string;
+	rawRefreshToken?: string;
 
-  get auth(): Auth {
-    if (!this._auth) {
-      throw new R_DataNotFoundError('Auth is undefined');
-    }
-    return this._auth;
-  }
+	get auth(): Auth {
+		if (!this.rawAuth) {
+			throw new R_DataNotFoundError("Auth is undefined");
+		}
+		return this.rawAuth;
+	}
 
-  @Mutation
-  setAuth(a: Auth): void {
-    this._auth = a;
-  }
+	@Mutation
+	setAuth(a: Auth): void {
+		this.rawAuth = a;
+	}
 
-  @Mutation
-  resetToken(): void {
-    this._token = undefined;
-    this._refreshToken = undefined;
-  }
+	@Mutation
+	resetToken(): void {
+		this.rawToken = undefined;
+		this.rawRefreshToken = undefined;
+	}
 
-  @Mutation
-  setToken(token: string): void {
-    this._token = token;
-  }
+	@Mutation
+	setToken(token: string): void {
+		this.rawToken = token;
+	}
 
-  get token(): string {
-    if (!this._token) {
-      throw new R_AuthError('undefined token');
-    } else {
-      return this._token;
-    }
-  }
+	get token(): string {
+		if (!this.rawToken) {
+			throw new R_AuthError("undefined token");
+		} else {
+			return this.rawToken;
+		}
+	}
 
-  @Mutation
-  setRefreshToken(token: string): void {
-    this._refreshToken = token;
-  }
+	@Mutation
+	setRefreshToken(token: string): void {
+		this.rawRefreshToken = token;
+	}
 
-  get refreshToken(): string {
-    if (!this._refreshToken) {
-      throw new R_AuthError('undefined refresh token');
-    } else {
-      return this._refreshToken;
-    }
-  }
+	get refreshToken(): string {
+		if (!this.rawRefreshToken) {
+			throw new R_AuthError("undefined refresh token");
+		} else {
+			return this.rawRefreshToken;
+		}
+	}
 
-  get isConnected(): boolean {
-    if (this._token && this._refreshToken) {
-      return true;
-    }
-    return false;
-  }
+	get isConnected(): boolean {
+		if (this.rawToken && this.rawRefreshToken) {
+			return true;
+		}
+		return false;
+	}
 }

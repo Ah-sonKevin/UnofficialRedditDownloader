@@ -1,10 +1,10 @@
 <template>
-  <div>Build with VueJs GitHub : <a href=""></a></div>
+	<div>Build with VueJs GitHub : <a href=""></a></div>
 </template>
 
 <script lang="ts">
 export default {
-  name: 'TheFooter',
+	name: "TheFooter",
 };
 </script>
 

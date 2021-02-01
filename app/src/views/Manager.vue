@@ -1,350 +1,350 @@
 <template>
-  Due to Reddit's restrictions you can't access more than 1000 saved posts.
-  <el-container class="pageContainer">
-    <el-aside>
-      <ManagerSideMenu
-        class="TheSideMenu"
-        :type-filter="typeFilter"
-        :category-filter="categoryFilter"
-        :subreddit-filter="subredditFilter"
-        :subreddit-list="subredditList"
-        @changeFilter="setFilter"
-      />
-    </el-aside>
-    <el-container class="mainArea">
-      <el-header id="topArea">
-        <ManagerHeader
-          :show-deleted="showDeleted"
-          :item-per-page="itemPerPage"
-          :selected-sorter="selectedSorter"
-          :is-gold="isGold"
-          @changeShowDelete="changeShowDelete"
-          @changeItemPerPage="changeItemPerPage"
-          @changeSelectedSorter="changeSelectedSorter"
-        />
-        <ManagerTools
-          :is-gold="isGold"
-          :selected-item="selectedItem"
-          @unsave="unsave($event)"
-          @selectAll="selectAll"
-          @unselectAll="unselectAll"
-          @downloadSelected="downloadSelected"
-          @showSelectedDialog="showSelectedDialog"
-        />
-        <ManagerSearch
-          :filtered-items="partiallyFilteredItems"
-          :search-input="searchInput"
-          @updateInput="updateInput"
-        />
-      </el-header>
+	Due to Reddit's restrictions you can't access more than 1000 saved posts.
+	<el-container class="pageContainer">
+		<el-aside>
+			<ManagerSideMenu
+				class="TheSideMenu"
+				:type-filter="typeFilter"
+				:category-filter="categoryFilter"
+				:subreddit-filter="subredditFilter"
+				:subreddit-list="subredditList"
+				@changeFilter="setFilter"
+			/>
+		</el-aside>
+		<el-container class="mainArea">
+			<el-header id="topArea">
+				<ManagerHeader
+					:show-deleted="showDeleted"
+					:item-per-page="itemPerPage"
+					:selected-sorter="selectedSorter"
+					:is-gold="isGold"
+					@changeShowDelete="changeShowDelete"
+					@changeItemPerPage="changeItemPerPage"
+					@changeSelectedSorter="changeSelectedSorter"
+				/>
+				<ManagerTools
+					:is-gold="isGold"
+					:selected-item="selectedItem"
+					@unsave="unsave($event)"
+					@selectAll="selectAll"
+					@unselectAll="unselectAll"
+					@downloadSelected="downloadSelected"
+					@showSelectedDialog="showSelectedDialog"
+				/>
+				<ManagerSearch
+					:filtered-items="partiallyFilteredItems"
+					:search-input="searchInput"
+					@updateInput="updateInput"
+				/>
+			</el-header>
 
-      <el-main class="listElement">
-        <el-skeleton :loading="loading" animated :count="5" :throttle="500">
-          <template #template>
-            <ManagerSkeletonLine />
-          </template>
-          <template #default>
-            <ul>
-              <li v-for="item in getActive()" :key="item.id">
-                <ManagerLineList
-                  :item="item"
-                  :is-gold="isGold"
-                  @unsave="unsave($event)"
-                  @save="save($event)"
-                  @download="download(item)"
-                  @select="select(item, $event)"
-                  @setItemCategory="setItemCategory(item, $event)"
-                />
-              </li>
-            </ul>
-          </template>
-        </el-skeleton>
-      </el-main>
-      <el-footer>
-        <el-pagination
-          :total="filteredItems.length"
-          :current-page="1"
-          :page-size="itemPerPage"
-          layout="prev, pager, next, ->, total"
-          background
-          @current-change="changePage"
-        />
-        <el-backtop>Up</el-backtop>
-      </el-footer>
-    </el-container>
-  </el-container>
-  <el-dialog v-model="showSelectedDialog" title="Items selected">
-    <ul>
-      <li v-for="item in selectedItem" :key="item.id">
-        //tocheck allwo to unselect
-        {{ item.title }}
-      </li>
-    </ul>
-  </el-dialog>
+			<el-main class="listElement">
+				<el-skeleton :loading="loading" animated :count="5" :throttle="500">
+					<template #template>
+						<ManagerSkeletonLine />
+					</template>
+					<template #default>
+						<ul>
+							<li v-for="item in getActive()" :key="item.id">
+								<ManagerLineList
+									:item="item"
+									:is-gold="isGold"
+									@unsave="unsave($event)"
+									@save="save($event)"
+									@download="download(item)"
+									@select="select(item, $event)"
+									@setItemCategory="setItemCategory(item, $event)"
+								/>
+							</li>
+						</ul>
+					</template>
+				</el-skeleton>
+			</el-main>
+			<el-footer>
+				<el-pagination
+					:total="filteredItems.length"
+					:current-page="1"
+					:page-size="itemPerPage"
+					layout="prev, pager, next, ->, total"
+					background
+					@current-change="changePage"
+				/>
+				<el-backtop>Up</el-backtop>
+			</el-footer>
+		</el-container>
+	</el-container>
+	<el-dialog v-model="showSelectedDialog" title="Items selected">
+		<ul>
+			<li v-for="item in selectedItem" :key="item.id">
+				//tocheck allwo to unselect
+				{{ item.title }}
+			</li>
+		</ul>
+	</el-dialog>
 </template>
 <script lang="ts">
-import ManagerSearch from '@managerComponents/ManagerSearch.vue';
-import ManagerSideMenu from '@managerComponents/ManagerSideMenu.vue';
-import ManagerHeader from '@managerComponents/ManagerHeader.vue';
-import ManagerTools from '@managerComponents/ManagerTools.vue';
-import ManagerSkeletonLine from '@managerComponents/ManagerSkeletonLine.vue';
-import ManagerLineList from '@managerComponents/ManagerLineList.vue';
+import ManagerSearch from "@managerComponents/ManagerSearch.vue";
+import ManagerSideMenu from "@managerComponents/ManagerSideMenu.vue";
+import ManagerHeader from "@managerComponents/ManagerHeader.vue";
+import ManagerTools from "@managerComponents/ManagerTools.vue";
+import ManagerSkeletonLine from "@managerComponents/ManagerSkeletonLine.vue";
+import ManagerLineList from "@managerComponents/ManagerLineList.vue";
 
-import { defineComponent, ref, Ref, onBeforeMount } from 'vue';
-import { sorter } from '@/enum/sorter';
-import SavedContent from '@/object/savedContent';
-import { ElLoading, ElMessage } from 'element-plus';
-import User from '@/object/User';
-import { itemPerPageList } from '@/enum/itemPerPageList';
-import { download } from '@/helper/objectDownloader';
+import { defineComponent, ref, Ref, onBeforeMount } from "vue";
+import { sorter } from "@/enum/sorter";
+import SavedContent from "@/object/savedContent";
+import { ElLoading, ElMessage } from "element-plus";
+import User from "@/object/User";
+import { itemPerPageList } from "@/enum/itemPerPageList";
+import { download } from "@/helper/objectDownloader";
 import {
-  recGetSave,
-  fetchUser,
-  fetchCategories,
-  setSubredditList,
-  save,
-  unsave,
-} from '@/helper/dataManager';
-import { R_NetworkError, R_UnauthorizedAccess } from '@/errors/restartError';
-import { getSortedContent } from '../helper/sorter';
+	recGetSave,
+	fetchUser,
+	fetchCategories,
+	setSubredditList,
+	save,
+	unsave,
+} from "@/helper/dataManager";
+import { R_NetworkError, R_UnauthorizedAccess } from "@/errors/restartError";
+import { getSortedContent } from "../helper/sorter";
 import {
-  filterItems,
-  searchByText,
-  hideDeleted,
-  setFilter,
-} from '../helper/filter';
+	filterItems,
+	searchByText,
+	hideDeleted,
+	setFilter,
+} from "../helper/filter";
 
 export default defineComponent({
-  components: {
-    ManagerTools,
-    ManagerLineList,
-    ManagerSkeletonLine,
-    ManagerHeader,
-    ManagerSideMenu,
-    ManagerSearch,
-  },
-  setup() {
-    // todo get Size first
-    console.log('Manager');
+	components: {
+		ManagerTools,
+		ManagerLineList,
+		ManagerSkeletonLine,
+		ManagerHeader,
+		ManagerSideMenu,
+		ManagerSearch,
+	},
+	setup() {
+		// todo get Size first
+		console.log("Manager");
 
-    const selectedSorter = ref(sorter.ADDED_DATE);
-    const itemPerPage = ref(itemPerPageList.SMALL);
-    const page = ref(1);
-    const searchInput = ref('');
-    const showDeleted = ref(true);
-    const loading = ref(true);
-    const isGold = ref(false);
+		const selectedSorter = ref(sorter.ADDED_DATE);
+		const itemPerPage = ref(itemPerPageList.SMALL);
+		const page = ref(1);
+		const searchInput = ref("");
+		const showDeleted = ref(true);
+		const loading = ref(true);
+		const isGold = ref(false);
 
-    const typeFilter: Ref<string[]> = ref([]);
-    const categoryFilter: Ref<string[]> = ref([]);
-    const subredditFilter: Ref<string[]> = ref([]);
+		const typeFilter: Ref<string[]> = ref([]);
+		const categoryFilter: Ref<string[]> = ref([]);
+		const subredditFilter: Ref<string[]> = ref([]);
 
-    const showSelectedDialog = ref(false);
+		const showSelectedDialog = ref(false);
 
-    function showSelected() {
-      showSelectedDialog.value = !showSelectedDialog.value;
-    }
+		function showSelected() {
+			showSelectedDialog.value = !showSelectedDialog.value;
+		}
 
-    function changePage(_page: number) {
-      page.value = _page;
-    }
+		function changePage(_page: number) {
+			page.value = _page;
+		}
 
-    function changeShowDelete(val: boolean) {
-      showDeleted.value = val;
-    }
-    function changeItemPerPage(val: number) {
-      itemPerPage.value = val;
-    }
-    function changeSelectedSorter(val: string) {
-      selectedSorter.value = val;
-    }
-    function updateInput(val: string) {
-      searchInput.value = val;
-    }
-    function setItemCategory(item: SavedContent, val: string) {
-      item.category = val;
-    }
+		function changeShowDelete(val: boolean) {
+			showDeleted.value = val;
+		}
+		function changeItemPerPage(val: number) {
+			itemPerPage.value = val;
+		}
+		function changeSelectedSorter(val: string) {
+			selectedSorter.value = val;
+		}
+		function updateInput(val: string) {
+			searchInput.value = val;
+		}
+		function setItemCategory(item: SavedContent, val: string) {
+			item.category = val;
+		}
 
-    let selectedItem: SavedContent[] = [];
-    const partiallyFilteredItems: Ref<SavedContent[]> = ref([]);
-    const filteredItems: Ref<SavedContent[]> = ref([]);
+		let selectedItem: SavedContent[] = [];
+		const partiallyFilteredItems: Ref<SavedContent[]> = ref([]);
+		const filteredItems: Ref<SavedContent[]> = ref([]);
 
-    const items: Ref<SavedContent[]> = ref([]);
+		const items: Ref<SavedContent[]> = ref([]);
 
-    const subredditList: Ref<string[]> = ref([]);
+		const subredditList: Ref<string[]> = ref([]);
 
-    async function getItems(user: User) {
-      return recGetSave(user.name)
-        .then(fetchedItems => {
-          items.value = fetchedItems;
-          if (isGold.value === true) {
-            // todo move somewhere else
-            void fetchCategories();
-          }
-          subredditList.value = setSubredditList(fetchedItems);
-          loading.value = false;
-          return items;
-        })
-        .catch(reason => {
-          throw new R_NetworkError(`Fail when getting data ${String(reason)}`);
-        });
-    }
+		async function getItems(user: User) {
+			return recGetSave(user.name)
+				.then(fetchedItems => {
+					items.value = fetchedItems;
+					if (isGold.value === true) {
+						// todo move somewhere else
+						void fetchCategories();
+					}
+					subredditList.value = setSubredditList(fetchedItems);
+					loading.value = false;
+					return items;
+				})
+				.catch(reason => {
+					throw new R_NetworkError(`Fail when getting data ${String(reason)}`);
+				});
+		}
 
-    function unselectAll() {
-      selectedItem.forEach(el => {
-        el.isSelected = false;
-      });
-      selectedItem = [];
-    }
+		function unselectAll() {
+			selectedItem.forEach(el => {
+				el.isSelected = false;
+			});
+			selectedItem = [];
+		}
 
-    function selectAll() {
-      filteredItems.value.forEach(el => {
-        el.isSelected = true;
-        selectedItem.push(el);
-      });
-    }
+		function selectAll() {
+			filteredItems.value.forEach(el => {
+				el.isSelected = true;
+				selectedItem.push(el);
+			});
+		}
 
-    function downloadSelected() {
-      console.log('downloadSelected');
-      if (selectedItem.length === 0) {
-        ElMessage.error('Selection is empty');
-        return;
-      }
-      download(selectedItem);
+		function downloadSelected() {
+			console.log("downloadSelected");
+			if (selectedItem.length === 0) {
+				ElMessage.error("Selection is empty");
+				return;
+			}
+			download(selectedItem);
 
-      unselectAll();
-    }
+			unselectAll();
+		}
 
-    onBeforeMount(() => {
-      const loadingSpinner = ElLoading.service({
-        fullscreen: true,
-        text: 'Loading Reddit Data',
-      });
-      fetchUser()
-        .then(user => {
-          isGold.value = user.isGold;
-          return user;
-        })
-        .then(user => {
-          return getItems(user); // tocheck assignment here
-        })
-        .catch(() => {
-          throw new R_UnauthorizedAccess();
-        })
-        .finally(() => {
-          loadingSpinner.close();
-        });
-    });
+		onBeforeMount(() => {
+			const loadingSpinner = ElLoading.service({
+				fullscreen: true,
+				text: "Loading Reddit Data",
+			});
+			fetchUser()
+				.then(user => {
+					isGold.value = user.isGold;
+					return user;
+				})
+				.then(user => {
+					return getItems(user); // tocheck assignment here
+				})
+				.catch(() => {
+					throw new R_UnauthorizedAccess();
+				})
+				.finally(() => {
+					loadingSpinner.close();
+				});
+		});
 
-    /* function changeCategory(): void {
+		/* function changeCategory(): void {
       //later change category
       console.log("changeCategory");
       postOapi("/api/saved_categories", []);
     } */
 
-    function select(content: SavedContent, value: boolean) {
-      content.isSelected = value;
-      if (value) {
-        selectedItem.push(content);
-      } else {
-        const index = selectedItem.indexOf(content);
-        selectedItem.splice(index, 1);
-      }
-    }
+		function select(content: SavedContent, value: boolean) {
+			content.isSelected = value;
+			if (value) {
+				selectedItem.push(content);
+			} else {
+				const index = selectedItem.indexOf(content);
+				selectedItem.splice(index, 1);
+			}
+		}
 
-    // later accessibilité
+		// later accessibilité
 
-    function getPageElement(itemsList: SavedContent[]) {
-      const res = itemsList.slice(
-        (page.value - 1) * itemPerPage.value,
-        page.value * itemPerPage.value,
-      );
-      return res;
-    }
+		function getPageElement(itemsList: SavedContent[]) {
+			const res = itemsList.slice(
+				(page.value - 1) * itemPerPage.value,
+				page.value * itemPerPage.value,
+			);
+			return res;
+		}
 
-    function getActive() {
-      const filtered = filterItems(
-        items.value,
-        typeFilter.value,
-        categoryFilter.value,
-        subredditFilter.value,
-      );
-      partiallyFilteredItems.value = filtered;
-      const filterInput = searchByText(filtered, searchInput.value);
-      const notHidden = hideDeleted(filterInput, showDeleted.value);
-      filteredItems.value = notHidden;
-      const res = getPageElement(
-        getSortedContent(notHidden, selectedSorter.value),
-      );
-      return res;
-    }
+		function getActive() {
+			const filtered = filterItems(
+				items.value,
+				typeFilter.value,
+				categoryFilter.value,
+				subredditFilter.value,
+			);
+			partiallyFilteredItems.value = filtered;
+			const filterInput = searchByText(filtered, searchInput.value);
+			const notHidden = hideDeleted(filterInput, showDeleted.value);
+			filteredItems.value = notHidden;
+			const res = getPageElement(
+				getSortedContent(notHidden, selectedSorter.value),
+			);
+			return res;
+		}
 
-    return {
-      itemPerPage,
-      changeItemPerPage,
-      changePage,
+		return {
+			itemPerPage,
+			changeItemPerPage,
+			changePage,
 
-      showDeleted,
-      changeShowDelete,
+			showDeleted,
+			changeShowDelete,
 
-      changeSelectedSorter,
-      selectedSorter,
+			changeSelectedSorter,
+			selectedSorter,
 
-      searchByText,
+			searchByText,
 
-      unselectAll,
-      selectedItem,
-      isGold,
+			unselectAll,
+			selectedItem,
+			isGold,
 
-      unsave,
-      save,
-      download,
-      downloadSelected,
-      select,
+			unsave,
+			save,
+			download,
+			downloadSelected,
+			select,
 
-      filteredItems,
+			filteredItems,
 
-      getActive,
+			getActive,
 
-      loading,
-      setItemCategory,
+			loading,
+			setItemCategory,
 
-      typeFilter,
-      categoryFilter,
-      subredditFilter,
+			typeFilter,
+			categoryFilter,
+			subredditFilter,
 
-      setFilter,
-      subredditList,
-      selectAll,
-      searchInput,
-      updateInput,
-      partiallyFilteredItems,
+			setFilter,
+			subredditList,
+			selectAll,
+			searchInput,
+			updateInput,
+			partiallyFilteredItems,
 
-      showSelectedDialog,
-    };
-  },
+			showSelectedDialog,
+		};
+	},
 });
 </script>
 <style scoped>
 .el-header {
-  background-color: #030303;
-  border: 1px solid grey;
+	background-color: #030303;
+	border: 1px solid grey;
 }
 .el-aside {
-  background-color: #1a1a1b;
-  border: 1px solid grey;
+	background-color: #1a1a1b;
+	border: 1px solid grey;
 }
 
 .pageFooter {
-  background-color: #030303;
-  border: 1px solid black;
+	background-color: #030303;
+	border: 1px solid black;
 }
 
 .pageContainer {
-  color: white;
+	color: white;
 }
 
 .itemPerPages {
-  width: 5em;
+	width: 5em;
 }
 </style>
