@@ -4,7 +4,6 @@ import AuthStore from "@/store/authStore";
 import { useRouter } from "vue-router";
 import { getModule } from "vuex-module-decorators";
 import { Couple } from "./couple";
-import { fetchMethod } from "./fetchInterface";
 
 const REDDIT_API = "https://www.reddit.com";
 const OAUTH_API = "https://oauth.reddit.com";
@@ -129,7 +128,7 @@ export function fetchMedia(url: string, needYtDl = false): Promise<Response> {
 	const authHeaders = new Headers();
 	authHeaders.append("Content-Type", "application/x-www-form-urlencoded");
 	return fetch("/api/downItem/", {
-		method: fetchMethod.POST,
+		method: "POST",
 		body: `url=${url}&needYdl=${needYtDl}`,
 		headers: authHeaders,
 	});
@@ -142,7 +141,7 @@ export function fetchBatchMediaInfo(
 	authHeaders.append("Content-Type", "application/json");
 	const jsonUrls = JSON.stringify(urls);
 	return fetch("/api/downBatchInfo/", {
-		method: fetchMethod.POST,
+		method: "POST",
 		body: jsonUrls,
 		headers: authHeaders,
 	});
@@ -155,7 +154,7 @@ export function fetchBatchMediaFile(
 	authHeaders.append("Content-Type", "application/json");
 	const jsonList = JSON.stringify(list);
 	return fetch("/api/downBatchList/", {
-		method: fetchMethod.POST,
+		method: "POST",
 		body: jsonList,
 		headers: authHeaders,
 	});
