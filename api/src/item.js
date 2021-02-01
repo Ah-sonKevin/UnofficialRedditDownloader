@@ -1,119 +1,100 @@
-const format = require("./enum/mediaFormat");
+// const fetch = require("node-fetch");
+const fetch = require("node-fetch").default;
+const bluebird = require("bluebird");
+const youtubeDl = bluebird.promisifyAll(require("youtube-dl"));
+const mediaFormat = require("./enum/mediaFormat");
 
-async function getInfoFormat(url, format) {
-  //tocheck async
+function getInfoFormat(url, format) {
+  bluebird.promisifyAll(youtubeDl);
+  // tocheck async
+  // tocheck promisifty /  nested async
+  // @ts-ignore
+  return youtubeDl.getInfoAsync(
+    url,
+    [
+      "--hls-prefer-ffmpeg",
+      "--restrict-filenames",
+      "--output=media/%(title)s.%(ext)s",
+      `--format=${format}`,
+    ],
+    {}
+  );
+}
 
-  return new Promise((promise, reject) => {
-    youtubeDl.getInfo(
-      //tocheck block async
-      url,
-      [
-        "--hls-prefer-ffmpeg",
-        "--restrict-filenames",
-        "--output=media/%(title)s.%(ext)s",
-        "--format=" + format,
-      ],
-      {},
-      (err, info) => {
-        //tocheck nested
-        if (err) {
-          reject(err);
-          errorCallback(err);
-        } else {
-          promise(info);
-          successCallback(info);
+function getSize(url) {
+  return fetch(url, { method: "HEAD" }).then((res) => {
+    const { headers } = res;
+    const size = headers.get("content-length");
+    if (headers) {
+      return size // todo update eslint ? to use ??
+        ? parseInt(headers.get("content-length"))
+        : 0;
+    }
+    return 0;
+  });
+}
+
+/**
+ * @param {string} url
+ * @param {boolean} needYoutubeDl
+ * @param {string} name
+ * @param {string} folder
+ */
+async function getAllInfo(url, needYoutubeDl, name, folder) {
+  // tocheck error in promise
+  console.log(`${url}  ${needYoutubeDl}  ${name}  ${folder}`);
+  if (!needYoutubeDl) {
+    const size = await getSize(url);
+    if (size) {
+      return {
+        isOneFile: true,
+        url,
+        size,
+        name,
+        folder,
+        needYoutubeDl,
+      };
+    }
+    throw new Error();
+  }
+  return getInfoFormat(url, mediaFormat.allInOne)
+    .then(async (info) => {
+      console.log("allInOne");
+      console.log(info);
+      const size = await getSize(info.url);
+      if (size) {
+        return {
+          isOneFile: true,
+          url: info.url,
+          size,
+          name,
+          folder,
+          needYoutubeDl,
+        };
+      }
+      throw new Error();
+    })
+    .catch(async () => {
+      console.log("videoStream");
+      const infoVideo = await getInfoFormat(url, mediaFormat.videoStream); // tocheck await and catch
+      const infoAudio = await getInfoFormat(url, mediaFormat.audioStream);
+      const sizeVideo = await getSize(infoVideo.url);
+      if (sizeVideo) {
+        const sizeAudio = await getSize(infoAudio.url);
+        if (sizeAudio) {
+          return {
+            isOneFile: false,
+            video: { url: infoVideo.url, ext: infoVideo.ext },
+            audio: { url: infoAudio.url, ext: infoAudio.ext },
+            size: sizeAudio + sizeVideo,
+            name,
+            folder,
+            needYoutubeDl,
+          };
         }
       }
-    );
-  });
+      throw new Error();
+    });
 }
 
-async function getSize(url) {
-  return await fetch(url, { method: "HEAD" })
-    .then((res) => {
-      const headers = res.headers;
-      if (headers) {
-        return headers.get("content-length") //todo update eslint ? to use ??
-          ? parseInt(headers.get("content-length"))
-          : 0;
-      } else return 0;
-    })
-    .catch(() => null);
-}
-
-async function getAllInfo(url, needYoutubeDl, name, folder) { //toceck error in promise
-  console.log(url + "  " + needYoutubeDl + "  " + name + "  " + folder);
-  return new Promise((promise, reject) => {
-    if (!needYoutubeDl) {
-      getSize(url)
-        .then((size) => {
-          promise({
-            isOneFile: false,
-            url: url,
-            size,
-            name: name,
-            folder: folder,
-          });
-        })
-        .catch(() => {
-          reject();
-          console.log("REJECT SIZE !needYoutubeDl  " + name);
-        });
-    } else {
-      return getInfoFormat(url, format.allInOne)
-        .then(async (info) => {
-          const size = await getSize(info.url);
-          if (size) {
-            promise({
-              isOneFile: true,
-              url: info.url,
-              size,
-              name: name,
-              folder: folder,
-            });
-          } else {
-            reject();
-            console.log("REJECT SIZE  formatVideoOneStream" + name);
-          }
-        })
-        .catch(() => {
-          getInfoFormat(url, format.videoStream).then((infoVideo) => {
-            getInfoFormat(url, format.audioStream)
-              .then(async (infoAudio) => {
-                let sizeVideo = await getSize(infoVideo.url);
-                if (sizeVideo) {
-                  let sizeAudio = await getSize(infoAudio.url);
-                  if (sizeAudio) {
-                    promise({
-                      isOneFile: false,
-                      videoUrl: infoVideo.url,
-                      audioUrl: infoAudio.url,
-                      size: sizeAudio + sizeVideo,
-                      name: name,
-                      folder: folder,
-                    });
-                  } else {
-                    reject();
-                    console.log("REJECT SIZE both  " + name);
-                  }
-                } else {
-                  reject();
-                }
-              })
-              .catch(() => {
-                console.log(
-                  "REJECT getInfoFormat  formatAudioOnlyStream " + name
-                );
-                reject();
-              });
-          });
-        })
-        .catch(() => {
-          console.log("REJECT getInfoFormat formatVideoOnlyStream  " + name);
-          reject();
-        });
-    }
-  });
-}
-
-module.exports = { getAllInfo, getInfoFormat };
+module.exports = getAllInfo;

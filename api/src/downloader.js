@@ -1,190 +1,146 @@
 const { createWriteStream, createReadStream, unlink } = require("fs");
-const request = require("request");
 require("express-zip");
-const youtubeDl = require("youtube-dl");
-const fetch = require("node-fetch");
+const fetch = require("node-fetch").default; // tocheck
 const ffmpeg = require("fluent-ffmpeg");
 
-const formatVideoOneStream =
-  "best[ext=mp4][width<=1920]/best[width<=1920]/best[ext=mp4]/best";
-const formatVideoOnlyStream =
-  "bestvideo[ext=mp4][width<=1920]/bestvideo[width<=1920]/bestvideo[ext=mp4]/bestvideo";
-const formatAudioOnlyStream = "bestaudio";
+const basePath = "../media/";
 
-function youtubeDlFormat(url, format) {
-  return youtubeDl(
-    url,
-    [
-      "--hls-prefer-ffmpeg",
-      "--restrict-filenames",
-      "--output=media/%(title)s.%(ext)s",
-      "--format=" + format,
-    ],
-    {}
-  ).on("error", (err) => {
-    console.log("ERROR " + err);
-  });
+function download(uri) {
+  console.log(`url ${uri}`);
+  return fetch(uri);
 }
 
-function downloader(
-  url,
-  path,
-  needYoutubeDl,
-  next,
-  res,
-  callback,
-  failCallback
-) {
-  if (needYoutubeDl) {
-    youtubeDlDownload(url, path, next, res, callback, failCallback);
-  } else {
-    download(url, path, next, res, callback, failCallback);
-  }
-}
+async function youtubeDlDownload(itemInfo) {
+  return new Promise((promise, reject) => {
+    console.log("youtubeDlDownload");
 
-const download = function (uri, filepath, next, res, callback, failCallback) {
-  console.log("DOWNLOAD ---------------------------------------");
-  request(uri)
-    .on("error", (err) => {
-      failCallback(err);
-    })
-    .on("response", (response) => {
-      response.pause();
-      console.log("response  " + response.statusCode);
-      if (response.statusCode === 200) {
-        callback(response);
-      } else {
-        failCallback(new Error());
+    let videoStreamDone = false;
+    let audioStreamDone = false;
+    let audioExt = "";
+    let videoExt = "";
+
+    function streamMerge() {
+      if (videoStreamDone && audioStreamDone) {
+        console.log(`streamMerge${videoStreamDone}${audioStreamDone}`);
+        const clean = () => {
+          unlink(`${basePath}${itemInfo.name}_video.${videoExt}`, () => {}); // todo add to info
+          unlink(`${basePath}${itemInfo.name}_audio.${audioExt}`, () => {});
+        };
+        ffmpeg()
+          .addInput(`${basePath}${itemInfo.name}_video.${videoExt}`)
+          .addInput(`${basePath}${itemInfo.name}_audio.${audioExt}`)
+          .audioCodec("copy")
+          .videoCodec("copy")
+          .saveToFile(`${basePath}${itemInfo.name}.${videoExt}`) // cant directly output stream for mp4 format
+          .on("error", () => {
+            clean();
+            reject();
+            console.log("ffmpeg error");
+          })
+          .on("end", () => {
+            clean();
+            const stream = createReadStream(
+              `${basePath}${itemInfo.name}.${videoExt}`
+            )
+              .on("error", () => {
+                unlink(`${basePath}${itemInfo.name}.${videoExt}`, () => {});
+                reject();
+                stream.destroy();
+              })
+              .on("close", () => {
+                unlink(`${basePath}${itemInfo.name}.${videoExt}`, () => {});
+              })
+              .on("open", () => {
+                promise(stream.pause());
+              });
+          });
       }
-    });
-};
-
-function youtubeDlDownload(itemInfo) {
-  console.log("youtubeDlDownload");
-
-  let videoStreamDone = false;
-  let audioStreamDone = false;
-  let audioExt = "";
-  let videoExt = "";
-
-  function streamMerge() {
-    if (videoStreamDone && audioStreamDone) {
-      let clean = () => {
-        unlink(name + "_video" + "." + videoExt, () => {});
-        unlink(name + "_audio" + "." + audioExt, () => {});
-      };
-      ffmpeg()
-        .addInput(name + "_video" + "." + videoExt)
-        .addInput(name + "_audio" + "." + audioExt)
-        .audioCodec("copy")
-        .videoCodec("copy")
-        .saveToFile(name + "." + videoExt) // cant directly output stream for mp4 format
-        .on("error", () => {
-          clean();
-          console.log("ffmpeg error");
-        })
-        .on("end", () => {
-          clean();
-          const stream = createReadStream(name + "." + videoExt)
-            .on("error", () => {
-              unlink(name + "." + videoExt, () => {});
-              stream.destroy();
-            })
-            .on("close", () => {
-              unlink(name + "." + videoExt, () => {});
-            })
-            .on("open", () => {
-              callback(stream.pause());
-            });
-        });
-    } else {
-      return;
     }
-  }
 
-  console.log(url);
-  getInfoFormat(
-    url,
-    formatVideoOneStream,
-    () => {
-      const stream = youtubeDlFormat(url, formatVideoOneStream); //todo replace ?
-      stream.pause();
-      callback(stream);
-    },
-    () => {
-      getInfoFormat(
-        url,
-        formatVideoOnlyStream,
-        (videoInfo) => {
-          getInfoFormat(
-            url,
-            formatAudioOnlyStream,
-            (audioInfo) => {
-              videoExt = videoInfo.ext;
-              audioExt = audioInfo.ext;
+    if (itemInfo.isOneFile) {
+      fetch(itemInfo.url)
+        .then((res) => {
+          if (res.ok) {
+            promise(res.body);
+          } else {
+            reject();
+          }
+        })
+        .catch((err) => reject(err)); // todo replace  fetch? | await catch
+    } else {
+      videoExt = itemInfo.video.ext;
+      audioExt = itemInfo.audio.ext;
 
-              youtubeDlFormat(url, formatVideoOnlyStream)
-                .pipe(
-                  createWriteStream(name + "_video" + "." + videoExt)
-                    .on("finish", () => {
-                      videoStreamDone = true;
-                      streamMerge(callback);
-                    })
-                    .on("error", (err) => {
-                      failCallback(err);
-                    })
-                )
-                .on("error", (err) => {
-                  failCallback(err);
-                });
+      console.log("two stream");
 
-              /*  fetch(videoInfo.url, { method: "HEAD" }).then((resp) => { //todo
-                  resp.body
+      // tocheck axios
+      fetch(itemInfo.video.url)
+        .then((respVideo) => {
+          console.log(`respVideo ${respVideo.ok}`);
+          if (respVideo.ok) {
+            fetch(itemInfo.audio.url)
+              .then((respAudio) => {
+                if (respAudio) {
+                  respVideo.body
                     .pipe(
-                      createWriteStream(name + "_video" + "." + videoExt + "2")
+                      createWriteStream(
+                        `${basePath}${itemInfo.name}_video.${videoExt}`
+                      )
                         .on("finish", () => {
-                          console.log(
-                            "DURATION FETCH :  " + (new Date().getTime() - time2)
-                          );
                           videoStreamDone = true;
-                          // streamMerge(callback);
+                          streamMerge();
                         })
                         .on("error", (err) => {
-                          console.log("failback : 1");
-                          failCallback(err);
+                          console.log("error");
+                          console.log(err);
+                          reject(err);
                         })
                     )
                     .on("error", (err) => {
-                      console.log("failback : 1");
-                      failCallback(err);
+                      console.log("error 2");
+                      console.log(err);
+                      reject(err);
                     });
-                });*/
-              youtubeDlFormat(url, formatAudioOnlyStream)
-                .pipe(
-                  createWriteStream(name + "_audio" + "." + audioExt)
-                    .on("finish", () => {
-                      audioStreamDone = true;
-                      streamMerge(callback);
-                    })
+
+                  respAudio.body
+                    .pipe(
+                      createWriteStream(
+                        `${basePath}${itemInfo.name}_audio.${audioExt}`
+                      )
+                        .on("finish", () => {
+                          audioStreamDone = true;
+                          streamMerge();
+                        })
+                        .on("error", (err) => {
+                          reject(err);
+                        })
+                    )
                     .on("error", (err) => {
-                      failCallback(err);
-                    })
-                )
-                .on("error", (err) => {
-                  failCallback(err);
-                });
-            },
-            () => {
-              failCallback(new Error("Can't get audio data"));
-            }
-          );
-        },
-        () => {
-          failCallback(new Error("Get Info Video Error"));
-        }
-      );
+                      reject(err);
+                    });
+                  console.log(`respAudio ${respAudio.ok}`);
+                  console.log(
+                    `path ${basePath}${itemInfo.name}_audio.${audioExt}`
+                  );
+                } else {
+                  reject();
+                }
+              })
+              .catch((err) => reject(err));
+          } else {
+            reject();
+          }
+        })
+        .catch((err) => reject(err));
     }
-  );
+  });
 }
 
-module.exports = { download };
+function downloader(itemInfo) {
+  if (itemInfo.needYoutubeDl) {
+    return youtubeDlDownload(itemInfo);
+  }
+  return download(itemInfo.url);
+}
+
+module.exports = downloader;
