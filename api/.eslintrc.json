@@ -3,7 +3,7 @@
         "node": true,
         "es2020": true
     },
-    "extends": ["eslint:recommended", "prettier", "plugin:node/recommended"],
+    "extends": ["eslint:recommended", "plugin:node/recommended","airbnb-base", "prettier"],
     "parser":"@babel/eslint-parser",
     "parserOptions": {
         "sourceType": "module",
@@ -15,7 +15,8 @@
     "rules": {
         "prettier/prettier": "error",
         "no-undef": ["error"],
-        "no-undefined": ["error"]
+        "no-undefined": ["error"],
+        "radix":"off"
     },
     "plugins": ["prettier"]
 }
