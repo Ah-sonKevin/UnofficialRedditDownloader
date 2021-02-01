@@ -61,7 +61,6 @@ export function setSubredditList(items: SavedContent[]): string[] {
 export async function fetchCategories(): Promise<string[]> {
   // later
   const res = await fetchOapi("/api/saved_categories");
-  console.log(res);
   if (res.ok) {
     return res.json().then(() => []);
   }

@@ -99,12 +99,8 @@ async function fetchData(
   name: string,
 ) {
   // downloading= true
-  console.log("fetchData downloading ");
-  console.log(downloading);
   if (x.ok) {
-    console.log("fetchData OK");
     const tmpRes = startDownload(x);
-    console.log("started");
 
     const { divider, extension, length } = tmpRes || {
       divider: 1,
@@ -116,7 +112,6 @@ async function fetchData(
     let receivedData = 0;
     const totalData: number = length;
     const reader = x.body?.getReader();
-    console.log("fetchData pre reeadr");
     if (!reader) {
       console.log("Bad response");
       downloadIndicator.close();
@@ -137,7 +132,7 @@ async function fetchData(
       }
     }, 1000);
     while (reading && downloading) {
-      console.log("fetchData reading");
+      // replace no for loop
       // eslint-disable-next-line no-await-in-loop
       const { done, value } = await reader.read();
       if (done) {
@@ -152,7 +147,6 @@ async function fetchData(
         receivedData += value.length;
       }
     }
-    console.log("fetchData done reading");
 
     downloadIndicator.close();
     clearInterval(updateSpinner);
@@ -169,8 +163,6 @@ async function fetchData(
 }
 
 async function downloadMedia(item: SavedContent) {
-  const time = new Date().getTime();
-  console.log("Download Image");
   const downloadIndicator = ElLoading.service({
     fullscreen: true,
     text: "Download Preparation",
@@ -178,16 +170,12 @@ async function downloadMedia(item: SavedContent) {
   });
 
   const url = item.externalUrl;
-  console.log(url);
-  console.log("fetchmedia");
   const x = await fetchMedia(url, item.needYtDl);
-  console.log("fetch data");
   await fetchData(
     x,
     downloadIndicator,
     getName(item.title, url.split(".").slice(-1)[0]),
   );
-  console.log(new Date().getTime() - time);
 }
 
 function downloadObject(object: Blob, nom: string): void {
@@ -245,7 +233,6 @@ function getBatchUrl(item: SavedContent): ItemInfo[] {
 }
 
 export function download(items: SavedContent | SavedContent[]): void {
-  console.log("DOwnload");
   if (Array.isArray(items)) {
     if (items.length === 1) {
       void singleDownload(items[0])
@@ -255,7 +242,6 @@ export function download(items: SavedContent | SavedContent[]): void {
         })
         .catch(err => console.log(err));
     } else {
-      console.log("batch");
       void batchDownload(items).then(() => {
         downloading = false;
         return downloading;
@@ -289,19 +275,11 @@ export async function batchDownload(items: SavedContent[]): Promise<void> {
   items.forEach(el => {
     urls.push(...getBatchUrl(el));
   });
-  console.log(urls);
-  console.log("GotUrl ***");
-  console.log(urls);
-  // todo empty screen list
-  console.log("aaa");
-  const x = await fetchBatchMediaInfo(urls);
-  console.log("cccc");
 
-  console.log(x);
-  console.log("eee");
+  // todo empty screen list
+  const x = await fetchBatchMediaInfo(urls);
   const blob = await fetchData(x, downloadIndicator, "a.zip");
-  console.log("fetchData");
-  console.log(blob);
+
   if (blob) {
     void loadAsync(blob)
       .then(el => el.files["result.json"].async("string"))
