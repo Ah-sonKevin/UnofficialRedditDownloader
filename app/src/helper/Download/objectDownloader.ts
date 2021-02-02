@@ -277,7 +277,6 @@ export async function batchDownload(items: SavedContent[]): Promise<void> {
 		urls.push(...getBatchUrl(el));
 	});
 
-	// todo empty screen list
 	const x = await fetchBatchMediaInfo(urls);
 	const blob = await fetchData(x, downloadIndicator, "a.zip");
 

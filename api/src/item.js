@@ -26,7 +26,7 @@ function getSize(url) {
     const { headers } = res;
     const size = headers.get("content-length");
     if (headers) {
-      return size // todo update eslint ? to use ??
+      return size 
         ? parseInt(headers.get("content-length"))
         : 0;
     }

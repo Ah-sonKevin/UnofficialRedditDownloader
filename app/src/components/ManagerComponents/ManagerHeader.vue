@@ -67,7 +67,7 @@ export default defineComponent({
 			set: val => context.emit("changeSelectedSorter", val),
 		});
 
-		// tocheck toremember const getValueByKey = (key: string) => (obj: Record<string, any>) =>
+		// toremember const getValueByKey = (key: string) => (obj: Record<string, any>) =>
 
 		onBeforeMount(() => {
 			Object.values(sorter).forEach(el => sorterList.push(el));
