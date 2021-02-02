@@ -44,8 +44,9 @@
 						<ManagerSkeletonLine />
 					</template>
 					<template #default>
-						<ul>
+						<ul v-if="getActive().length > 0">
 							<li v-for="item in getActive()" :key="item.id">
+								//todo make computed
 								<ManagerLineList
 									:item="item"
 									:is-gold="isGold"
@@ -57,6 +58,10 @@
 								/>
 							</li>
 						</ul>
+						<el-empty
+							v-else
+							description="You don't have any saved content"
+						></el-empty>
 					</template>
 				</el-skeleton>
 			</el-main>
