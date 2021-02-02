@@ -1,4 +1,4 @@
-import { R_NetworkError } from "@/errors/restartError";
+import { NetworkError } from "@/errors/restartError";
 import { buildContent } from "@/savedContent/contentBuilder";
 import SavedContent from "@/savedContent/savedContent";
 import User from "@/User/User";
@@ -17,7 +17,7 @@ export async function recGetSave(
 	}
 	const res = await fetchOapi(`/user/${username}/saved?limit=100${afterParam}`);
 	if (!res.ok) {
-		throw new R_NetworkError(res.statusText);
+		throw new NetworkError(res.statusText);
 	}
 
 	const result: RawItem = (await res.json()) as RawItem;
@@ -43,7 +43,7 @@ export async function fetchUser(): Promise<User> {
 			return user;
 		});
 	}
-	throw new R_NetworkError(userRes.statusText);
+	throw new NetworkError(userRes.statusText);
 }
 
 export function setSubredditList(items: SavedContent[]): string[] {

@@ -1,4 +1,4 @@
-import { R_DataNotFoundError, R_NetworkError } from "@/errors/restartError";
+import { DataNotFoundError, NetworkError } from "@/errors/restartError";
 import { store } from "@/store";
 import AuthStore from "@/store/authStore";
 import { useRouter } from "vue-router";
@@ -61,7 +61,7 @@ export async function refreshAccessToken(): Promise<void> {
 			void useRouter().push({ name: "Home" });
 		}
 	} else {
-		throw new R_DataNotFoundError("Refresh Token Not Found ");
+		throw new DataNotFoundError("Refresh Token Not Found ");
 	}
 }
 
@@ -81,7 +81,7 @@ export async function fetchOapi(
 			await refreshAccessToken();
 			return fetchOapi(endpoint, true);
 		}
-		throw new R_NetworkError(response.statusText);
+		throw new NetworkError(response.statusText);
 	} else {
 		return response;
 	}
@@ -115,9 +115,9 @@ export async function postOapi(
 				await refreshAccessToken();
 				return postOapi(endpoint, args, true);
 			}
-			throw new R_NetworkError("Refresh Token Error");
+			throw new NetworkError("Refresh Token Error");
 		} else {
-			throw new R_NetworkError(response.statusText);
+			throw new NetworkError(response.statusText);
 		}
 	}
 	const result: unknown = await response.json();

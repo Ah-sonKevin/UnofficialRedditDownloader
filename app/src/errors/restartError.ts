@@ -1,6 +1,6 @@
-import { R_Error } from "./error";
+import { RedditManagerError } from "./error";
 
-export class R_RestartError extends R_Error {
+export class RestartError extends RedditManagerError {
 	preMessage = "";
 
 	popupMessage: string;
@@ -16,26 +16,26 @@ export class R_RestartError extends R_Error {
 	}
 }
 
-export class R_AuthError extends R_RestartError {
+export class AuthError extends RestartError {
 	constructor(msg: string) {
 		super(msg);
 		this.nameError = "Authentication Error";
 	}
 }
 
-export class R_UnauthorizedAccess extends R_RestartError {
+export class UnauthorizedAccess extends RestartError {
 	constructor() {
 		super("You need to be connect to access this page");
 	}
 }
 
-export class R_NetworkError extends R_RestartError {
+export class NetworkError extends RestartError {
 	constructor(msg: string) {
 		super(msg);
 		this.nameError = "Network Error";
 	}
 }
-export class R_BadLinkError extends R_RestartError {
+export class BadLinkError extends RestartError {
 	// tocheck
 	constructor(msg: string) {
 		super(msg);
@@ -43,7 +43,7 @@ export class R_BadLinkError extends R_RestartError {
 	}
 }
 
-export class R_UnknowTypeError extends R_RestartError {
+export class UnknowTypeError extends RestartError {
 	// todo sendError / LogLevel
 	constructor(msg: string) {
 		super(msg);
@@ -51,7 +51,7 @@ export class R_UnknowTypeError extends R_RestartError {
 	}
 }
 
-export class R_DataNotFoundError extends R_RestartError {
+export class DataNotFoundError extends RestartError {
 	// tocheck
 	constructor(msg: string) {
 		super(msg);
@@ -59,7 +59,7 @@ export class R_DataNotFoundError extends R_RestartError {
 	}
 }
 
-export class R_DownloadError extends R_RestartError {
+export class DownloadError extends RestartError {
 	constructor() {
 		super("");
 	}

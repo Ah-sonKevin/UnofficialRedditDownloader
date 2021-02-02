@@ -4,8 +4,8 @@
 		lazy
 		:src="getImage()"
 		fit="cover"
-		:width="thumbnailSize"
-		:height="thumbnailSize"
+		:width="THUMBNAIL_SIZE"
+		:height="THUMBNAIL_SIZE"
 	>
 		<template #error>
 			<i class="el-icon-picture-outline" />
@@ -15,7 +15,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
-import SavedContent from "@/object/savedContent";
+import SavedContent from "@/savedContent/savedContent";
 
 export default defineComponent({
 	name: "ManagerLineListListImage",
@@ -30,7 +30,7 @@ export default defineComponent({
 		},
 	},
 	setup(props) {
-		const thumbnailSize = "140px";
+		const THUMBNAIL_SIZE = "140px";
 
 		function getImage(): string {
 			if (props.item.hasImage) {
@@ -51,7 +51,7 @@ export default defineComponent({
 
 		return {
 			getImage,
-			thumbnailSize,
+			THUMBNAIL_SIZE,
 			getPreviewImage,
 		};
 	},

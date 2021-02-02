@@ -92,11 +92,8 @@ import ManagerLineList from "@managerComponents/ManagerLineList.vue";
 
 import { defineComponent, ref, Ref, onBeforeMount } from "vue";
 import { sorter } from "@/enum/sorter";
-import SavedContent from "@/object/savedContent";
 import { ElLoading, ElMessage } from "element-plus";
-import User from "@/object/User";
 import { itemPerPageList } from "@/enum/itemPerPageList";
-import { download } from "@/helper/objectDownloader";
 import {
 	recGetSave,
 	fetchUser,
@@ -105,14 +102,17 @@ import {
 	save,
 	unsave,
 } from "@/helper/dataManager";
-import { R_NetworkError, R_UnauthorizedAccess } from "@/errors/restartError";
-import { getSortedContent } from "../helper/sorter";
+import { NetworkError, UnauthorizedAccess } from "@/errors/restartError";
+import SavedContent from "@/savedContent/savedContent";
+import User from "@/User/User";
 import {
 	filterItems,
 	searchByText,
 	hideDeleted,
 	setFilter,
-} from "../helper/filter";
+} from "@/helper/filterHelper";
+import { download } from "@/helper/Download/objectDownloader";
+import { getSortedContent } from "../helper/sorter";
 
 export default defineComponent({
 	components: {
@@ -124,7 +124,6 @@ export default defineComponent({
 		ManagerSearch,
 	},
 	setup() {
-		// todo get Size first
 		console.log("Manager");
 
 		const selectedSorter = ref(sorter.ADDED_DATE);
@@ -186,7 +185,7 @@ export default defineComponent({
 					return items;
 				})
 				.catch(reason => {
-					throw new R_NetworkError(`Fail when getting data ${String(reason)}`);
+					throw new NetworkError(`Fail when getting data ${String(reason)}`);
 				});
 		}
 
@@ -229,7 +228,7 @@ export default defineComponent({
 					return getItems(user); // tocheck assignment here
 				})
 				.catch(() => {
-					throw new R_UnauthorizedAccess();
+					throw new UnauthorizedAccess();
 				})
 				.finally(() => {
 					loadingSpinner.close();

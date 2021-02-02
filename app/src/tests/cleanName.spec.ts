@@ -1,7 +1,6 @@
 import { cleanString } from "@/helper/stringHelper";
 
 describe("Get name function", () => {
-	// todo check archive two file same name
 	test("Clean not alphanumeric character", () => {
 		const INPUT = "This is^a$test;3";
 		const OUTPUT = "This_is_a_test_3";

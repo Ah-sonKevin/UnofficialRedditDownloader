@@ -2,23 +2,31 @@
     "env": {
         "browser": true,
         "es2020": true
-    },
+	},
+	"settings": {//<projectRoot>/node_modules/@vue/cli-service/webpack.config.js
+		"import/resolver": {
+			"webpack":{
+				"config":"./node_modules/@vue/cli-service/webpack.config.js"}
+		}
+	},
     "extends": [
         "eslint:recommended",
         "plugin:vue/essential",
         "plugin:vue/vue3-recommended",
         "plugin:vue/vue3-strongly-recommended",
         "plugin:@typescript-eslint/recommended",
-        "plugin:@typescript-eslint/recommended-requiring-type-checking",        
+        "plugin:@typescript-eslint/recommended-requiring-type-checking",
         "plugin:jest/recommended",
         "plugin:jest/style",
         "plugin:security/recommended",
         "plugin:regexp/recommended",
-        "plugin:promise/recommended",         
+        "plugin:promise/recommended",
         "plugin:array-func/recommended",
         "plugin:eslint-comments/recommended",
         "airbnb-typescript/base",
-        "plugin:jest-formatting/recommended",
+		"plugin:jest-formatting/recommended",
+		"plugin:import/warnings",
+		"plugin:import/typescript",
         "prettier"
     ],
 
@@ -62,9 +70,8 @@
             "allowBoolean": true
             }],
             "quotes": "off",
-            "@typescript-eslint/quotes": ["error","double"],
+            "@typescript-eslint/quotes": "off",
             "import/extensions":"off",
-            "import/no-unresolved":"off",
             "prefer-destructuring":"off",//tocheck
             "no-unused-vars": "off",
 			"@typescript-eslint/no-unused-vars": ["warn"],
@@ -84,12 +91,9 @@
             "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
             "indent": "off",
 			"@typescript-eslint/indent": "off",
-			"vue/html-indent":"off"
-        
-
-  
+			"vue/html-indent":"off",
+			"max-classes-per-file":"off"
     },
-        
     "overrides": [{
         "files": ["**/enum/**"],
         "rules": {

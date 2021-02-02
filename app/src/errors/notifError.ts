@@ -1,12 +1,8 @@
-import { R_Error } from "./error";
+import { RedditManagerError } from "./error";
 
-export class R_NotifError extends R_Error {
-	constructor(msg: string) {
-		super(msg);
-	}
-}
+export class NotifError extends RedditManagerError {}
 
-export class R_PartialDownloadError extends R_NotifError {
+export class PartialDownloadError extends NotifError {
 	success: { path: string; name: string }[];
 
 	fail: { path: string; name: string }[];

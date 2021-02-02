@@ -18,7 +18,7 @@ import {
 	PropType,
 	useContext,
 } from "vue";
-import SavedContent from "@/object/savedContent";
+import SavedContent from "@/savedContent/savedContent";
 
 export default defineComponent({
 	name: "ManagerSearch",

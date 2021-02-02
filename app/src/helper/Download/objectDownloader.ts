@@ -1,16 +1,16 @@
 import { postType } from "@/enum/postType";
 import {
-	R_DownloadError,
-	R_NetworkError,
-	R_UnknowTypeError,
+	DownloadError,
+	NetworkError,
+	UnknowTypeError,
 } from "@/errors/restartError";
 import SavedContent from "@/savedContent/savedContent";
 import { ElLoading } from "element-plus";
 import { ILoadingInstance } from "element-plus/lib/el-loading/src/loading.type";
 import { loadAsync } from "jszip";
-import { R_PartialDownloadError } from "../../errors/notifError";
-import { fetchBatchMediaInfo, fetchMedia } from "../fetchHelper/fetchHelper";
+import { PartialDownloadError } from "../../errors/notifError";
 import { ItemInfo, SuccessList } from "../../savedContent/ItemInterface";
+import { fetchBatchMediaInfo, fetchMedia } from "../fetchHelper/fetchHelper";
 import { notify } from "../notifierHelper";
 import { cleanString } from "../stringHelper";
 
@@ -50,7 +50,6 @@ function downloadPageAsText(item: SavedContent): void {
 function startDownload(x: Response) {
 	let length = x.headers.get("Content-Length");
 	if (!length) {
-		console.log("LengthError");
 		// return;
 		length = "1";
 	}
@@ -73,7 +72,7 @@ function startDownload(x: Response) {
 			break;
 		default: {
 			console.log("Size error");
-			throw new R_DownloadError();
+			throw new DownloadError();
 		}
 	}
 	return { divider, extension, length: +length };
@@ -92,7 +91,10 @@ function updateDownloadSpinner(
 		)} ${extension}`,
 	);
 }
-
+/* //tocheck
+  for (var aMultiples = ["KiB", "MiB", "GiB", "TiB", "PiB", "EiB", "ZiB", "YiB"], nMultiple = 0, nApprox = nBytes / 1024; nApprox > 1; nApprox /= 1024, nMultiple++) {
+    sOutput = nApprox.toFixed(3) + " " + aMultiples[nMultiple] + " (" + nBytes + " bytes)";
+    */
 async function fetchData(
 	x: Response,
 	downloadIndicator: ILoadingInstance,
@@ -113,9 +115,8 @@ async function fetchData(
 		const totalData: number = length;
 		const reader = x.body?.getReader();
 		if (!reader) {
-			console.log("Bad response");
 			downloadIndicator.close();
-			throw new R_DownloadError();
+			throw new DownloadError();
 		}
 		let reading = true;
 		const updateSpinner = setInterval(() => {
@@ -140,9 +141,8 @@ async function fetchData(
 				reading = false;
 			} else {
 				if (!value) {
-					console.log("BadValue");
 					downloadIndicator.close();
-					throw new R_DownloadError();
+					throw new DownloadError();
 				}
 				fileChunks.push(value);
 				receivedData += value.length;
@@ -159,8 +159,7 @@ async function fetchData(
 		return undefined;
 	}
 	downloadIndicator.close();
-	console.log("Bad response");
-	throw new R_DownloadError();
+	throw new DownloadError();
 }
 
 async function downloadMedia(item: SavedContent) {
@@ -259,7 +258,6 @@ export function download(items: SavedContent | SavedContent[]): void {
 // todo check batch text
 export async function batchDownload(items: SavedContent[]): Promise<void> {
 	downloading = true;
-	console.log(`batchDownload :  + ${items.length}`);
 
 	const downloadIndicator = ElLoading.service({
 		fullscreen: true,
@@ -287,12 +285,12 @@ export async function batchDownload(items: SavedContent[]): Promise<void> {
 			.then(res => {
 				const arrays = JSON.parse(res) as SuccessList;
 				if (arrays.fail.length > 0) {
-					throw new R_PartialDownloadError(arrays);
+					throw new PartialDownloadError(arrays);
 				}
 				return arrays;
 			});
 	} else {
-		throw new R_NetworkError(x.statusText);
+		throw new NetworkError(x.statusText);
 	}
 }
 
@@ -311,6 +309,6 @@ export async function singleDownload(item: SavedContent): Promise<void> {
 	} else if (itemType === postType.IMAGE || itemType === postType.VIDEO) {
 		await downloadMedia(item);
 	} else {
-		throw new R_UnknowTypeError(`Unknow type ${itemType}  ${item.title}`);
+		throw new UnknowTypeError(`Unknow type ${itemType}  ${item.title}`);
 	}
 }

@@ -1,4 +1,4 @@
-import { R_AuthError, R_DataNotFoundError } from "@/errors/restartError";
+import { AuthError, DataNotFoundError } from "@/errors/restartError";
 import Auth from "@/User/Auth";
 import { Module, Mutation, VuexModule } from "vuex-module-decorators";
 
@@ -13,7 +13,7 @@ export default class AuthStore extends VuexModule {
 
 	get auth(): Auth {
 		if (!this.rawAuth) {
-			throw new R_DataNotFoundError("Auth is undefined");
+			throw new DataNotFoundError("Auth is undefined");
 		}
 		return this.rawAuth;
 	}
@@ -36,7 +36,7 @@ export default class AuthStore extends VuexModule {
 
 	get token(): string {
 		if (!this.rawToken) {
-			throw new R_AuthError("undefined token");
+			throw new AuthError("undefined token");
 		} else {
 			return this.rawToken;
 		}
@@ -49,7 +49,7 @@ export default class AuthStore extends VuexModule {
 
 	get refreshToken(): string {
 		if (!this.rawRefreshToken) {
-			throw new R_AuthError("undefined refresh token");
+			throw new AuthError("undefined refresh token");
 		} else {
 			return this.rawRefreshToken;
 		}

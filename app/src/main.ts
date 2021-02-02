@@ -5,7 +5,7 @@ import App from "@/views/App.vue";
 import ElementPlus from "element-plus";
 import "element-plus/lib/theme-chalk/index.css";
 import { createApp } from "vue";
-import { R_Error } from "./errors/error";
+import { RedditManagerError } from "./errors/error";
 
 const app = createApp(App);
 app
@@ -17,7 +17,7 @@ app
 
 window.onunhandledrejection = (promiseEvent: PromiseRejectionEvent) => {
 	const error: unknown = promiseEvent.reason;
-	if (error instanceof R_Error) {
+	if (error instanceof RedditManagerError) {
 		promiseEvent.preventDefault(); // message still show on firefox, bug
 		managerErrors(error);
 	} else {

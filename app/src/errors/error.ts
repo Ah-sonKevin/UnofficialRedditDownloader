@@ -1,5 +1,1 @@
-export class R_Error extends Error {
-	constructor(msg: string) {
-		super(msg);
-	}
-}
+export class RedditManagerError extends Error {}

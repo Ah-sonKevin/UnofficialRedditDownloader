@@ -3,19 +3,17 @@
 </template>
 
 <script lang="ts">
-import router from "@/router";
 import { onBeforeMount, defineComponent } from "vue";
-import { generateAccessToken } from "@/helper/authHelper";
-import { useRoute } from "vue-router";
-import { R_NetworkError } from "@/errors/restartError";
+import { useRoute, useRouter } from "vue-router";
+import { NetworkError } from "@/errors/restartError";
+import { generateAccessToken } from "@/auth/authHelper";
 
 export default defineComponent({
 	setup() {
 		const query = useRoute().query;
+		const router = useRouter();
 
 		onBeforeMount(() => {
-			console.log("Login");
-
 			generateAccessToken({
 				state: query.state as string,
 				code: query.code as string,
@@ -23,7 +21,7 @@ export default defineComponent({
 			})
 				.then(() => router.push("Manager"))
 				.catch((reason: unknown) => {
-					throw new R_NetworkError(JSON.stringify(reason));
+					throw new NetworkError(JSON.stringify(reason));
 				});
 		});
 	},

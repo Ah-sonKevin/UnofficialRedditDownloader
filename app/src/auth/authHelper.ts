@@ -1,4 +1,4 @@
-import { R_AuthError, R_NetworkError } from "@/errors/restartError";
+import { AuthError, NetworkError } from "@/errors/restartError";
 import AuthStore from "@/store/authStore";
 import { useStore } from "vuex";
 import { getModule } from "vuex-module-decorators";
@@ -33,7 +33,7 @@ export function resetToken(): void {
 		)
 		.then(() => authModule.resetToken())
 		.catch(err => {
-			throw new R_AuthError(err);
+			throw new AuthError(err);
 		});
 }
 
@@ -44,7 +44,7 @@ export async function generateAccessToken(received: CodeTruple): Promise<void> {
 		received.state !== authModule.auth.AUTH_STRING ||
 		!received.code
 	) {
-		throw new R_AuthError(
+		throw new AuthError(
 			`Error: ${received.error ?? "No Error"},  State:${received.state} = ${
 				authModule.auth.AUTH_STRING
 			},  Code:${received.code}`,
@@ -64,6 +64,6 @@ export async function generateAccessToken(received: CodeTruple): Promise<void> {
 		authModule.setToken(res.access_token);
 		authModule.setRefreshToken(res.refresh_token);
 	} else {
-		throw new R_NetworkError(result.statusText);
+		throw new NetworkError(result.statusText);
 	}
 }

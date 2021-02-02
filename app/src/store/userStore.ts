@@ -1,4 +1,4 @@
-import { R_DataNotFoundError } from "@/errors/restartError";
+import { DataNotFoundError } from "@/errors/restartError";
 import User from "@/User/User";
 import { Module, Mutation, VuexModule } from "vuex-module-decorators";
 
@@ -17,7 +17,7 @@ export default class UserStore extends VuexModule {
 	}
 
 	get getUser(): User {
-		if (!this.user) throw new R_DataNotFoundError("Undefined User");
+		if (!this.user) throw new DataNotFoundError("Undefined User");
 		return this.user;
 	}
 }

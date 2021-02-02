@@ -14,8 +14,7 @@
 <script lang="ts">
 import { useContext, defineComponent, PropType } from "vue";
 import { ElMessage } from "element-plus";
-import SavedContent from "@/object/savedContent";
-import { download, batchDownload } from "@/helper/objectDownloader";
+import SavedContent from "@/savedContent/savedContent";
 
 export default defineComponent({
 	name: "ManagerTools",

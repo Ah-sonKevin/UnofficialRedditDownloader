@@ -18,10 +18,10 @@
 
 <script lang="ts">
 import { defineComponent, ref, onBeforeMount } from "vue";
-import { buildContent } from "@/object/contentBuilder";
-import { download } from "@/helper/objectDownloader";
-import { R_BadLinkError, R_DownloadError } from "@/errors/restartError";
-import { rawItem } from "@/helper/rawItemInterface";
+import { BadLinkError, DownloadError } from "@/errors/restartError";
+import { RawItem } from "@/savedContent/rawItemInterface";
+import { buildContent } from "@/savedContent/contentBuilder";
+import { download } from "@/helper/Download/objectDownloader";
 
 export default defineComponent({
 	name: "HomeDownloadLink",
@@ -49,15 +49,15 @@ export default defineComponent({
 						if (el.ok) {
 							return el.json();
 						}
-						throw new R_BadLinkError("Couldn't access link");
+						throw new BadLinkError("Couldn't access link");
 					})
-					.then((json: rawItem[]) => {
+					.then((json: RawItem[]) => {
 						const content = json[0].data.children[0];
 						return buildContent({ kind: content.kind, data: content.data });
 					})
 					.then(item => download(item))
 					.catch(err => {
-						throw new R_DownloadError();
+						throw new DownloadError();
 					});
 			}
 		}

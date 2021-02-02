@@ -1,5 +1,5 @@
 import { postType } from "@/enum/postType";
-import { R_BadLinkError } from "@/errors/restartError";
+import { BadLinkError } from "@/errors/restartError";
 import { RedditRawData } from "./redditDataInterface";
 import SavedContent from "./savedContent";
 
@@ -12,7 +12,7 @@ function cleanURL(url: string): string {
 	const res = parser.parseFromString(url, "text/html").documentElement
 		.textContent;
 	if (!res) {
-		throw new R_BadLinkError(`Cleaning URL Error  ${url}`); // tocheck list element couldn't load
+		throw new BadLinkError(`Cleaning URL Error  ${url}`); // tocheck list element couldn't load
 	}
 	return res;
 }
@@ -28,9 +28,7 @@ async function isDownloadable(url: string): Promise<boolean> {
 	});
 	if (res.ok) {
 		const txt = (await res.json()) as boolean;
-		console.log("Is Downloadable"); // todo
-		console.log(typeof txt);
-		console.log(txt); // tocheck
+		console.log(`Is Downloadable ${txt}  ${typeof txt}`); // todo
 		return txt;
 	}
 	return false;

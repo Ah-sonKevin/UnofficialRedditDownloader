@@ -89,7 +89,7 @@ import {
 	ref,
 	nextTick,
 } from "vue";
-import SavedContent from "@/object/savedContent";
+import SavedContent from "@/savedContent/savedContent";
 import ButtonTooltip from "../General/ButtonTooltip.vue";
 import ManagerLineListListImage from "./ManagerLineListListImage.vue";
 

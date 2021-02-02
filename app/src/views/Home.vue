@@ -8,24 +8,21 @@
 
 <script lang="ts">
 import HomeDownloadLink from "@/components/HomeDownloadLink.vue";
-
 import { defineComponent } from "vue";
 import { getModule } from "vuex-module-decorators";
 import AuthStore from "@/store/authStore";
 import { store } from "@/store";
-import permission from "@/helper/permission";
-import router from "@/router";
+import permission from "@/auth/permission";
+import { useRouter } from "vue-router";
 
-"use strict";
-
-console.log("LoadHome");
 export default defineComponent({
 	components: { HomeDownloadLink },
 	setup() {
+		const router = useRouter();
 		const authModule = getModule(AuthStore, store);
 		function connectToReddit(): void {
 			if (!authModule.isConnected) {
-				authModule.setAuth(permission.createAuthData());
+				authModule.setAuth(permission.createAuthData()); // todo permission not need to be object
 				window.location.href = authModule.auth.AUTH_LINK;
 			} else {
 				void router.push({ name: "Manager" });
@@ -38,11 +35,6 @@ export default defineComponent({
 	},
 });
 // tocheck
-/*
-  // partie de code facultative pour l'approximation des multiples
-  for (var aMultiples = ["KiB", "MiB", "GiB", "TiB", "PiB", "EiB", "ZiB", "YiB"], nMultiple = 0, nApprox = nBytes / 1024; nApprox > 1; nApprox /= 1024, nMultiple++) {
-    sOutput = nApprox.toFixed(3) + " " + aMultiples[nMultiple] + " (" + nBytes + " bytes)";
-    */
 </script>
 <style scoped>
 input:valid {
