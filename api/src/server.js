@@ -16,8 +16,6 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-
-
 app.post("/api/getHead/", (req, res) => {
   const { url } = req.body;
   youtubeDl.getInfo(url, (err) => {
@@ -124,7 +122,7 @@ app.post("/api/downBatchInfo/", (req, res, next) => {
 });
 // TODO SELECT all page // all filtered
 // todo cancel download
-// tocheck pipeline send error and make sure to clean all stream
+// toremember pipeline send error and make sure to clean all stream
 
 app.use((err, req, res) => {
   if (req.xhr) {

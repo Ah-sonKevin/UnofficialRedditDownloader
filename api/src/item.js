@@ -26,9 +26,7 @@ function getSize(url) {
     const { headers } = res;
     const size = headers.get("content-length");
     if (headers) {
-      return size 
-        ? parseInt(headers.get("content-length"))
-        : 0;
+      return size ? parseInt(headers.get("content-length")) : 0;
     }
     return 0;
   });
