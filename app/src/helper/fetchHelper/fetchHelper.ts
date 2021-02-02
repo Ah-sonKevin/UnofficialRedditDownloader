@@ -91,7 +91,7 @@ export async function postOapi(
 	endpoint: string,
 	args: Couple[],
 	retry = false,
-): Promise<any> {
+): Promise<unknown> {
 	const authHeaders = getOauthHeader();
 	let body = "";
 

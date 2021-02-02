@@ -95,6 +95,8 @@ function updateDownloadSpinner(
   for (var aMultiples = ["KiB", "MiB", "GiB", "TiB", "PiB", "EiB", "ZiB", "YiB"], nMultiple = 0, nApprox = nBytes / 1024; nApprox > 1; nApprox /= 1024, nMultiple++) {
     sOutput = nApprox.toFixed(3) + " " + aMultiples[nMultiple] + " (" + nBytes + " bytes)";
     */
+
+const SPINNER_UPDATE_FREQUENCY = 1000;
 async function fetchData(
 	x: Response,
 	downloadIndicator: ILoadingInstance,
@@ -131,7 +133,7 @@ async function fetchData(
 			} else {
 				downloadIndicator.setText("Downloading ...");
 			}
-		}, 1000);
+		}, SPINNER_UPDATE_FREQUENCY);
 		// eslint-disable-next-line no-loops/no-loops
 		while (reading && downloading) {
 			// replace no for loop

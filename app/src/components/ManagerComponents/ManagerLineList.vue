@@ -90,10 +90,7 @@ import {
 	nextTick,
 } from "vue";
 import SavedContent from "@/savedContent/savedContent";
-import ButtonTooltip from "../General/ButtonTooltip.vue";
 import ManagerLineListListImage from "./ManagerLineListListImage.vue";
-
-"use strict";
 
 export default defineComponent({
 	name: "ManagerLineList",
@@ -145,11 +142,11 @@ export default defineComponent({
 			await nextTick();
 			const el = document.getElementById(props.item.id);
 			if (el) {
-				const margin = 20;
+				const MARGIN = 20;
 				const info = el.getBoundingClientRect();
 				window.scrollTo({
 					left: 0,
-					top: window.scrollY + info.top - margin,
+					top: window.scrollY + info.top - MARGIN,
 					behavior: "smooth",
 				});
 			}

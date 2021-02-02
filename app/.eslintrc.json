@@ -18,7 +18,7 @@
         "plugin:@typescript-eslint/recommended-requiring-type-checking",
         "plugin:jest/recommended",
         "plugin:jest/style",
-        "plugin:security/recommended",
+        //"plugin:security/recommended",
         "plugin:regexp/recommended",
         "plugin:promise/recommended",
         "plugin:array-func/recommended",
@@ -49,8 +49,11 @@
         "const-case",
         "no-secrets",
        // "xss",
-        "security",
-        "optimize-regex","promise","no-loops","prettier"
+      //  "security",
+		"optimize-regex",
+		"promise",
+		"no-loops",
+		"prettier"
     ],
     "rules": {
       "vue/no-multiple-template-root": "off",

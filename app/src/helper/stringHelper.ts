@@ -1,11 +1,13 @@
-export function cleanString(text: string) {
+const MAX_NAME_SIZE = 100;
+
+export function cleanString(text: string): string {
 	// no ' !!
 	return text
 		.replace(/\W/gi, "_")
 		.replace(/_+/gi, "_")
 		.replace(/^_/, "")
 		.replace(/_$/, "")
-		.substr(0, 100);
+		.substr(0, MAX_NAME_SIZE);
 }
 
 // todo code organisation / architecture / need helper
