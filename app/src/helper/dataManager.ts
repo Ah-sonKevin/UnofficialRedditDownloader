@@ -2,9 +2,9 @@ import { NetworkError } from "@/errors/restartError";
 import { buildContent } from "@/savedContent/contentBuilder";
 import SavedContent from "@/savedContent/savedContent";
 import User from "@/User/User";
-import { Couple } from "./fetchHelper/requestArgument";
-import { fetchOapi, postOapi } from "./fetchHelper/fetchHelper";
 import { RawItem, RawItemUnit } from "../savedContent/rawItemInterface";
+import { fetchOapi, postOapi } from "./fetchHelper/fetchHelper";
+import { Couple } from "./fetchHelper/requestArgument";
 
 export async function recGetSave(
 	username: string,
@@ -61,7 +61,8 @@ export async function fetchCategories(): Promise<string[]> {
 	// later
 	const res = await fetchOapi("/api/saved_categories");
 	if (res.ok) {
-		return res.json().then(() => []);
+		const categories = res.json() as Promise<string[]>;
+		return categories;
 	}
 	return [];
 }

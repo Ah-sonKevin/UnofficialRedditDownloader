@@ -12,9 +12,7 @@ import { defineComponent } from "vue";
 import { getModule } from "vuex-module-decorators";
 import AuthStore from "@/store/authStore";
 import { store } from "@/store";
-
 import { useRouter } from "vue-router";
-import createAuthData from "@/auth/permission";
 
 export default defineComponent({
 	components: { HomeDownloadLink },
@@ -23,7 +21,7 @@ export default defineComponent({
 		const authModule = getModule(AuthStore, store);
 		function connectToReddit(): void {
 			if (!authModule.isConnected) {
-				authModule.createAuthData(); 
+				authModule.createAuthData();
 				window.location.href = authModule.auth.AUTH_LINK;
 			} else {
 				void router.push({ name: "Manager" });
@@ -35,7 +33,6 @@ export default defineComponent({
 		};
 	},
 });
-
 </script>
 <style scoped>
 input:valid {

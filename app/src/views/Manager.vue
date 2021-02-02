@@ -177,22 +177,7 @@ export default defineComponent({
 
 		const subredditList: Ref<string[]> = ref([]);
 
-		async function getItems(user: User) {
-			return recGetSave(user.name)
-				.then(fetchedItems => {
-					items.value = fetchedItems;
-					if (isGold.value === true) {
-						// todo move somewhere else
-						void fetchCategories();
-					}
-					subredditList.value = setSubredditList(fetchedItems);
-					loading.value = false;
-					return items;
-				})
-				.catch(reason => {
-					throw new NetworkError(`Fail when getting data ${String(reason)}`);
-				});
-		}
+		const categoriesList = ref([]);
 
 		function unselectAll() {
 			selectedItem.forEach(el => {
@@ -230,9 +215,26 @@ export default defineComponent({
 					return user;
 				})
 				.then(user => {
-					return getItems(user); // tocheck assignment here
+					return recGetSave(user); // tocheck assignment here
+				})
+				.then(fetchedItems => {
+					items.value = fetchedItems;
+					subredditList.value = setSubredditList(fetchedItems);
+					loading.value = false;
+					return items;
+				})
+				.then(() => {
+					if (isGold.value === true) {
+						return fetchCategories();
+					}
+					return [];
+				})
+				.then(categories => {
+					categoriesList.value = categories;
+					return categoriesList;
 				})
 				.catch(() => {
+					// throw new NetworkError(`Fail when getting data ${String(reason)}`);
 					throw new UnauthorizedAccess();
 				})
 				.finally(() => {
