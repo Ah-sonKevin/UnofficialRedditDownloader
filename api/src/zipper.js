@@ -13,20 +13,18 @@ class Zipper {
   zipping = false;
 
   constructor() {
-    // todo make into custom stream
-    // tocheck need babel
     this.archive = new Packer({ store: true, zlib: { level: 0 } }).pause();
-    this.archive.on("error", (err) => {
-      console.log("archive error");
-      console.log(err);
-    });
+    this.archive.on(
+      "error",
+      (err) => 0
+      // todo
+    );
   }
 
   addStream(stream, nameFile, promise, reject) {
     stream.on("error", (err) => {
       this.failArray.push(nameFile);
-      reject();
-      console.log(`Reject ERROR Callbaback ${nameFile}   ${err}`);
+      reject(err);
     });
 
     if (this.zipping) {
@@ -38,7 +36,6 @@ class Zipper {
       });
     } else {
       this.zipping = true;
-      console.log("StartFromBase");
       this.toZipList.push({
         stream,
         name: nameFile,
@@ -52,11 +49,12 @@ class Zipper {
 
   endArchive() {
     const stream = new Stream.Readable();
-    stream.on("error", () => {
-      console.log("Stream Error");
-      stream.destroy();
+    // todo
+    stream.on(
+      "error",
+      () => 0
       // next(err);
-    });
+    );
     stream.push(
       JSON.stringify({ success: this.fileArray, fail: this.failArray })
     );
@@ -64,9 +62,8 @@ class Zipper {
 
     this.archive.entry(stream, { name: "result.json" }, (err) => {
       if (err) {
+        // todo
         console.log(`${"compression error result.json   "}${err}`);
-      } else {
-        console.log("Compression Success");
       }
       this.archive.finish();
     });
@@ -108,7 +105,6 @@ class Zipper {
         }
       });
     } else {
-      console.log("STOP");
       this.zipping = false;
     }
   }

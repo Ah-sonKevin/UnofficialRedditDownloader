@@ -5,7 +5,6 @@ require("express-zip");
 const youtubeDl = require("youtube-dl");
 const cors = require("cors");
 const compression = require("compression");
-const { createWriteStream, createReadStream, unlink } = require("fs");
 const Zipper = require("./zipper");
 const downloader = require("./downloader");
 const getAllInfo = require("./item");
@@ -17,7 +16,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// todo remove
+
 
 app.post("/api/getHead/", (req, res) => {
   const { url } = req.body;
@@ -38,11 +37,10 @@ app.post("/api/downItem/", async (req, res, next) => {
   const info = await getAllInfo(req.body.url, needYtdl, path, null);
   if (info) {
     // todo error handling
-    res.setHeader("Content-Length", info.size);
+    res.setHeader("Content-Length", info.size); // tocheck
   } else {
     console.log(`SIZE Error  ${path}`);
   }
-  console.log(info);
 
   downloader(info)
     .then((response) => {
@@ -56,16 +54,13 @@ app.post("/api/downItem/", async (req, res, next) => {
         .on("close", () => {
           res.end();
         });
-      console.log("promise");
     })
     .catch((err) => {
-      console.log("ERROR");
       next(err);
     });
 });
 
 app.post("/api/downBatchInfo/", (req, res, next) => {
-  // todo getAllInfo
   // todo interupt server udring downlaod error
 
   const archive = new Zipper();
@@ -73,16 +68,10 @@ app.post("/api/downBatchInfo/", (req, res, next) => {
     .getArchive()
     .resume()
     .on("finish", () => {
-      console.log("archive finish");
-      //   console.log(JSON.stringify(archive))
       res.end();
     })
     .on("error", (err) => next(err))
-    .pipe(
-      res
-        .on("error", (err) => next(err))
-        .on("close", () => console.log("Close res"))
-    ); // tocheck handle error on all pipe
+    .pipe(res.on("error", (err) => next(err))); // tocheck handle error on all pipe
   const prepPromiseArray = [];
   const prepArray = [];
 
@@ -106,10 +95,7 @@ app.post("/api/downBatchInfo/", (req, res, next) => {
   // todo class
 
   Promise.allSettled(prepPromiseArray).then(() => {
-    console.log("DOOONE");
-    console.log(prepArray.length);
     const totalSize = prepArray.reduce((acc, val) => acc + val.size, 0);
-    console.log(`${totalSize}  ${typeof totalSize}`);
 
     res.setHeader("MediaSize", totalSize); // try without reseult . json //§remeber that
 
@@ -124,8 +110,7 @@ app.post("/api/downBatchInfo/", (req, res, next) => {
             })
             .catch((err) => {
               downloadFail.push(element.name);
-              reject();
-              console.log(`Reject Failback${element.name}   ${err}`);
+              reject(err);
             })
         )
       );
@@ -144,8 +129,7 @@ app.post("/api/downBatchInfo/", (req, res, next) => {
 app.use((err, req, res) => {
   if (req.xhr) {
     console.log("Error caught");
-    // console.log(err);
-    res.status(400).send(new Error("Download fail"));
+    res.status(400).send(new Error(err));
   } else {
     console.log("Other Error");
   }

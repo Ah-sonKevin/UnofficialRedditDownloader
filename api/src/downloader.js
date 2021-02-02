@@ -6,49 +6,45 @@ const ffmpeg = require("fluent-ffmpeg");
 const basePath = "../media/";
 
 function download(uri) {
-  console.log(`url ${uri}`);
   return fetch(uri);
 }
 
 async function youtubeDlDownload(itemInfo) {
   return new Promise((promise, reject) => {
-    console.log("youtubeDlDownload");
-
     let videoStreamDone = false;
     let audioStreamDone = false;
     let audioExt = "";
     let videoExt = "";
+    let audioNameFile = "";
+    let videoNameFile = "";
 
     function streamMerge() {
       if (videoStreamDone && audioStreamDone) {
-        console.log(`streamMerge${videoStreamDone}${audioStreamDone}`);
+        const nameFile = `${basePath}${itemInfo.name}.${videoExt}`;
         const clean = () => {
-          unlink(`${basePath}${itemInfo.name}_video.${videoExt}`, () => {}); // todo add to info
-          unlink(`${basePath}${itemInfo.name}_audio.${audioExt}`, () => {});
+          unlink(videoNameFile, () => {});
+          unlink(audioNameFile, () => {});
         };
         ffmpeg()
-          .addInput(`${basePath}${itemInfo.name}_video.${videoExt}`)
-          .addInput(`${basePath}${itemInfo.name}_audio.${audioExt}`)
+          .addInput(videoNameFile)
+          .addInput(audioNameFile)
           .audioCodec("copy")
           .videoCodec("copy")
-          .saveToFile(`${basePath}${itemInfo.name}.${videoExt}`) // cant directly output stream for mp4 format
-          .on("error", () => {
+          .saveToFile(nameFile) // cant directly output stream for mp4 format
+          .on("error", (err) => {
             clean();
-            reject();
-            console.log("ffmpeg error");
+            reject(err);
           })
           .on("end", () => {
             clean();
-            const stream = createReadStream(
-              `${basePath}${itemInfo.name}.${videoExt}`
-            )
+            const stream = createReadStream(nameFile)
               .on("error", () => {
-                unlink(`${basePath}${itemInfo.name}.${videoExt}`, () => {});
+                unlink(nameFile, () => {});
                 reject();
                 stream.destroy();
               })
               .on("close", () => {
-                unlink(`${basePath}${itemInfo.name}.${videoExt}`, () => {});
+                unlink(nameFile, () => {});
               })
               .on("open", () => {
                 promise(stream.pause());
@@ -66,47 +62,38 @@ async function youtubeDlDownload(itemInfo) {
             reject();
           }
         })
-        .catch((err) => reject(err)); // todo replace  fetch? | await catch
+        .catch((err) => reject(err)); // tocheck await catch
     } else {
       videoExt = itemInfo.video.ext;
       audioExt = itemInfo.audio.ext;
-
-      console.log("two stream");
+      videoNameFile = `${basePath}${itemInfo.name}_video.${videoExt}`;
+      audioNameFile = `${basePath}${itemInfo.name}_audio.${audioExt}`;
 
       // tocheck axios
       fetch(itemInfo.video.url)
         .then((respVideo) => {
-          console.log(`respVideo ${respVideo.ok}`);
           if (respVideo.ok) {
             fetch(itemInfo.audio.url)
               .then((respAudio) => {
                 if (respAudio) {
                   respVideo.body
                     .pipe(
-                      createWriteStream(
-                        `${basePath}${itemInfo.name}_video.${videoExt}`
-                      )
+                      createWriteStream(videoNameFile)
                         .on("finish", () => {
                           videoStreamDone = true;
                           streamMerge();
                         })
                         .on("error", (err) => {
-                          console.log("error");
-                          console.log(err);
                           reject(err);
                         })
                     )
                     .on("error", (err) => {
-                      console.log("error 2");
-                      console.log(err);
                       reject(err);
                     });
 
                   respAudio.body
                     .pipe(
-                      createWriteStream(
-                        `${basePath}${itemInfo.name}_audio.${audioExt}`
-                      )
+                      createWriteStream(audioNameFile)
                         .on("finish", () => {
                           audioStreamDone = true;
                           streamMerge();
@@ -118,10 +105,6 @@ async function youtubeDlDownload(itemInfo) {
                     .on("error", (err) => {
                       reject(err);
                     });
-                  console.log(`respAudio ${respAudio.ok}`);
-                  console.log(
-                    `path ${basePath}${itemInfo.name}_audio.${audioExt}`
-                  );
                 } else {
                   reject();
                 }
