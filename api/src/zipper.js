@@ -79,9 +79,9 @@ class Zipper {
       const el = this.toZipList[0];
       const name = el.name.substr(0, 30);
       const stream = el.stream
-        .on("error", () => {
-          el.reject();
-          this.failArray.push(name); // tocheck
+        .on("error", (err) => {
+          el.reject(err);
+          this.failArray.push(name); 
           stream.resume().destroy();
         })
         .on("close", () => {
