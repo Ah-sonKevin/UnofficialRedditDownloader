@@ -66,21 +66,14 @@ export default defineComponent({
 			get: () => props.selectedSorter,
 			set: val => context.emit("changeSelectedSorter", val),
 		});
-		// https://stackoverflow.com/questions/57350092/string-cant-be-used-to-index-type
-		// Typescript typing for  array[key] (ici (key)(array))
-		const getValueByKey = (key: string) => (obj: Record<string, any>) =>
-			// eslint-disable-next-line @typescript-eslint/no-unsafe-return
-			obj[key];
+
+		// tocheck toremember const getValueByKey = (key: string) => (obj: Record<string, any>) =>
 
 		onBeforeMount(() => {
-			for (const el in sorter) {
-				sorterList.push(getValueByKey(el)(sorter));
-			}
-			for (const el in itemPerPageList) {
-				activesElementListNumberElement.push(
-					getValueByKey(el)(itemPerPageList),
-				);
-			}
+			Object.values(sorter).forEach(el => sorterList.push(el));
+			Object.values(itemPerPageList).forEach(el =>
+				activesElementListNumberElement.push(el),
+			);
 		});
 
 		return {
