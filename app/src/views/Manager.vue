@@ -78,16 +78,15 @@
 			</el-footer>
 		</el-container>
 	</el-container>
-	<el-dialog v-model="showSelectedDialog" title="Items selected">
-		<ul>
-			<li v-for="item in selectedItem" :key="item.id">
-				//tocheck allwo to unselect
-				{{ item.title }}
-			</li>
-		</ul>
-	</el-dialog>
+	<ManagerShowSelectedItemsDialog
+		:show-selected-dialog="showSelectedDialog"
+		:selected-item="selectedItem"
+		@changeShowSelectedDialog="changeShowSelectedDialog"
+		@unselect="select($event, false)"
+	></ManagerShowSelectedItemsDialog>
 </template>
 <script lang="ts">
+import ManagerShowSelectedItemsDialog from "@managerComponents/ManagerShowSelectedItemsDialog.vue";
 import ManagerSearch from "@managerComponents/ManagerSearch.vue";
 import ManagerSideMenu from "@managerComponents/ManagerSideMenu.vue";
 import ManagerHeader from "@managerComponents/ManagerHeader.vue";
@@ -100,7 +99,7 @@ import { sorter } from "@/enum/sorter";
 import { ElLoading, ElMessage } from "element-plus";
 import { itemPerPageList } from "@/enum/itemPerPageList";
 import {
-	recGetSave,
+	recGetItems,
 	fetchUser,
 	fetchCategories,
 	setSubredditList,
@@ -127,6 +126,7 @@ export default defineComponent({
 		ManagerHeader,
 		ManagerSideMenu,
 		ManagerSearch,
+		ManagerShowSelectedItemsDialog,
 	},
 	setup() {
 		console.log("Manager");
@@ -167,6 +167,10 @@ export default defineComponent({
 		}
 		function setItemCategory(item: SavedContent, val: string) {
 			item.category = val;
+		}
+
+		function changeShowSelectedDialog() {
+			showSelectedDialog.value = !showSelectedDialog.value;
 		}
 
 		let selectedItem: SavedContent[] = [];
@@ -215,7 +219,7 @@ export default defineComponent({
 					return user;
 				})
 				.then(user => {
-					return recGetSave(user); // tocheck assignment here
+					return recGetItems(user);
 				})
 				.then(fetchedItems => {
 					items.value = fetchedItems;
@@ -247,7 +251,7 @@ export default defineComponent({
       console.log("changeCategory");
       postOapi("/api/saved_categories", []);
     } */
-
+		// toremember need to install npm i autoprefixer other 'dead' not recognisez in browserslist
 		function select(content: SavedContent, value: boolean) {
 			content.isSelected = value;
 			if (value) {
@@ -327,6 +331,7 @@ export default defineComponent({
 			partiallyFilteredItems,
 
 			showSelectedDialog,
+			changeShowSelectedDialog,
 		};
 	},
 });
