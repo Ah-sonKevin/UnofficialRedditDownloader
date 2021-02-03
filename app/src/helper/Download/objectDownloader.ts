@@ -7,7 +7,7 @@ import {
 import SavedContent from "@/savedContent/savedContent";
 import { ElLoading } from "element-plus";
 import { ILoadingInstance } from "element-plus/lib/el-loading/src/loading.type";
-import { loadAsync } from "jszip";
+import jszip, { loadAsync } from "jszip";
 import { PartialDownloadError } from "../../errors/notifError";
 import { ItemInfo, SuccessList } from "../../savedContent/ItemInterface";
 import { fetchBatchMediaInfo, fetchMedia } from "../fetchHelper/fetchHelper";
@@ -25,7 +25,8 @@ function getName(text: string, extension: string): string {
 	return `${cleanString(text)}.${extension}`;
 }
 // tocheck lint staged
-function downloadPageAsText(item: SavedContent): void {
+
+function getText(item: SavedContent): string {
 	const parser = new DOMParser();
 
 	const parsedContent = parser.parseFromString(item.htmlText, "text/html");
@@ -43,7 +44,11 @@ function downloadPageAsText(item: SavedContent): void {
 			item.redditUrl
 		} \n\n\n\n ${stringContent ?? ""}`;
 	}
+	return res;
+}
 
+function downloadPageAsText(item: SavedContent): void {
+	const res = getText(item);
 	downloadObject(new Blob([res]), getName(item.title, "html"));
 }
 
@@ -150,14 +155,20 @@ async function downloadMedia(item: SavedContent) {
 
 	const url = item.externalUrl;
 	const x = await fetchMedia(url, item.needYtDl);
-	await fetchData(
+	const data = await fetchData(
 		x,
 		downloadIndicator,
 		getName(item.title, url.split(".").slice(-1)[0]),
 	);
+	// downloadObject(file, name);
+	if (data) {
+		// todo else
+		downloadObject(data, "name"); // todo redo flow
+	}
 }
 
-function downloadObject(object: Blob, nom: string): void {
+function downloadObject(object: any, nom: string): void {
+	// to change object type
 	const img = URL.createObjectURL(object);
 	const linkDown = document.createElement("a");
 	linkDown.href = img;
@@ -234,8 +245,41 @@ export function download(items: SavedContent | SavedContent[]): void {
 	}
 }
 
-// todo check batch text
 export async function batchDownload(items: SavedContent[]): Promise<void> {
+	// return archive ?
+	const medias: SavedContent[] = [];
+	const texts: SavedContent[] = [];
+	items.forEach(item => {
+		if (item.hasImage) {
+			medias.push(item);
+		} else {
+			texts.push(item);
+		}
+	});
+	const textContents = texts.map(el => ({
+		name: cleanString(el.title),
+		content: getText(el),
+	}));
+	const blob = await batchDownloadMedia(medias);
+	if (blob) {
+		const archive = await loadAsync(blob);
+		textContents.forEach(el => {
+			void archive.file(el.name, el.content);
+		});
+		downloadObject(archive, "archive");
+	} else if (textContents) {
+		// eslint-disable-next-line new-cap
+		const archive = new jszip();
+		textContents.forEach(el => {
+			archive.file(el.name, el.content);
+		});
+		const zip = await archive.generateAsync({ type: "uint8array" });
+		downloadObject(zip, "archive");
+	}
+}
+
+// todo check batch text
+async function batchDownloadMedia(items: SavedContent[]): Promise<Blob | null> {
 	downloading = true;
 
 	const downloadIndicator = ElLoading.service({
@@ -253,7 +297,7 @@ export async function batchDownload(items: SavedContent[]): Promise<void> {
 	items.forEach(el => {
 		urls.push(...getBatchUrl(el));
 	});
-
+//todo test download
 	const x = await fetchBatchMediaInfo(urls);
 	const blob = await fetchData(x, downloadIndicator, "a.zip");
 
@@ -267,9 +311,9 @@ export async function batchDownload(items: SavedContent[]): Promise<void> {
 				}
 				return arrays;
 			});
-	} else {
-		throw new NetworkError(x.statusText);
+		return blob;
 	}
+	throw new NetworkError(x.statusText);
 }
 
 export async function singleDownload(item: SavedContent): Promise<void> {
