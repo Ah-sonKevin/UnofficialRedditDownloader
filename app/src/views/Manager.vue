@@ -46,7 +46,6 @@
 					<template #default>
 						<ul v-if="getActive().length > 0">
 							<li v-for="item in getActive()" :key="item.id">
-								//todo make computed
 								<ManagerLineList
 									:item="item"
 									:is-gold="isGold"
@@ -106,9 +105,8 @@ import {
 	save,
 	unsave,
 } from "@/helper/dataManager";
-import { NetworkError, UnauthorizedAccess } from "@/errors/restartError";
+import { UnauthorizedAccess } from "@/errors/restartError";
 import SavedContent from "@/savedContent/savedContent";
-import User from "@/User/User";
 import {
 	filterItems,
 	searchByText,
@@ -129,8 +127,6 @@ export default defineComponent({
 		ManagerShowSelectedItemsDialog,
 	},
 	setup() {
-		console.log("Manager");
-
 		const selectedSorter = ref(sorter.ADDED_DATE);
 		const itemPerPage = ref(itemPerPageList.SMALL);
 		const page = ref(1);
@@ -198,7 +194,6 @@ export default defineComponent({
 		}
 
 		function downloadSelected() {
-			console.log("downloadSelected");
 			if (selectedItem.length === 0) {
 				ElMessage.error("Selection is empty");
 				return;

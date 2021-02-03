@@ -124,18 +124,25 @@ export async function postOapi(
 	return result;
 }
 
-export function fetchMedia(url: string, needYtDl = false): Promise<Response> {
+export function fetchMedia(
+	url: string,
+	needYtDl = false,
+	signal: AbortSignal,
+): Promise<Response> {
 	const authHeaders = new Headers();
 	authHeaders.append("Content-Type", "application/x-www-form-urlencoded");
-	return fetch("/api/downItem/", {
+	const request = fetch("/api/downItem/", {
 		method: "POST",
 		body: `url=${url}&needYdl=${needYtDl}`,
 		headers: authHeaders,
+		signal,
 	});
+	return request;
 }
 
 export function fetchBatchMediaInfo(
 	urls: { url: string; name: string; needYtDl: boolean }[],
+	signal: AbortSignal,
 ): Promise<Response> {
 	const authHeaders = new Headers();
 	authHeaders.append("Content-Type", "application/json");
@@ -144,6 +151,7 @@ export function fetchBatchMediaInfo(
 		method: "POST",
 		body: jsonUrls,
 		headers: authHeaders,
+		signal,
 	});
 }
 

@@ -15,10 +15,12 @@ import { notify } from "../notifierHelper";
 import { cleanString } from "../stringHelper";
 
 let downloading = false;
+const cancelController = new AbortController(); // tocheck object
 
 function cancelDownload() {
 	notify("Download Canceled");
-	downloading = false;
+	downloading = false; // tocheck still needed ?
+	cancelController.abort();
 }
 
 function getName(text: string, extension: string): string {
@@ -89,11 +91,12 @@ async function fetchData(
 	if (x.ok) {
 		const tmpSize = x.headers.get("MediaSize");
 		downloadIndicator.setText("Downloading ...");
+		const fileChunks: Uint8Array[] = [];
+		let receivedData = 0;
 
-		let updateSpinner; // todo make dynamic
+		let updateSpinner;
 		if (tmpSize) {
 			updateSpinner = setInterval(() => {
-				// todo
 				const totalSize = parseInt(tmpSize);
 				const { suffix, divider, size } = getSizeInfo(totalSize);
 				updateDownloadSpinner(
@@ -106,8 +109,6 @@ async function fetchData(
 			}, SPINNER_UPDATE_FREQUENCY);
 		}
 
-		const fileChunks: Uint8Array[] = [];
-		let receivedData = 0;
 		const reader = x.body?.getReader();
 		if (!reader) {
 			downloadIndicator.close();
@@ -154,16 +155,24 @@ async function downloadMedia(item: SavedContent) {
 	});
 
 	const url = item.externalUrl;
-	const x = await fetchMedia(url, item.needYtDl);
-	const data = await fetchData(
-		x,
-		downloadIndicator,
-		getName(item.title, url.split(".").slice(-1)[0]),
-	);
-	// downloadObject(file, name);
-	if (data) {
-		// todo else
-		downloadObject(data, "name"); // todo redo flow
+	const request = fetchMedia(url, item.needYtDl, cancelController.signal);
+	try {
+		const x = await request;
+		const data = await fetchData(
+			x,
+			downloadIndicator,
+			getName(item.title, url.split(".").slice(-1)[0]),
+		);
+		// downloadObject(file, name);
+		if (data) {
+			downloadObject(data, "name"); // todo redo flow
+		}
+	} catch (err) {
+		if ((err as Error).name === "AbortError") {
+			notify("Download has been Canceled");
+		} else {
+			throw err;
+		}
 	}
 }
 
@@ -278,7 +287,6 @@ export async function batchDownload(items: SavedContent[]): Promise<void> {
 	}
 }
 
-// todo check batch text
 async function batchDownloadMedia(items: SavedContent[]): Promise<Blob | null> {
 	downloading = true;
 
@@ -298,7 +306,7 @@ async function batchDownloadMedia(items: SavedContent[]): Promise<Blob | null> {
 		urls.push(...getBatchUrl(el));
 	});
 	// todo test download
-	const x = await fetchBatchMediaInfo(urls);
+	const x = await fetchBatchMediaInfo(urls, cancelController.signal);
 	const blob = await fetchData(x, downloadIndicator, "a.zip");
 
 	if (blob) {
