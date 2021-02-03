@@ -27,7 +27,7 @@
 		"plugin:jest-formatting/recommended",
 		"plugin:import/warnings",
 		"plugin:import/typescript",
-		"plugin:compat/recommended",
+	//	"plugin:compat/recommended",
         "prettier"
     ],
 
