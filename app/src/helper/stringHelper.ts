@@ -9,5 +9,3 @@ export function cleanString(text: string): string {
 		.replace(/_$/, "")
 		.substr(0, MAX_NAME_SIZE);
 }
-
-// todo code organisation / architecture / need helper

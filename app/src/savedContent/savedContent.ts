@@ -79,7 +79,7 @@ export default class SavedContent {
 		this.title = data.title;
 		this.category = data.category;
 		this.creationDate = new Date(data.created_utc);
-		this.redditUrl = `https://www.reddit.com${data.permalink}`; // tocheck
+		this.redditUrl = `https://www.reddit.com${data.permalink}`;
 
 		this.type = _type;
 		this.imageLink = _imageLink;
@@ -89,13 +89,13 @@ export default class SavedContent {
 
 		if (kind === "t1") {
 			this.type = postType.COMMENT;
-			this.text = data.body ?? ""; // tocheck
+			this.text = data.body ?? "";
 			this.htmlText = decodeHtml(data.body_html ?? "");
 			this.title = data.link_title;
 			this.postAuthor = data.link_author;
 			this.postLink = data.link_url;
 		} else if (data.is_self) {
-			this.type = postType.TEXT; // Self post does not link outside of reddit (pure text)
+			this.type = postType.TEXT;
 			this.text = data.selftext;
 			this.htmlText = decodeHtml(data.selftext_html ?? "");
 		} else if (data.is_gallery) {

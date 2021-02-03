@@ -28,7 +28,6 @@ async function isDownloadable(url: string): Promise<boolean> {
 	});
 	if (res.ok) {
 		const txt = (await res.json()) as boolean;
-		console.log(`Is Downloadable ${txt}  ${typeof txt}`); // todo
 		return txt;
 	}
 	return false;

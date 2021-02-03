@@ -1,4 +1,3 @@
-// todo standardize data send signel download / batch
 export default class User {
 	name: string;
 

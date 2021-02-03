@@ -13,5 +13,3 @@ export interface ItemInfo {
 	needYtDl: boolean;
 	folder: string;
 }
-
-// todo where tyo put interface

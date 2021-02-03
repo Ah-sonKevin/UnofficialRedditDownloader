@@ -297,7 +297,7 @@ async function batchDownloadMedia(items: SavedContent[]): Promise<Blob | null> {
 	items.forEach(el => {
 		urls.push(...getBatchUrl(el));
 	});
-//todo test download
+	// todo test download
 	const x = await fetchBatchMediaInfo(urls);
 	const blob = await fetchData(x, downloadIndicator, "a.zip");
 
