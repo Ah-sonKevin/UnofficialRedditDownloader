@@ -35,13 +35,14 @@
       "dom.iterable",
       "scripthost"
     ],
-    "allowJs": true
+		"allowJs": true,
+		"checkJs": true
   },
   "include": [
     "src/**/*.ts",
     "src/**/*.vue",
     "src/**/*.d.ts"
-, "src/tests/styleMock.ts"  ],
+, "src/tests/styleMock.ts", "info/serverInfo.ts", "info/redditAppsIDs.ts"  ],
   "exclude": [
     "node_modules"
   ]

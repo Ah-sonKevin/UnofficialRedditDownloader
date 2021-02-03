@@ -1,7 +1,7 @@
 import { AuthError, DataNotFoundError } from "@/errors/restartError";
 import Auth from "@/User/Auth";
 import { Module, Mutation, VuexModule } from "vuex-module-decorators";
-import { AUTH_ID, AUTH_SECRET } from "../auth/redditAppsIDs";
+import { AUTH_ID, AUTH_SECRET } from "../../info/secret/redditAppsIDs";
 
 // @Module({ dynamic: true, store, name: 'auth', preserveState: true })
 @Module({ name: "auth" })

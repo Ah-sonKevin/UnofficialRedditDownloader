@@ -1,5 +1,5 @@
 const path = require("path");
-import { HOST, PORT } from "./src/helper/serverInfo";
+const { HOST, PORT } = require("./info/serverInfo");
 
 module.exports = {
 	devServer: {
