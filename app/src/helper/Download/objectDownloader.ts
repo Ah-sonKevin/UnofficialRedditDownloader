@@ -47,54 +47,32 @@ function downloadPageAsText(item: SavedContent): void {
 	downloadObject(new Blob([res]), getName(item.title, "html"));
 }
 
-function startDownload(x: Response) {
-	let length = x.headers.get("Content-Length");
-	if (!length) {
-		// return;
-		length = "1";
+const suffixList = ["B", "KiB", "MiB", "GiB"];
+const SIZE_RATIO = 1024;
+function getSizeInfo(totalSize: number) {
+	let multiple = 0;
+	while (totalSize > SIZE_RATIO) {
+		totalSize /= SIZE_RATIO;
+		multiple += 1;
 	}
-	const BYTE_SIZE = 8;
-	const ordreDeGrandeur = Math.floor(length.length / 3);
-	const divider = BYTE_SIZE * ordreDeGrandeur * 1000;
-	let extension = "";
-	switch (ordreDeGrandeur) {
-		case 0:
-			extension = "B";
-			break;
-		case 1:
-			extension = "kB";
-			break;
-		case 2:
-			extension = "mB";
-			break;
-		case 3:
-			extension = "gB";
-			break;
-		default: {
-			console.log("Size error");
-			throw new DownloadError();
-		}
-	}
-	return { divider, extension, length: +length };
+	return {
+		suffix: suffixList[multiple],
+		divider: SIZE_RATIO ** multiple,
+		size: 1 + totalSize / SIZE_RATIO,
+	}; // tocheck
 }
 //
 function updateDownloadSpinner(
 	downloadIndicator: ILoadingInstance,
 	receivedData: number,
-	totalData: number,
+	size: number,
 	divider: number,
 	extension: string,
 ) {
 	downloadIndicator.setText(
-		`Downloading : ${String(receivedData / divider)}/${String(
-			totalData / divider,
-		)} ${extension}`,
+		`Downloading : ${receivedData / divider}/${size} ${extension}`,
 	);
 }
-/* //tocheck
-  for (var aMultiples = ["KiB", "MiB", "GiB", "TiB", "PiB", "EiB", "ZiB", "YiB"], nMultiple = 0, nApprox = nBytes / 1024; nApprox > 1; nApprox /= 1024, nMultiple++) {
-    sOutput = nApprox.toFixed(3) + " " + aMultiples[nMultiple] + " (" + nBytes + " bytes)";
-    */
 
 const SPINNER_UPDATE_FREQUENCY = 1000;
 async function fetchData(
@@ -104,36 +82,34 @@ async function fetchData(
 ) {
 	// downloading= true
 	if (x.ok) {
-		const tmpRes = startDownload(x);
+		const tmpSize = x.headers.get("MediaSize");
+		downloadIndicator.setText("Downloading ...");
 
-		const { divider, extension, length } = tmpRes || {
-			divider: 1,
-			extension: "",
-			length: 1,
-		};
+		let updateSpinner; // todo make dynamic
+		if (tmpSize) {
+			updateSpinner = setInterval(() => {
+				// todo
+				const totalSize = parseInt(tmpSize);
+				const { suffix, divider, size } = getSizeInfo(totalSize);
+				updateDownloadSpinner(
+					downloadIndicator,
+					receivedData,
+					size,
+					divider,
+					suffix,
+				);
+			}, SPINNER_UPDATE_FREQUENCY);
+		}
 
 		const fileChunks: Uint8Array[] = [];
 		let receivedData = 0;
-		const totalData: number = length;
 		const reader = x.body?.getReader();
 		if (!reader) {
 			downloadIndicator.close();
 			throw new DownloadError();
 		}
 		let reading = true;
-		const updateSpinner = setInterval(() => {
-			if (tmpRes) {
-				updateDownloadSpinner(
-					downloadIndicator,
-					receivedData,
-					totalData,
-					divider,
-					extension,
-				);
-			} else {
-				downloadIndicator.setText("Downloading ...");
-			}
-		}, SPINNER_UPDATE_FREQUENCY);
+
 		// eslint-disable-next-line no-loops/no-loops
 		while (reading && downloading) {
 			// replace no for loop
@@ -152,10 +128,11 @@ async function fetchData(
 		}
 
 		downloadIndicator.close();
-		clearInterval(updateSpinner);
+		if (updateSpinner) {
+			clearInterval(updateSpinner);
+		}
 		if (downloading) {
 			const file = new Blob(fileChunks);
-			downloadObject(file, name);
 			return file;
 		}
 		return undefined;
