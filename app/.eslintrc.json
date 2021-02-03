@@ -27,7 +27,6 @@
 		"plugin:jest-formatting/recommended",
 		"plugin:import/warnings",
 		"plugin:import/typescript",
-	//	"plugin:compat/recommended",
         "prettier"
     ],
 
@@ -48,7 +47,6 @@
         "jest",
        "jest-formatting",
         "const-case",
-        "no-secrets",
        // "xss",
       //  "security",
 		"optimize-regex",
@@ -83,7 +81,6 @@
 			"no-void":"off",
 			"promise/catch-or-return":["error",{"allowFinally":true}],
             "const-case/uppercase": "error",
-            "no-secrets/no-secrets":"error",
           //  "xss/no-mixed-html":"error",
             //"xss/no-location-href-assign":"error",
             "optimize-regex/optimize-regex": "warn",
