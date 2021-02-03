@@ -6,7 +6,7 @@ import { RawItem, RawItemUnit } from "../savedContent/rawItemInterface";
 import { fetchOapi, postOapi } from "./fetchHelper/fetchHelper";
 import { Couple } from "./fetchHelper/requestArgument";
 
-export async function recGetSave(
+export async function recGetItems(
 	username: string,
 	after = "",
 	items: SavedContent[] = [],
