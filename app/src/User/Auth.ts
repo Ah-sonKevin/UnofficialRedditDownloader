@@ -13,6 +13,7 @@ export default class Auth {
 
 	AUTH_AUTHORIZATION: string;
 
+	// eslint-disable-next-line max-params
 	constructor(
 		id: string,
 		authString: string,

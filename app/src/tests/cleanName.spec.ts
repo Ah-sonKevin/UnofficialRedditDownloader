@@ -8,7 +8,6 @@ describe("Get name function", () => {
 	});
 
 	test("Don't terminate by '_' or ' '", () => {
-		// tocheck unit test
 		const input = ["This_is_a_test_", "This_is_a_test$"];
 		const OUTPUT = "This_is_a_test";
 		input.forEach(el => expect(cleanString(el)).toBe(OUTPUT));

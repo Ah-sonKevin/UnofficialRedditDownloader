@@ -13,7 +13,6 @@ app
 	.use(router)
 	.use(ElementPlus)
 	.mount("#app");
-// todo textContent/MEdiaContent class
 
 window.onunhandledrejection = (promiseEvent: PromiseRejectionEvent) => {
 	const error: unknown = promiseEvent.reason;

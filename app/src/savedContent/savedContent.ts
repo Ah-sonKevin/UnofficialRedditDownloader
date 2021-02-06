@@ -61,6 +61,7 @@ export default class SavedContent {
 
 	needYtDl = false;
 
+	// eslint-disable-next-line max-params
 	constructor(
 		kind: string,
 		_data: RedditRawData,

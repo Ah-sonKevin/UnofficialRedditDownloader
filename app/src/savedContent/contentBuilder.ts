@@ -39,7 +39,8 @@ function cleanFallback(url: string) {
 		.slice(0, -1)
 		.join("/");
 }
-
+// todu use composition & object literal
+// eslint-disable-next-line max-params
 function returnMedia(
 	type: string,
 	externalUrl: string,

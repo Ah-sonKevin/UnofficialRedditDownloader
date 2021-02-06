@@ -1,5 +1,6 @@
 import SavedContent from "@/savedContent/savedContent";
 
+// eslint-disable-next-line max-params
 export function filterItems(
 	items: SavedContent[],
 	typeFilter: string[],

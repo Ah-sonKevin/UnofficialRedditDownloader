@@ -77,7 +77,6 @@ export async function fetchOapi(
 	const response = await fetch(request);
 	if (!response.ok) {
 		if (response.status === 401 && !retry) {
-			console.error(response);
 			await refreshAccessToken();
 			return fetchOapi(endpoint, true);
 		}
@@ -111,7 +110,6 @@ export async function postOapi(
 	if (!response.ok) {
 		if (response.status === 401) {
 			if (!retry) {
-				console.error(response);
 				await refreshAccessToken();
 				return postOapi(endpoint, args, true);
 			}
