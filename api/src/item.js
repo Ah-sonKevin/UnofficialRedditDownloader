@@ -1,14 +1,11 @@
-// const fetch = require("node-fetch");
 const fetch = require("node-fetch").default;
 const bluebird = require("bluebird");
 const youtubeDl = bluebird.promisifyAll(require("youtube-dl"));
-const mediaFormat = require("./enum/mediaFormat");
+const mediaFormat = require("./enum/mediaFormat"); // later bluebird to pify
 
 function getInfoFormat(url, format) {
   bluebird.promisifyAll(youtubeDl);
-  // tocheck async
-  // tocheck promisifty /  nested async
-  // @ts-ignore
+
   return youtubeDl.getInfoAsync(
     url,
     [
@@ -39,8 +36,6 @@ function getSize(url) {
  * @param {string} folder
  */
 async function getAllInfo(url, needYoutubeDl, name, folder) {
-  // tocheck error in promise
-  console.log(`${url}  ${needYoutubeDl}  ${name}  ${folder}`);
   if (!needYoutubeDl) {
     const size = await getSize(url);
     if (size) {
@@ -74,7 +69,7 @@ async function getAllInfo(url, needYoutubeDl, name, folder) {
     })
     .catch(async () => {
       console.log("videoStream");
-      const infoVideo = await getInfoFormat(url, mediaFormat.videoStream); // tocheck await and catch
+      const infoVideo = await getInfoFormat(url, mediaFormat.videoStream);
       const infoAudio = await getInfoFormat(url, mediaFormat.audioStream);
       const sizeVideo = await getSize(infoVideo.url);
       if (sizeVideo) {

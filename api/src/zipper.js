@@ -14,11 +14,6 @@ class Zipper {
 
   constructor() {
     this.archive = new Packer({ store: true, zlib: { level: 0 } }).pause();
-    this.archive.on(
-      "error",
-      (err) => 0
-      // todo
-    );
   }
 
   addStream(stream, nameFile, promise, reject) {
@@ -49,12 +44,7 @@ class Zipper {
 
   endArchive() {
     const stream = new Stream.Readable();
-    // todo
-    stream.on(
-      "error",
-      () => 0
-      // next(err);
-    );
+    stream.on("error", (err) => console.log(err));
     stream.push(
       JSON.stringify({ success: this.fileArray, fail: this.failArray })
     );
@@ -62,7 +52,6 @@ class Zipper {
 
     this.archive.entry(stream, { name: "result.json" }, (err) => {
       if (err) {
-        // todo
         console.log(`${"compression error result.json   "}${err}`);
       }
       this.archive.finish();
@@ -81,7 +70,7 @@ class Zipper {
       const stream = el.stream
         .on("error", (err) => {
           el.reject(err);
-          this.failArray.push(name); 
+          this.failArray.push(name);
           stream.resume().destroy();
         })
         .on("close", () => {

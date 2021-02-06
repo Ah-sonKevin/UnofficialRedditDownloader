@@ -62,14 +62,13 @@ async function youtubeDlDownload(itemInfo) {
             reject();
           }
         })
-        .catch((err) => reject(err)); // tocheck await catch
+        .catch((err) => reject(err));
     } else {
       videoExt = itemInfo.video.ext;
       audioExt = itemInfo.audio.ext;
       videoNameFile = `${basePath}${itemInfo.name}_video.${videoExt}`;
       audioNameFile = `${basePath}${itemInfo.name}_audio.${audioExt}`;
 
-      // tocheck axios
       fetch(itemInfo.video.url)
         .then((respVideo) => {
           if (respVideo.ok) {

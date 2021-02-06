@@ -34,8 +34,7 @@ app.post("/api/downItem/", async (req, res, next) => {
 
   const info = await getAllInfo(req.body.url, needYtdl, path, null);
   if (info) {
-    // todo error handling
-    res.setHeader("Content-Length", info.size); // tocheck
+    res.setHeader("MediaSize", info.size);
   } else {
     console.log(`SIZE Error  ${path}`);
   }
@@ -59,7 +58,7 @@ app.post("/api/downItem/", async (req, res, next) => {
 });
 
 app.post("/api/downBatchInfo/", (req, res, next) => {
-  // todo interupt server udring downlaod error
+
 
   const archive = new Zipper();
   archive
@@ -69,7 +68,7 @@ app.post("/api/downBatchInfo/", (req, res, next) => {
       res.end();
     })
     .on("error", (err) => next(err))
-    .pipe(res.on("error", (err) => next(err))); // tocheck handle error on all pipe
+    .pipe(res);
   const prepPromiseArray = [];
   const prepArray = [];
 
@@ -89,8 +88,6 @@ app.post("/api/downBatchInfo/", (req, res, next) => {
       })
     );
   });
-
-  // todo class
 
   Promise.allSettled(prepPromiseArray).then(() => {
     const totalSize = prepArray.reduce((acc, val) => acc + val.size, 0);
@@ -120,9 +117,10 @@ app.post("/api/downBatchInfo/", (req, res, next) => {
     });
   });
 });
-// TODO SELECT all page // all filtered
-// todo cancel download
+
 // toremember pipeline send error and make sure to clean all stream
+
+app.post("/api/logError", (req, res, next) => {});
 
 app.use((err, req, res) => {
   if (req.xhr) {
