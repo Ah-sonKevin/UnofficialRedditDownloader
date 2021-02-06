@@ -29,6 +29,7 @@
         "node-fetch": "^2.6.1",
         "prettier": "^2.2.1",
         "request": "^2.88.2",
+        "winston": "^3.3.3",
         "youtube-dl": "^3.1.0",
         "ytdl-core": "^4.4.3",
         "zip-stream": "^4.0.4"
