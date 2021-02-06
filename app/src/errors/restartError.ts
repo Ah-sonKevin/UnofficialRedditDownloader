@@ -36,7 +36,6 @@ export class NetworkError extends RestartError {
 	}
 }
 export class BadLinkError extends RestartError {
-	// tocheck
 	constructor(msg: string) {
 		super(msg);
 		this.nameError = "Bad Link Error";
@@ -44,7 +43,6 @@ export class BadLinkError extends RestartError {
 }
 
 export class UnknowTypeError extends RestartError {
-	// todo sendError / LogLevel
 	constructor(msg: string) {
 		super(msg);
 		this.nameError = "Unknow type Error";
@@ -52,7 +50,6 @@ export class UnknowTypeError extends RestartError {
 }
 
 export class DataNotFoundError extends RestartError {
-	// tocheck
 	constructor(msg: string) {
 		super(msg);
 		this.nameError = "Data not found Error";

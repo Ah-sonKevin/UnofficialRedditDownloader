@@ -2,7 +2,6 @@
 	<el-dialog v-model="showDialog" title="Items selected">
 		<ul>
 			<li v-for="item in selectedItem" :key="item.id">
-				//tocheck allwo to unselect
 				<el-button type="text" @click="unselect(item)">
 					{{ item.title }}
 				</el-button>
