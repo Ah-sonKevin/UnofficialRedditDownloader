@@ -7,24 +7,24 @@ import {
 import SavedContent from "@/savedContent/savedContent";
 import { ElLoading } from "element-plus";
 import { ILoadingInstance } from "element-plus/lib/el-loading/src/loading.type";
-import jszip, { loadAsync } from "jszip";
+import Jszip, { loadAsync } from "jszip";
 import { PartialDownloadError } from "../../errors/notifError";
 import { ItemInfo, SuccessList } from "../../savedContent/ItemInterface";
 import { fetchBatchMediaInfo, fetchMedia } from "../fetchHelper/fetchHelper";
 import { notify } from "../notifierHelper";
 import { cleanString } from "../stringHelper";
 
-let downloading = false;
-const cancelController = new AbortController(); // tocheck object
+const cancelController = new AbortController(); 
+const SPINNER_UPDATE_FREQUENCY = 1000;
+const suffixList = ["B", "KiB", "MiB", "GiB"];
+const SIZE_RATIO = 1024;
 
-function cancelDownload() {
-	notify("Download Canceled");
-	downloading = false; // tocheck still needed ?
+export function cancelDownload(): void {
 	cancelController.abort();
 }
 
 function getName(text: string, extension: string): string {
-	return `${cleanString(text)}.${extension}`;
+	return `${cleanString(text)}.${cleanString(extension)}`;
 }
 // tocheck lint staged
 
@@ -54,8 +54,6 @@ function downloadPageAsText(item: SavedContent): void {
 	downloadObject(new Blob([res]), getName(item.title, "html"));
 }
 
-const suffixList = ["B", "KiB", "MiB", "GiB"];
-const SIZE_RATIO = 1024;
 function getSizeInfo(totalSize: number) {
 	let multiple = 0;
 	while (totalSize > SIZE_RATIO) {
@@ -66,28 +64,23 @@ function getSizeInfo(totalSize: number) {
 		suffix: suffixList[multiple],
 		divider: SIZE_RATIO ** multiple,
 		size: 1 + totalSize / SIZE_RATIO,
-	}; // tocheck
+	};
 }
-//
+
 function updateDownloadSpinner(
 	downloadIndicator: ILoadingInstance,
 	receivedData: number,
-	size: number,
-	divider: number,
-	extension: string,
+	{ size, divider, suffix }: { size: number; divider: number; suffix: string },
 ) {
 	downloadIndicator.setText(
-		`Downloading : ${receivedData / divider}/${size} ${extension}`,
+		`Downloading : ${receivedData / divider}/${size} ${suffix}`,
 	);
 }
 
-const SPINNER_UPDATE_FREQUENCY = 1000;
 async function fetchData(
 	x: Response,
 	downloadIndicator: ILoadingInstance,
-	name: string,
-) {
-	// downloading= true
+): Promise<Blob> {
 	if (x.ok) {
 		const tmpSize = x.headers.get("MediaSize");
 		downloadIndicator.setText("Downloading ...");
@@ -96,16 +89,10 @@ async function fetchData(
 
 		let updateSpinner;
 		if (tmpSize) {
+			const totalSize = parseInt(tmpSize);
+			const sizeInfo = getSizeInfo(totalSize);
 			updateSpinner = setInterval(() => {
-				const totalSize = parseInt(tmpSize);
-				const { suffix, divider, size } = getSizeInfo(totalSize);
-				updateDownloadSpinner(
-					downloadIndicator,
-					receivedData,
-					size,
-					divider,
-					suffix,
-				);
+				updateDownloadSpinner(downloadIndicator, receivedData, sizeInfo);
 			}, SPINNER_UPDATE_FREQUENCY);
 		}
 
@@ -117,7 +104,7 @@ async function fetchData(
 		let reading = true;
 
 		// eslint-disable-next-line no-loops/no-loops
-		while (reading && downloading) {
+		while (reading) {
 			// replace no for loop
 			// eslint-disable-next-line no-await-in-loop
 			const { done, value } = await reader.read();
@@ -137,11 +124,7 @@ async function fetchData(
 		if (updateSpinner) {
 			clearInterval(updateSpinner);
 		}
-		if (downloading) {
-			const file = new Blob(fileChunks);
-			return file;
-		}
-		return undefined;
+		return new Blob(fileChunks);
 	}
 	downloadIndicator.close();
 	throw new DownloadError();
@@ -153,22 +136,19 @@ async function downloadMedia(item: SavedContent) {
 		text: "Download Preparation",
 		target: "#topArea",
 	});
+	const itemInfo = getItemInfo(item);
 
-	const url = item.externalUrl;
-	const request = fetchMedia(url, item.needYtDl, cancelController.signal);
 	try {
-		const x = await request;
-		const data = await fetchData(
-			x,
-			downloadIndicator,
-			getName(item.title, url.split(".").slice(-1)[0]),
+		const x = await fetchMedia(
+			itemInfo.url,
+			itemInfo.needYtDl,
+			cancelController.signal,
 		);
-		// downloadObject(file, name);
-		if (data) {
-			downloadObject(data, "name"); // todo redo flow
-		}
+		const data = await fetchData(x, downloadIndicator);
+		downloadObject(data, itemInfo.name);
 	} catch (err) {
 		if ((err as Error).name === "AbortError") {
+			downloadIndicator.close();
 			notify("Download has been Canceled");
 		} else {
 			throw err;
@@ -176,8 +156,7 @@ async function downloadMedia(item: SavedContent) {
 	}
 }
 
-function downloadObject(object: any, nom: string): void {
-	// to change object type
+function downloadObject(object: Blob, nom: string): void {
 	const img = URL.createObjectURL(object);
 	const linkDown = document.createElement("a");
 	linkDown.href = img;
@@ -187,7 +166,7 @@ function downloadObject(object: any, nom: string): void {
 	URL.revokeObjectURL(img);
 }
 
-function getURL(
+function getItemInfo(
 	item: SavedContent,
 ): { url: string; name: string; needYtDl: boolean; folder: string } {
 	if (item.isGallery) {
@@ -200,21 +179,20 @@ function getURL(
 	) {
 		return {
 			url: item.externalUrl,
-			name: getName(item.title, "html"),
+			name: getName(item.title, "txt"),
 			folder: "",
 			needYtDl: false,
 		};
 	}
 	return {
 		url: item.externalUrl,
-		// name: getName(item.title, item.externalUrl.split(".").slice(-1)[0]),
-		name: cleanString(item.title),
+		name: getName(item.title, item.externalUrl.split(".").slice(-1)[0]),
 		folder: "",
 		needYtDl: item.needYtDl,
 	};
 }
 
-function getBatchUrl(item: SavedContent): ItemInfo[] {
+function batchGetItemInfo(item: SavedContent): ItemInfo[] {
 	if (item.isGallery) {
 		return item.galleryURLs.map((el, index) => {
 			return {
@@ -228,34 +206,22 @@ function getBatchUrl(item: SavedContent): ItemInfo[] {
 			};
 		});
 	}
-	return [getURL(item)];
+	return [getItemInfo(item)];
 }
 
 export function download(items: SavedContent | SavedContent[]): void {
 	if (Array.isArray(items)) {
 		if (items.length === 1) {
-			void singleDownload(items[0])
-				.then(() => {
-					downloading = false;
-					return downloading;
-				})
-				.catch(err => console.log(err));
+			void singleDownload(items[0]);
 		} else {
-			void batchDownload(items).then(() => {
-				downloading = false;
-				return downloading;
-			});
+			void batchDownload(items);
 		}
 	} else {
-		void singleDownload(items).then(() => {
-			downloading = false;
-			return downloading;
-		});
+		void singleDownload(items);
 	}
 }
 
 export async function batchDownload(items: SavedContent[]): Promise<void> {
-	// return archive ?
 	const medias: SavedContent[] = [];
 	const texts: SavedContent[] = [];
 	items.forEach(item => {
@@ -266,30 +232,29 @@ export async function batchDownload(items: SavedContent[]): Promise<void> {
 		}
 	});
 	const textContents = texts.map(el => ({
-		name: cleanString(el.title),
+		name: getName(el.title, "txt"),
 		content: getText(el),
 	}));
-	const blob = await batchDownloadMedia(medias);
-	if (blob) {
-		const archive = await loadAsync(blob);
-		textContents.forEach(el => {
-			void archive.file(el.name, el.content);
-		});
-		downloadObject(archive, "archive");
-	} else if (textContents) {
-		// eslint-disable-next-line new-cap
-		const archive = new jszip();
-		textContents.forEach(el => {
-			archive.file(el.name, el.content);
-		});
-		const zip = await archive.generateAsync({ type: "uint8array" });
-		downloadObject(zip, "archive");
+
+	const archive = await getMediaArchive(medias);
+	textContents.forEach(el => {
+		archive.file(el.name, el.content);
+	});
+	const zip = await archive.generateAsync({ type: "uint8array" });
+	downloadObject(new Blob([zip]), "archive");
+}
+
+async function getMediaArchive(items: SavedContent[]) {
+	if (items.length > 0) {
+		const blob = await batchDownloadMedia(items);
+		if (blob) {
+			return loadAsync(blob);
+		}
 	}
+	return new Jszip();
 }
 
 async function batchDownloadMedia(items: SavedContent[]): Promise<Blob | null> {
-	downloading = true;
-
 	const downloadIndicator = ElLoading.service({
 		fullscreen: true,
 		text: "Download Preparation",
@@ -303,29 +268,36 @@ async function batchDownloadMedia(items: SavedContent[]): Promise<Blob | null> {
 		folder: string;
 	}[] = [];
 	items.forEach(el => {
-		urls.push(...getBatchUrl(el));
+		urls.push(...batchGetItemInfo(el));
 	});
-	// todo test download
-	const x = await fetchBatchMediaInfo(urls, cancelController.signal);
-	const blob = await fetchData(x, downloadIndicator, "a.zip");
-
-	if (blob) {
-		void loadAsync(blob)
-			.then(el => el.files["result.json"].async("string"))
-			.then(res => {
-				const arrays = JSON.parse(res) as SuccessList;
-				if (arrays.fail.length > 0) {
-					throw new PartialDownloadError(arrays);
-				}
-				return arrays;
-			});
-		return blob;
+	// todo interupt server udring downlaod error
+	try {
+		const x = await fetchBatchMediaInfo(urls, cancelController.signal);
+		const blob = await fetchData(x, downloadIndicator);
+		if (blob) {
+			void loadAsync(blob)
+				.then(el => el.files["result.json"].async("string"))
+				.then(res => {
+					const arrays = JSON.parse(res) as SuccessList;
+					if (arrays.fail.length > 0) {
+						throw new PartialDownloadError(arrays);
+					}
+					return arrays;
+				});
+			return blob;
+		}
+		throw new NetworkError(x.statusText);
+	} catch (err) {
+		if ((err as Error).name === "AbortError") {
+			downloadIndicator.close();
+			notify("Download has been Canceled");
+			return null;
+		}
+		throw err;
 	}
-	throw new NetworkError(x.statusText);
 }
 
 export async function singleDownload(item: SavedContent): Promise<void> {
-	downloading = true;
 	const itemType: string = item.type;
 	if (item.isGallery) {
 		await batchDownload([item]);
@@ -335,7 +307,6 @@ export async function singleDownload(item: SavedContent): Promise<void> {
 		itemType === postType.COMMENT
 	) {
 		downloadPageAsText(item);
-		downloading = false;
 	} else if (itemType === postType.IMAGE || itemType === postType.VIDEO) {
 		await downloadMedia(item);
 	} else {
