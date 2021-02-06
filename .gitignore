@@ -27,12 +27,13 @@ app/**/*.js
 *.js.map
 !*.config.js
 !doczrc.js
+!serverInfo.js
 
 #LocalData
 app/_Local
 
 #Token
-app/src/helper/redditAppsIDs.ts
+app/**/redditAppsIDs.ts
 
 #Media
 api/media/*
