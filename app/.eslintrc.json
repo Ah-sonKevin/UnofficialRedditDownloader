@@ -94,7 +94,8 @@
 			"@typescript-eslint/indent": "off",
 			"vue/html-indent":"off",
 			"max-classes-per-file":"off",
-			"radix":["error","as-needed"]
+			"radix":["error","as-needed"],
+            "max-params": ["error", 3]
     },
     "overrides": [{
         "files": ["**/enum/**"],
