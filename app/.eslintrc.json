@@ -74,7 +74,7 @@
             "quotes": "off",
             "@typescript-eslint/quotes": "off",
             "import/extensions":"off",
-            "prefer-destructuring":"off",//tocheck
+            "prefer-destructuring":["error",{"array":false}],
             "no-unused-vars": "off",
 			"@typescript-eslint/no-unused-vars": ["warn"],
 			"no-param-reassign":"off",
@@ -88,7 +88,7 @@
             "no-use-before-define": "off",
             "@typescript-eslint/no-use-before-define": "off",
             "import/prefer-default-export":"off",
-            "prettier/prettier": ["error", {"singleQuote": false,"trailingComma": "all","useTabs": true}],//tocheck
+            "prettier/prettier": ["error", {"singleQuote": false,"trailingComma": "all","useTabs": true}],//later
             "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
             "indent": "off",
 			"@typescript-eslint/indent": "off",
