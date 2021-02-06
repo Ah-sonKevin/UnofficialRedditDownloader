@@ -10,7 +10,7 @@ import { generateAccessToken } from "@/auth/authHelper";
 
 export default defineComponent({
 	setup() {
-		const query = useRoute().query;
+		const { query } = useRoute();
 		const router = useRouter();
 
 		onBeforeMount(() => {

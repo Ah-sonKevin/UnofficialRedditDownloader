@@ -56,7 +56,7 @@ export default defineComponent({
 						return buildContent({ kind: content.kind, data: content.data });
 					})
 					.then(item => download(item))
-					.catch(err => {
+					.catch(() => {
 						throw new DownloadError();
 					});
 			}
