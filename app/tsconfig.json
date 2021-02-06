@@ -17,7 +17,7 @@
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
     "resolveJsonModule": true,
-    "baseUrl": ".",
+		"baseUrl": ".",
     "types": [
       "webpack-env","jest", "node" 
     ],
@@ -36,14 +36,17 @@
       "scripthost"
     ],
 		"allowJs": true,
-		"checkJs": true
+		"checkJs": false,
+		"outDir": "dist",
   },
   "include": [
     "src/**/*.ts",
     "src/**/*.vue",
-    "src/**/*.d.ts"
-, "src/tests/styleMock.ts", "info/serverInfo.ts", "info/redditAppsIDs.ts"  ],
+		"src/**/*.d.ts",
+		"src/**/*.js"
+  ],
   "exclude": [
-    "node_modules"
+		"node_modules",
+		"dist" 
   ]
 }

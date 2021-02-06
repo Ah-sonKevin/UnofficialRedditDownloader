@@ -48,6 +48,7 @@
 		"http-proxy-middleware": "^1.0.6",
 		"jszip": "^3.5.0",
 		"register-service-worker": "^1.7.2",
+		"setimmediate": "^1.0.5",
 		"tslint-config-standard": "^9.0.0",
 		"tslint-eslint-rules": "^5.4.0",
 		"vue": "^3.0.5",

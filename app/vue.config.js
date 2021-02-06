@@ -1,5 +1,5 @@
 const path = require("path");
-const { HOST, PORT } = require("./info/serverInfo");
+const { HOST, PORT } = require("./src/info/serverInfo");
 
 module.exports = {
 	devServer: {
