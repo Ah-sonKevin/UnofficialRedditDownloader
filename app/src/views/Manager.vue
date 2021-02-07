@@ -13,29 +13,36 @@
 		</el-aside>
 		<el-container class="mainArea">
 			<el-header id="topArea">
-				<ManagerHeader
-					:show-deleted="showDeleted"
-					:item-per-page="itemPerPage"
-					:selected-sorter="selectedSorter"
-					:is-gold="isGold"
-					@changeShowDelete="changeShowDelete"
-					@changeItemPerPage="changeItemPerPage"
-					@changeSelectedSorter="changeSelectedSorter"
-				/>
-				<ManagerTools
-					:is-gold="isGold"
-					:selected-item="selectedItem"
-					@unsave="unsave($event)"
-					@selectAll="selectAll"
-					@unselectAll="unselectAll"
-					@downloadSelected="downloadSelected"
-					@showSelectedDialog="showSelectedDialog"
-				/>
-				<ManagerSearch
-					:filtered-items="partiallyFilteredItems"
-					:search-input="searchInput"
-					@updateInput="updateInput"
-				/>
+				<div id="toolsArea">
+					<ManagerHeader
+						:show-deleted="showDeleted"
+						:item-per-page="itemPerPage"
+						:selected-sorter="selectedSorter"
+						:is-gold="isGold"
+						@changeShowDelete="changeShowDelete"
+						@changeItemPerPage="changeItemPerPage"
+						@changeSelectedSorter="changeSelectedSorter"
+					/>
+					<ManagerTools
+						:is-gold="isGold"
+						:selected-item="selectedItem"
+						@unsave="unsave($event)"
+						@selectAll="selectAll"
+						@unselectAll="unselectAll"
+						@downloadSelected="downloadSelected"
+						@showSelectedDialog="showSelectedDialog"
+					/>
+					<ManagerSearch
+						:filtered-items="partiallyFilteredItems"
+						:search-input="searchInput"
+						@updateInput="updateInput"
+					/>
+				</div>
+				<div id="cancelArea">
+					<el-button type="primary" @click="cancelDownload">
+						Cancel Download
+					</el-button>
+				</div>
 			</el-header>
 
 			<el-main class="listElement">
@@ -113,7 +120,7 @@ import {
 	hideDeleted,
 	setFilter,
 } from "@/helper/filterHelper";
-import { download } from "@/helper/Download/objectDownloader";
+import { download, cancelDownload } from "@/helper/Download/objectDownloader";
 import { getSortedContent } from "../helper/sorter";
 
 export default defineComponent({
@@ -140,10 +147,6 @@ export default defineComponent({
 		const subredditFilter: Ref<string[]> = ref([]);
 
 		const showSelectedDialog = ref(false);
-
-		function showSelected() {
-			showSelectedDialog.value = !showSelectedDialog.value;
-		}
 
 		function changePage(_page: number) {
 			page.value = _page;
@@ -177,7 +180,7 @@ export default defineComponent({
 
 		const subredditList: Ref<string[]> = ref([]);
 
-		const categoriesList = ref([]);
+		const categoriesList: Ref<string[]> = ref([]);
 
 		function unselectAll() {
 			selectedItem.forEach(el => {
@@ -214,7 +217,7 @@ export default defineComponent({
 					return user;
 				})
 				.then(user => {
-					return recGetItems(user);
+					return recGetItems(user.name);
 				})
 				.then(fetchedItems => {
 					items.value = fetchedItems;
@@ -327,6 +330,7 @@ export default defineComponent({
 
 			showSelectedDialog,
 			changeShowSelectedDialog,
+			cancelDownload,
 		};
 	},
 });
