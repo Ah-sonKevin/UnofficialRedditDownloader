@@ -2,9 +2,11 @@ import { NetworkError } from "@/errors/restartError";
 import { buildContent } from "@/savedContent/contentBuilder";
 import SavedContent from "@/savedContent/savedContent";
 import User from "@/User/User";
+import { PartialRedditFetchError } from "../errors/notifError";
 import { RawItem, RawItemUnit } from "../savedContent/rawItemInterface";
 import { fetchOapi, postOapi } from "./fetchHelper/fetchHelper";
 import { Couple } from "./fetchHelper/requestArgument";
+import { logger } from "./logger";
 
 export async function recGetItems(
 	username: string,
@@ -24,8 +26,14 @@ export async function recGetItems(
 	result.data.children.forEach((el: RawItemUnit) => {
 		buildContent(el)
 			.then(item => items.push(item))
-			.catch(err => {
-				throw err;
+			.catch((err: Error) => {
+				// later better logger arguments
+				logger.error(
+					`${err.message} \n\n${err.stack ?? "NO STACK"}\n\n ${JSON.stringify(
+						err,
+					)}  ${JSON.stringify(el)}`,
+				);
+				throw new PartialRedditFetchError(el.data.name);
 			});
 	});
 	if (result.data.after) {
