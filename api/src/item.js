@@ -1,11 +1,9 @@
 const fetch = require("node-fetch").default;
 const bluebird = require("bluebird");
 const youtubeDl = bluebird.promisifyAll(require("youtube-dl"));
-const mediaFormat = require("./enum/mediaFormat"); // later bluebird to pify
+const mediaFormat = require("./enum/mediaFormat");
 
 function getInfoFormat(url, format) {
-  bluebird.promisifyAll(youtubeDl);
-
   return youtubeDl.getInfoAsync(
     url,
     [
@@ -52,8 +50,6 @@ async function getAllInfo(url, needYoutubeDl, name, folder) {
   }
   return getInfoFormat(url, mediaFormat.allInOne)
     .then(async (info) => {
-      console.log("allInOne");
-      console.log(info);
       const size = await getSize(info.url);
       if (size) {
         return {
@@ -68,7 +64,6 @@ async function getAllInfo(url, needYoutubeDl, name, folder) {
       throw new Error();
     })
     .catch(async () => {
-      console.log("videoStream");
       const infoVideo = await getInfoFormat(url, mediaFormat.videoStream);
       const infoAudio = await getInfoFormat(url, mediaFormat.audioStream);
       const sizeVideo = await getSize(infoVideo.url);
