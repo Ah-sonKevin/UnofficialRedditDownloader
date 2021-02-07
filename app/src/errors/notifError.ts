@@ -16,3 +16,9 @@ export class PartialDownloadError extends NotifError {
 		this.fail = arrays.fail;
 	}
 }
+
+export class PartialRedditFetchError extends NotifError {
+	constructor(name: string) {
+		super("");
+	}
+}

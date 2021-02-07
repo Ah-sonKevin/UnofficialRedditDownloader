@@ -1,8 +1,14 @@
+import { logger } from "@/helper/logger";
+import { notifyError } from "@/helper/notifierHelper";
 import router from "@/router";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { IMessageOptions } from "element-plus/lib/el-message/src/types";
 import { RedditManagerError } from "./error";
-import { NotifError, PartialDownloadError } from "./notifError";
+import {
+	NotifError,
+	PartialDownloadError,
+	PartialRedditFetchError
+} from "./notifError";
 import { RestartError } from "./restartError";
 
 const MESSAGE_DURATION = 10000;
@@ -16,6 +22,7 @@ function getMessage(msg: string, html = false): IMessageOptions {
 	};
 }
 export function managerErrors(err: RedditManagerError): void {
+	logger.error(err);
 	if (err instanceof RestartError) {
 		void router.push({ name: "Home" });
 		ElMessage({ message: err.popupMessage, showClose: true });
@@ -51,12 +58,14 @@ export function managerErrors(err: RedditManagerError): void {
 					};
 					ElMessage(
 						getMessage(
-							'Some files couldn\'t be download <el-button onclick="showPopup()" > See which one </el-button> ', // tocheck
+							'Some files couldn\'t be download <el-button onclick="showPopup()"> See which one </el-button> ', // tocheck
 							true,
 						),
 					);
 				}
 			}
+		} else if (err instanceof PartialRedditFetchError) {
+			notifyError(`Couldn't fetch the post :${err.name}`);
 		} else {
 			throw err;
 		}

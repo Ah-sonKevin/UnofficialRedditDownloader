@@ -12,7 +12,7 @@ function cleanURL(url: string): string {
 	const res = parser.parseFromString(url, "text/html").documentElement
 		.textContent;
 	if (!res) {
-		throw new BadLinkError(`Cleaning URL Error  ${url}`); // tocheck list element couldn't load
+		throw new BadLinkError(`Cleaning URL Error  ${url}`);
 	}
 	return res;
 }
@@ -39,7 +39,7 @@ function cleanFallback(url: string) {
 		.slice(0, -1)
 		.join("/");
 }
-// todu use composition & object literal
+// todo use composition & object literal
 // eslint-disable-next-line max-params
 function returnMedia(
 	type: string,
