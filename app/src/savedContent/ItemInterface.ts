@@ -3,8 +3,8 @@ export interface Item {
 	name: string;
 }
 export interface SuccessList {
-	success: Item[];
-	fail: Item[];
+	success: string[];
+	fail: string[];
 }
 
 export interface ItemInfo {
