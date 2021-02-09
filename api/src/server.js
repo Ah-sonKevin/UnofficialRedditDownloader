@@ -85,7 +85,10 @@ app.post("/api/downBatchInfo/", (req, res, next) => {
             prepArray.push(elInfo);
             prom();
           })
-          .catch((err) => rej(err));
+          .catch((err) => {
+            archive.addDownloadFail(el, "Couldn't get Info");
+            rej(err);
+          });
       })
     );
   });
@@ -105,7 +108,7 @@ app.post("/api/downBatchInfo/", (req, res, next) => {
               archive.addStream(stream, element.name, promise, reject);
             })
             .catch((err) => {
-              downloadFail.push(element.name);
+              archive.addDownloadFail(element, "Couldn't download the file");
               reject(err);
             })
         )
