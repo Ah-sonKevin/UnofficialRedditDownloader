@@ -44,7 +44,6 @@ app.post("/api/downItem/", async (req, res, next) => {
         .pipe(res)
         .on("error", (err) => {
           next(err);
-          response.destroy();
         })
         .on("close", () => {
           res.end();
@@ -56,8 +55,6 @@ app.post("/api/downItem/", async (req, res, next) => {
 });
 
 app.post("/api/downBatchInfo/", (req, res, next) => {
-
-
   const archive = new Zipper();
   archive
     .getArchive()
@@ -69,7 +66,6 @@ app.post("/api/downBatchInfo/", (req, res, next) => {
     .pipe(res);
   const prepPromiseArray = [];
   const prepArray = [];
-
   req.body.forEach((el) => {
     const needYtdl = el.needYtDl ? JSON.parse(el.needYtDl) : false;
     const folder = el.folder ? `${el.folder}/` : "";
@@ -93,9 +89,8 @@ app.post("/api/downBatchInfo/", (req, res, next) => {
   Promise.allSettled(prepPromiseArray).then(() => {
     const totalSize = prepArray.reduce((acc, val) => acc + val.size, 0);
 
-    res.setHeader("MediaSize", totalSize); // try without reseult . json //§remeber that
+    res.setHeader("MediaSize", totalSize);
 
-    const downloadFail = [];
     const promiseArray = [];
     prepArray.forEach((element) => {
       promiseArray.push(
@@ -112,8 +107,7 @@ app.post("/api/downBatchInfo/", (req, res, next) => {
       );
     });
 
-    Promise.allSettled(promiseArray).then((resArray) => {
-      console.log(resArray.length);
+    Promise.allSettled(promiseArray).then(() => {
       archive.endArchive();
     });
   });
