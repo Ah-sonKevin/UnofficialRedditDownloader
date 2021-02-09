@@ -128,10 +128,8 @@ app.post("/api/logError/", (req) => {
 
 app.use((err, req, res) => {
   if (req.xhr) {
-    console.log("Error caught");
+    serverLogger.error(err);
     res.status(400).send(new Error(err));
-  } else {
-    console.log("Other Error");
   }
 });
 app.listen(3080);
