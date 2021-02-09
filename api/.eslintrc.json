@@ -16,6 +16,7 @@
         "prettier/prettier": "error",
         "no-undef": ["error"],
         "no-undefined": ["error"],
+        "prefer-destructuring":"off",
         "radix":"off"
     },
     "plugins": ["prettier"]
