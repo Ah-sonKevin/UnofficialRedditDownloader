@@ -39,10 +39,6 @@ export default class AuthStore extends VuexModule {
 		);
 	}
 
-	// later readme
-	// later support me
-	// later explanation token
-
 	@Mutation
 	resetToken(): void {
 		this.rawToken = undefined;
