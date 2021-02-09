@@ -18,6 +18,7 @@ const cancelController = new AbortController();
 const SPINNER_UPDATE_FREQUENCY = 1000;
 const suffixList = ["B", "KiB", "MiB", "GiB"];
 const SIZE_RATIO = 1024;
+const SIZE_DECIMAL_PRECISION = 2;
 
 export function cancelDownload(): void {
 	cancelController.abort();
@@ -73,7 +74,9 @@ function updateDownloadSpinner(
 	{ size, divider, suffix }: { size: number; divider: number; suffix: string },
 ) {
 	downloadIndicator.setText(
-		`Downloading : ${receivedData / divider}/${size} ${suffix}`,
+		`Downloading : ${(receivedData / divider).toFixed(
+			SIZE_DECIMAL_PRECISION,
+		)}/${size.toFixed(SIZE_DECIMAL_PRECISION)} ${suffix}`,
 	);
 }
 
