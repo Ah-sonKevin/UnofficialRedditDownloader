@@ -247,14 +247,14 @@ export async function batchDownload(items: SavedContent[]): Promise<void> {
 	downloadObject(new Blob([zip]), "archive");
 }
 
-async function getMediaArchive(items: SavedContent[]) {
+async function getMediaArchive(items: SavedContent[]): Promise<JSZip> {
 	if (items.length > 0) {
 		const blob = await batchDownloadMedia(items);
 		if (blob) {
 			return loadAsync(blob);
 		}
 	}
-	return new Jszip();
+	return new JSZip();
 }
 
 async function batchDownloadMedia(items: SavedContent[]): Promise<Blob | null> {
