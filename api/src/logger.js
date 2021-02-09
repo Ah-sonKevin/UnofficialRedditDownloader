@@ -1,17 +1,27 @@
 const winston = require("winston");
 
-const serverLogger = winston.createLogger({
-  format: winston.format.json(),
-  defaultMeta: { service: "user-service" },
-  transports: [
-    new winston.transports.File({ filename: "../log/errors/serverErrors" }),
-  ],
-});
+module.exports = {
+  serverLogger: winston.createLogger({
+    format: winston.format.combine(
+      winston.format.json(),
+      winston.format.timestamp(),
+      winston.format.colorize(),
+      winston.format.align(),
+      winston.format.metadata()
+    ),
+    transports: [
+      new winston.transports.File({
+        filename: "log/errors/serverErrors.log",
+      }),
+    ],
+  }),
 
-const clientLogger = winston.createLogger({
-  format: winston.format.json(),
-  defaultMeta: { service: "user-service" },
-  transports: [
-    new winston.transports.File({ filename: "../log/errors/clientsErrors" }),
-  ],
-});
+  clientLogger: winston.createLogger({
+    format: winston.format.json(),
+    transports: [
+      new winston.transports.File({
+        filename: "log/errors/clientErrors.log",
+      }),
+    ],
+  }),
+};
