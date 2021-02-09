@@ -37,3 +37,8 @@ app/**/redditAppsIDs.ts
 
 #Media
 api/media/*
+
+#Logs
+api/log/**/*
+
+log/errors/clientsErrors
