@@ -42,6 +42,11 @@ class Zipper {
     }
   }
 
+  addDownloadFail(item, message) {
+    serverLogger.error(message);
+    this.failArray.push(item.name);
+  }
+
   endArchive() {
     const stream = new Stream.Readable();
     stream.on("error", (err) => console.log(err));
