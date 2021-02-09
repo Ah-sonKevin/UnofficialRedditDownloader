@@ -214,7 +214,7 @@ ul li {
 .checkbox .el-checkbox {
 	margin: none;
 }
-//later manage tablet/phone/4k
+
 .imageArea.thumbnail,
 .videoArea.thumbnail {
 	border: 1px solid white;
