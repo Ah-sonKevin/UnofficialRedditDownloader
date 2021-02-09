@@ -1,5 +1,4 @@
 <template>
-	Due to Reddit's restrictions you can't access more than 1000 saved posts.
 	<el-container class="pageContainer">
 		<el-aside>
 			<ManagerSideMenu
@@ -18,6 +17,7 @@
 						:show-deleted="showDeleted"
 						:item-per-page="itemPerPage"
 						:selected-sorter="selectedSorter"
+						:number-items="numberItems"
 						:is-gold="isGold"
 						@changeShowDelete="changeShowDelete"
 						@changeItemPerPage="changeItemPerPage"
@@ -29,7 +29,6 @@
 						@unsave="unsave($event)"
 						@selectAll="selectAll"
 						@unselectAll="unselectAll"
-						@downloadSelected="downloadSelected"
 						@showSelectedDialog="showSelectedDialog"
 					/>
 					<ManagerSearch
@@ -100,7 +99,14 @@ import ManagerTools from "@managerComponents/ManagerTools.vue";
 import ManagerSkeletonLine from "@managerComponents/ManagerSkeletonLine.vue";
 import ManagerLineList from "@managerComponents/ManagerLineList.vue";
 
-import { defineComponent, ref, Ref, onBeforeMount } from "vue";
+import {
+	defineComponent,
+	ref,
+	Ref,
+	onBeforeMount,
+	computed,
+	ComputedRef,
+} from "vue";
 import { sorter } from "@/enum/sorter";
 import { ElLoading, ElMessage } from "element-plus";
 import { itemPerPageList } from "@/enum/itemPerPageList";
@@ -121,6 +127,7 @@ import {
 	setFilter,
 } from "@/helper/filterHelper";
 import { download, cancelDownload } from "@/helper/Download/objectDownloader";
+import { postOapi } from "@/helper/fetchHelper/fetchHelper";
 import { getSortedContent } from "../helper/sorter";
 
 export default defineComponent({
@@ -151,7 +158,7 @@ export default defineComponent({
 		function changePage(_page: number) {
 			page.value = _page;
 		}
-
+		// later save on pocket
 		function changeShowDelete(val: boolean) {
 			showDeleted.value = val;
 		}
@@ -177,6 +184,7 @@ export default defineComponent({
 		const filteredItems: Ref<SavedContent[]> = ref([]);
 
 		const items: Ref<SavedContent[]> = ref([]);
+		const numberItems: ComputedRef<number> = computed(() => items.value.length);
 
 		const subredditList: Ref<string[]> = ref([]);
 
@@ -194,16 +202,6 @@ export default defineComponent({
 				el.isSelected = true;
 				selectedItem.push(el);
 			});
-		}
-
-		function downloadSelected() {
-			if (selectedItem.length === 0) {
-				ElMessage.error("Selection is empty");
-				return;
-			}
-			download(selectedItem);
-
-			unselectAll();
 		}
 
 		onBeforeMount(() => {
@@ -244,12 +242,10 @@ export default defineComponent({
 				});
 		});
 
-		/* function changeCategory(): void {
-      //later change category
-      console.log("changeCategory");
-      postOapi("/api/saved_categories", []);
-    } */
-		// toremember need to install npm i autoprefixer other 'dead' not recognisez in browserslist
+		function changeCategory(): void {
+			void postOapi("/api/saved_categories", []);
+		}
+
 		function select(content: SavedContent, value: boolean) {
 			content.isSelected = value;
 			if (value) {
@@ -261,6 +257,8 @@ export default defineComponent({
 		}
 
 		// later accessibilité
+		// later manage tablet/phone/4k
+		// later lint staged
 
 		function getPageElement(itemsList: SavedContent[]) {
 			const res = itemsList.slice(
@@ -289,6 +287,7 @@ export default defineComponent({
 
 		return {
 			itemPerPage,
+			numberItems,
 			changeItemPerPage,
 			changePage,
 
@@ -307,7 +306,6 @@ export default defineComponent({
 			unsave,
 			save,
 			download,
-			downloadSelected,
 			select,
 
 			filteredItems,
