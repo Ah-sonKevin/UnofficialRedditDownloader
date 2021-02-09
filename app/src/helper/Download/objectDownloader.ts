@@ -25,7 +25,7 @@ export function cancelDownload(): void {
 }
 
 function getName(text: string, extension: string): string {
-	return `${cleanString(text)}.${cleanString(extension)}`;
+	return `${text}.${extension}`;
 }
 // tocheck lint staged
 
@@ -171,7 +171,13 @@ function downloadObject(object: Blob, nom: string): void {
 
 function getItemInfo(
 	item: SavedContent,
-): { url: string; name: string; needYtDl: boolean; folder: string } {
+): {
+	url: string;
+	name: string;
+	needYtDl: boolean;
+	folder: string;
+	ext: string;
+} {
 	if (item.isGallery) {
 		throw Error("Need Batch Download");
 	}
@@ -182,14 +188,16 @@ function getItemInfo(
 	) {
 		return {
 			url: item.externalUrl,
-			name: getName(item.title, "txt"),
+			name: cleanString(item.title),
+			ext: "txt",
 			folder: "",
 			needYtDl: false,
 		};
 	}
 	return {
 		url: item.externalUrl,
-		name: getName(item.title, item.externalUrl.split(".").slice(-1)[0]),
+		name: cleanString(item.title),
+		ext: item.externalUrl.split(".").slice(-1)[0],
 		folder: "",
 		needYtDl: item.needYtDl,
 	};
