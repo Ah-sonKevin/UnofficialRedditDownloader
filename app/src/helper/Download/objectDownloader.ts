@@ -1,15 +1,15 @@
 import { postType } from "@/enum/postType";
+import { PartialDownloadError } from "@/errors/notifError";
 import {
 	DownloadError,
 	NetworkError,
 	UnknowTypeError,
 } from "@/errors/restartError";
+import { ItemInfo, SuccessList } from "@/savedContent/ItemInterface";
 import SavedContent from "@/savedContent/savedContent";
 import { ElLoading } from "element-plus";
 import { ILoadingInstance } from "element-plus/lib/el-loading/src/loading.type";
-import Jszip, { loadAsync } from "jszip";
-import { PartialDownloadError } from "../../errors/notifError";
-import { ItemInfo, SuccessList } from "../../savedContent/ItemInterface";
+import JSZip, { loadAsync } from "jszip";
 import { fetchBatchMediaInfo, fetchMedia } from "../fetchHelper/fetchHelper";
 import { notify } from "../notifierHelper";
 import { cleanString } from "../stringHelper";
