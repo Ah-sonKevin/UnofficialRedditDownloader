@@ -1,16 +1,14 @@
+import { SuccessList } from "@/savedContent/ItemInterface";
 import { RedditManagerError } from "./error";
 
 export class NotifError extends RedditManagerError {}
 
 export class PartialDownloadError extends NotifError {
-	success: { path: string; name: string }[];
+	success: string[];
 
-	fail: { path: string; name: string }[];
+	fail: string[];
 
-	constructor(arrays: {
-		success: { path: string; name: string }[];
-		fail: { path: string; name: string }[];
-	}) {
+	constructor(arrays: SuccessList) {
 		super("");
 		this.success = arrays.success;
 		this.fail = arrays.fail;
