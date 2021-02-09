@@ -8,6 +8,7 @@ const compression = require("compression");
 const Zipper = require("./zipper");
 const downloader = require("./downloader");
 const getAllInfo = require("./item");
+const { clientLogger, serverLogger } = require("./logger");
 
 const app = express();
 app.use(compression());
@@ -118,9 +119,9 @@ app.post("/api/downBatchInfo/", (req, res, next) => {
   });
 });
 
-// toremember pipeline send error and make sure to clean all stream
-
-app.post("/api/logError", (req, res, next) => {});
+app.post("/api/logError/", (req) => {
+  clientLogger.error(req.body);
+});
 
 app.use((err, req, res) => {
   if (req.xhr) {
