@@ -17,7 +17,7 @@ app
 window.onunhandledrejection = (promiseEvent: PromiseRejectionEvent) => {
 	const error: unknown = promiseEvent.reason;
 	if (error instanceof RedditManagerError) {
-		promiseEvent.preventDefault(); // message still show on firefox, bug
+		promiseEvent.preventDefault();
 		managerErrors(error);
 	} else {
 		throw error;
@@ -25,7 +25,7 @@ window.onunhandledrejection = (promiseEvent: PromiseRejectionEvent) => {
 };
 
 app.config.errorHandler = (err: unknown) => {
-	if (err instanceof Error) {
+	if (err instanceof RedditManagerError) {
 		managerErrors(err);
 	}
 };
