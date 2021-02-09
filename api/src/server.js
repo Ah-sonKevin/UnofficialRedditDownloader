@@ -34,11 +34,8 @@ app.post("/api/downItem/", async (req, res, next) => {
   const needYtdl = req.body.needYdl ? JSON.parse(req.body.needYdl) : false;
 
   const info = await getAllInfo(req.body.url, needYtdl, path, null);
-  if (info) {
-    res.setHeader("MediaSize", info.size);
-  } else {
-    console.log(`SIZE Error  ${path}`);
-  }
+  res.setHeader("MediaSize", info.size);
+  res.setHeader("MediaFormat", info.ext);
 
   downloader(info)
     .then((response) => {
