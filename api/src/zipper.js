@@ -1,5 +1,6 @@
 const Packer = require("zip-stream");
 const Stream = require("stream");
+const { serverLogger } = require("./logger");
 
 class Zipper {
   archive;
@@ -74,7 +75,7 @@ class Zipper {
     if (this.toZipList.length > 0) {
       let compressed = false;
       const el = this.toZipList[0];
-      const name = el.name.substr(0, 30);
+      const name = el.name;
       const stream = el.stream
         .on("error", (err) => {
           el.reject(err);
@@ -90,7 +91,7 @@ class Zipper {
           this.toZipList.splice(0, 1);
           this.startZip();
         });
-      this.archive.entry(stream, { name: el.name.substr(0, 30) }, (err) => {
+      this.archive.entry(stream, { name }, (err) => {
         if (err) {
           compressed = false;
           this.failArray.push(name);
