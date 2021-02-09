@@ -57,7 +57,10 @@ class Zipper {
 
     this.archive.entry(stream, { name: "result.json" }, (err) => {
       if (err) {
-        console.log(`${"compression error result.json   "}${err}`);
+        serverLogger.error({
+          message: "compression error result.json",
+          error: err,
+        });
       }
       this.archive.finish();
     });
