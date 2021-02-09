@@ -56,7 +56,8 @@ async function getAllInfo(url, needYoutubeDl, name, folder) {
           isOneFile: true,
           url: info.url,
           size,
-          name,
+          name: `${name.split(".")[0]}`,
+          ext: info.ext,
           folder,
           needYoutubeDl,
         };
@@ -75,7 +76,8 @@ async function getAllInfo(url, needYoutubeDl, name, folder) {
             video: { url: infoVideo.url, ext: infoVideo.ext },
             audio: { url: infoAudio.url, ext: infoAudio.ext },
             size: sizeAudio + sizeVideo,
-            name,
+            name: `${name.split(".")[0]}`,
+            ext: infoVideo.ext,
             folder,
             needYoutubeDl,
           };
