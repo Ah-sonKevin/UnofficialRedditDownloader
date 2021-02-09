@@ -148,7 +148,8 @@ async function downloadMedia(item: SavedContent) {
 			cancelController.signal,
 		);
 		const data = await fetchData(x, downloadIndicator);
-		downloadObject(data, itemInfo.name);
+		const ext = itemInfo.ext ?? x.headers.get("MediaFormat") ?? "";
+		downloadObject(data, `${itemInfo.name}.${ext}`);
 	} catch (err) {
 		if ((err as Error).name === "AbortError") {
 			downloadIndicator.close();
@@ -252,7 +253,7 @@ export async function batchDownload(items: SavedContent[]): Promise<void> {
 		archive.file(el.name, el.content);
 	});
 	const zip = await archive.generateAsync({ type: "uint8array" });
-	downloadObject(new Blob([zip]), "archive");
+	downloadObject(new Blob([zip]), getName("archive", "zip"));
 }
 
 async function getMediaArchive(items: SavedContent[]): Promise<JSZip> {
