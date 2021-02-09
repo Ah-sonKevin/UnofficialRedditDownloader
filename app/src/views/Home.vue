@@ -1,6 +1,18 @@
 <template>
 	<div class="home">
 		<img alt="Vue logo" src="assets/logo.png" />
+		<el-tooltip placement="top">
+			<template #content>
+				We will only access the information we need, the authentification is
+				securised by reedit, we will not have access to your credential
+				<router-link v-slot="{ href, navigate }" to="/about#security">
+					<NavLink :href="href" @click="navigate">
+						Read more
+					</NavLink>
+				</router-link>
+			</template>
+			<i class="el el-info-circle">Is this safe</i>
+		</el-tooltip>
 		<button @click="connectToReddit">connectToReddit</button>
 		<HomeDownloadLink />
 	</div>

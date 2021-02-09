@@ -1,10 +1,6 @@
 import { postType } from "@/enum/postType";
-import { PartialDownloadError } from "@/errors/notifError";
-import {
-	DownloadError,
-	NetworkError,
-	UnknowTypeError,
-} from "@/errors/restartError";
+import { DownloadError, PartialDownloadError } from "@/errors/notifError";
+import { NetworkError, UnknowTypeError } from "@/errors/restartError";
 import { ItemInfo, SuccessList } from "@/savedContent/ItemInterface";
 import SavedContent from "@/savedContent/savedContent";
 import { ElLoading } from "element-plus";
@@ -14,7 +10,7 @@ import { fetchBatchMediaInfo, fetchMedia } from "../fetchHelper/fetchHelper";
 import { notify } from "../notifierHelper";
 import { cleanString } from "../stringHelper";
 
-const cancelController = new AbortController(); 
+const cancelController = new AbortController();
 const SPINNER_UPDATE_FREQUENCY = 1000;
 const suffixList = ["B", "KiB", "MiB", "GiB"];
 const SIZE_RATIO = 1024;
@@ -27,8 +23,6 @@ export function cancelDownload(): void {
 function getName(text: string, extension: string): string {
 	return `${text}.${extension}`;
 }
-// tocheck lint staged
-
 function getText(item: SavedContent): string {
 	const parser = new DOMParser();
 
@@ -37,15 +31,15 @@ function getText(item: SavedContent): string {
 
 	let res = "";
 	if (item.type === postType.COMMENT) {
-		res = `A comment  by '${item.author}' of the post '${item.title}' by '${
-			item.author
-		}' from
+		res = `${item.redditUrl} \n\n A comment  by '${item.author}' of the post '${
+			item.title
+		}' by '${item.author}' from
          ${item.subreddit} at ${item.redditUrl} \n\n\n\n ${stringContent ??
 			""}`;
 	} else {
-		res = `'${item.title}' by '${item.author}' from ${item.subreddit} at ${
-			item.redditUrl
-		} \n\n\n\n ${stringContent ?? ""}`;
+		res = `${item.redditUrl} \n\n ${item.title} by '${item.author}' from ${
+			item.subreddit
+		} at ${item.redditUrl} \n\n\n\n ${stringContent ?? ""}`;
 	}
 	return res;
 }
@@ -147,6 +141,7 @@ async function downloadMedia(item: SavedContent) {
 			itemInfo.needYtDl,
 			cancelController.signal,
 		);
+
 		const data = await fetchData(x, downloadIndicator);
 		const ext = itemInfo.ext ?? x.headers.get("MediaFormat") ?? "";
 		downloadObject(data, `${itemInfo.name}.${ext}`);
@@ -160,7 +155,7 @@ async function downloadMedia(item: SavedContent) {
 	}
 }
 
-function downloadObject(object: Blob, nom: string): void {
+export function downloadObject(object: Blob, nom: string): void {
 	const img = URL.createObjectURL(object);
 	const linkDown = document.createElement("a");
 	linkDown.href = img;
@@ -282,7 +277,7 @@ async function batchDownloadMedia(items: SavedContent[]): Promise<Blob | null> {
 	items.forEach(el => {
 		urls.push(...batchGetItemInfo(el));
 	});
-	// todo interupt server udring downlaod error
+
 	try {
 		const x = await fetchBatchMediaInfo(urls, cancelController.signal);
 		const blob = await fetchData(x, downloadIndicator);

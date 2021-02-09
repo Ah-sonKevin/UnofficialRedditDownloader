@@ -3,6 +3,7 @@
 	<el-button @click="unselectAll()"> Unselect All </el-button>
 	<el-button @click="applyToSelected(unsave)"> Unsave </el-button>
 	<el-button @click="downloadSelected()"> Download </el-button>
+	<el-button @click="getSelectedURLs()"> Get all URLs </el-button>
 	<!--  <el-button v-if="isGold" @click="applyToSelected(changeCategory)" 
     >Change Category</el-button-->
 	>
@@ -15,6 +16,7 @@
 import { useContext, defineComponent, PropType } from "vue";
 import { ElMessage } from "element-plus";
 import SavedContent from "@/savedContent/savedContent";
+import { download, downloadObject } from "@/helper/Download/objectDownloader";
 
 export default defineComponent({
 	name: "ManagerTools",
@@ -28,13 +30,19 @@ export default defineComponent({
 			type: Boolean,
 		},
 	},
-	emits: ["unsave", "selectAll", "unselectAll", "downloadSelected"],
+	emits: ["unsave", "selectAll", "unselectAll"],
 	setup(props) {
 		const context = useContext();
 
 		function downloadSelected() {
-			context.emit("downloadSelected");
+			if (props.selectedItem.length === 0) {
+				ElMessage.error("Selection is empty");
+				return;
+			}
+			download(props.selectedItem);
+			unselectAll();
 		}
+
 		function showSelectedDialog() {
 			context.emit("showSelectedDialog");
 		}
@@ -66,6 +74,11 @@ export default defineComponent({
 			context.emit("unselectAll");
 		}
 
+		function getSelectedURLs() {
+			const urls = props.selectedItem.map(el => el.redditUrl); 
+			downloadObject(downloadObject, "redditUrls.txt");
+		}
+
 		return {
 			downloadSelected,
 			applyToSelected,
@@ -75,6 +88,7 @@ export default defineComponent({
 			applyFunctionToArray,
 			unselectAll,
 			showSelectedDialog,
+			getSelectedURLs,
 		};
 	},
 });

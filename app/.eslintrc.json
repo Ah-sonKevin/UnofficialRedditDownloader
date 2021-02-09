@@ -97,7 +97,8 @@
 			"radix":["error","as-needed"],
             "max-params": ["error", 3],
 			"comma-dangle": "off",
-			"@typescript-eslint/comma-dangle": "off"
+			"@typescript-eslint/comma-dangle": "off",
+			"vue/html-closing-bracket-newline":"off"
     },
     "overrides": [{
         "files": ["**/enum/**"],

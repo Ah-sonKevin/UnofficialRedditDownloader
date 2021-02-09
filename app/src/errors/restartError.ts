@@ -55,5 +55,3 @@ export class DataNotFoundError extends RestartError {
 		this.nameError = "Data not found Error";
 	}
 }
-
-export class DownloadError extends RestartError {}

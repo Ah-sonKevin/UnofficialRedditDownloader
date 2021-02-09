@@ -1,4 +1,11 @@
 <template>
+	<div>You have {{ numberItems }} saved items</div>
+	<p v-if="numberItems > 900">
+		<i class="el-icon-warning">
+			Due to Reddit's restrictions you can't have more than 1000 saved posts.</i
+		>
+	</p>
+
 	<el-header height="auto">
 		<el-switch
 			v-model="showDeletedComp"
@@ -25,9 +32,16 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, useContext, computed, onBeforeMount } from "vue";
+import {
+	defineComponent,
+	useContext,
+	computed,
+	onBeforeMount,
+	PropType,
+} from "vue";
 import { itemPerPageList } from "@/enum/itemPerPageList";
 import { sorter } from "@/enum/sorter";
+import SavedContent from "@/savedContent/savedContent";
 
 export default defineComponent({
 	name: "ManagerHeader",
@@ -44,6 +58,10 @@ export default defineComponent({
 		selectedSorter: {
 			required: true,
 			type: String,
+		},
+		numberItems: {
+			required: true,
+			type: Number,
 		},
 	},
 	emits: ["changeShowDelete", "changeItemPerPage", "changeSelectedSorter"],

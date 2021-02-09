@@ -1,7 +1,5 @@
 const MAX_NAME_SIZE = 100;
-
 export function cleanString(text: string): string {
-	// no ' !!
 	return text
 		.replace(/\W/gi, "_")
 		.replace(/_+/gi, "_")
