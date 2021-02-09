@@ -102,7 +102,7 @@ async function fetchData(
 		const reader = x.body?.getReader();
 		if (!reader) {
 			downloadIndicator.close();
-			throw new DownloadError();
+			throw new DownloadError(`Undefined Reader error `);
 		}
 		let reading = true;
 
@@ -116,7 +116,7 @@ async function fetchData(
 			} else {
 				if (!value) {
 					downloadIndicator.close();
-					throw new DownloadError();
+					throw new DownloadError(`Undefined Value Error`);
 				}
 				fileChunks.push(value);
 				receivedData += value.length;
@@ -130,7 +130,7 @@ async function fetchData(
 		return new Blob(fileChunks);
 	}
 	downloadIndicator.close();
-	throw new DownloadError();
+	throw new DownloadError(`Undefined Response Error`);
 }
 
 async function downloadMedia(item: SavedContent) {
