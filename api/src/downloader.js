@@ -3,7 +3,7 @@ require("express-zip");
 const fetch = require("node-fetch").default;
 const ffmpeg = require("fluent-ffmpeg");
 
-const basePath = "../media/";
+const basePath = "media/";
 
 function download(uri) {
   return fetch(uri);
