@@ -88,14 +88,16 @@
             "no-use-before-define": "off",
             "@typescript-eslint/no-use-before-define": "off",
             "import/prefer-default-export":"off",
-            "prettier/prettier": ["error", {"singleQuote": false,"trailingComma": "all","useTabs": true}],//later
+            "prettier/prettier": ["error", {"singleQuote": false,"trailingComma": "all","useTabs": true}],
             "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
             "indent": "off",
 			"@typescript-eslint/indent": "off",
 			"vue/html-indent":"off",
 			"max-classes-per-file":"off",
 			"radix":["error","as-needed"],
-            "max-params": ["error", 3]
+            "max-params": ["error", 3],
+			"comma-dangle": "off",
+			"@typescript-eslint/comma-dangle": "off"
     },
     "overrides": [{
         "files": ["**/enum/**"],
