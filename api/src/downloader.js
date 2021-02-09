@@ -9,6 +9,14 @@ function download(uri) {
   return fetch(uri);
 }
 
+function cleanString(text) {
+  return text
+    .replace(/\W/gi, "_")
+    .replace(/_+/gi, "_")
+    .replace(/^_/, "")
+    .replace(/_$/, "");
+}
+
 async function youtubeDlDownload(itemInfo) {
   return new Promise((promise, reject) => {
     let videoStreamDone = false;
@@ -66,8 +74,12 @@ async function youtubeDlDownload(itemInfo) {
     } else {
       videoExt = itemInfo.video.ext;
       audioExt = itemInfo.audio.ext;
-      videoNameFile = `${basePath}${itemInfo.name}_video.${videoExt}`;
-      audioNameFile = `${basePath}${itemInfo.name}_audio.${audioExt}`;
+      videoNameFile = `${basePath}${cleanString(
+        itemInfo.name
+      )}_video.${cleanString(videoExt)}`;
+      audioNameFile = `${basePath}${cleanString(
+        itemInfo.name
+      )}_audio.${cleanString(audioExt)}`;
 
       fetch(itemInfo.video.url)
         .then((respVideo) => {
