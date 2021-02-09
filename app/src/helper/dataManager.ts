@@ -27,7 +27,6 @@ export async function recGetItems(
 		buildContent(el)
 			.then(item => items.push(item))
 			.catch((err: Error) => {
-				// later better logger arguments
 				logger.error(
 					`${err.message} \n\n${err.stack ?? "NO STACK"}\n\n ${JSON.stringify(
 						err,
@@ -66,7 +65,7 @@ export function setSubredditList(items: SavedContent[]): string[] {
 }
 
 export async function fetchCategories(): Promise<string[]> {
-	// later
+	// nextRelease make Fetch categories
 	const res = await fetchOapi("/api/saved_categories");
 	if (res.ok) {
 		const categories = res.json() as Promise<string[]>;

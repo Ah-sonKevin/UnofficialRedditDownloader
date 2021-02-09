@@ -56,8 +56,4 @@ export class DataNotFoundError extends RestartError {
 	}
 }
 
-export class DownloadError extends RestartError {
-	constructor() {
-		super("");
-	}
-}
+export class DownloadError extends RestartError {}
