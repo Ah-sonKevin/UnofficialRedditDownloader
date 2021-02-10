@@ -4,6 +4,6 @@ node_js:
 before_install:
  - cd app
 after_script:
- - cat ./coverage/lcov.info | coveralls"
+ - cat ./coverage/lcov.info | coveralls
 script: npm run test 
 
