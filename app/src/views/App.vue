@@ -14,8 +14,8 @@
 </template>
 
 <script lang="ts">
-import TheNavigation from "@/components/TheNavigation.vue";
-import TheFooter from "@/components/TheFooter.vue";
+import TheFooter from "@/components/General/TheFooter.vue";
+import TheNavigation from "@/components/General/TheNavigation.vue";
 
 export default {
 	components: { TheNavigation, TheFooter },
