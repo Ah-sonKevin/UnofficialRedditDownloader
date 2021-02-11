@@ -22,9 +22,9 @@ export default defineComponent({
 	name: "TheNavigation",
 	setup() {
 		const authModule = getModule(AuthStore, useStore());
-		const isConnected: ComputedRef<boolean> = computed(() => {
-			return authModule.isConnected;
-		});
+		const isConnected: ComputedRef<boolean> = computed(
+			() => authModule.isConnected,
+		);
 		function disconnect() {
 			authModule.resetToken();
 			void useRouter().push({ name: "Home" });
