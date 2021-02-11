@@ -1,9 +1,10 @@
 language: node_js
 node_js:
- - "node"
+- node
 before_install:
- - cd app
+- cd app
 after_script:
- - cat ./coverage/lcov.info | coveralls
-script: npm run test 
-
+- cat ./coverage/lcov.info | coveralls
+script: npm run test
+dd:
+  secure: XYUF8RReGTUACDNg0j4RZpCaeHkUbTrp2vWsXB5cSeskZ96aI6PvviE2mazVhCxMh3OgMfs8LMf1poKfGoLF5lOxA7FlVpyALXGiHWTEJVEkRNxefwI2SC5UPeJ9DA/AvfcWGfQVsqB/DHuhqLQMx/CiOpQLj9f5+fyQMNWkLsit8AHM9dHtFihxEUst2ZXi71FDjBQKp4ylSMWvu9f+m8woGIqXhAtP/LfF4/zDCh9uPJnGnl0D3Y1BWBNZygadXL5BPZqdHG1uKRgYRfR9nI1MZCZiHkdRG46vpwuEzz0ffcG69E4ataJx8oqulZjFY6v/tfqRvpfjdIiPvLXQN1eZHkKuzI+Dt528ipaIoUdqVOlm+6N8hQwoRN2nax2INNV155SqoqHlVOF/JMp3UGqZ+B7jmkDEqVD0eQjZdXKu6sTr8pLqryh21m7xfXDLGnd4MJJMmuxOhVYCD6z7CfmxSXLbTBKGajGuCVfj2DmQ+5xVF3XdF+1M/txJ9BL5gILoii4fwMIZox/4COxRSR0eTXDKqgnjYmFZExxNBtUpEJd2MkGWy7cdbeDpFS/1EK0sC9ThivDFzmI7eHIwGM4QSH/Y+cB3A6sEKlDM10lFBgtkklmqNLyxtfQsQIqsCt0quYaYM70lVa+ZTaT5NXwQgzkrzVx3csGfjENNIV4=
