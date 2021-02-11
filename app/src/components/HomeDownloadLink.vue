@@ -18,10 +18,11 @@
 
 <script lang="ts">
 import { defineComponent, ref, onBeforeMount } from "vue";
-import { BadLinkError, DownloadError } from "@/errors/restartError";
+import { BadLinkError } from "@/errors/restartError";
 import { RawItem } from "@/savedContent/rawItemInterface";
 import { buildContent } from "@/savedContent/contentBuilder";
 import { download } from "@/helper/Download/objectDownloader";
+import { DownloadError } from "@/errors/notifError";
 
 export default defineComponent({
 	name: "HomeDownloadLink",
