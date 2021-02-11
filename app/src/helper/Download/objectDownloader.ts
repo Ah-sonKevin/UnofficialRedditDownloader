@@ -34,8 +34,9 @@ function getText(item: SavedContent): string {
 		res = `${item.redditUrl} \n\n A comment  by '${item.author}' of the post '${
 			item.title
 		}' by '${item.author}' from
-         ${item.subreddit} at ${item.redditUrl} \n\n\n\n ${stringContent ??
-			""}`;
+         ${item.subreddit} at ${item.redditUrl} \n\n\n\n ${
+			stringContent ?? ""
+		}`;
 	} else {
 		res = `${item.redditUrl} \n\n ${item.title} by '${item.author}' from ${
 			item.subreddit
@@ -201,17 +202,15 @@ function getItemInfo(
 
 function batchGetItemInfo(item: SavedContent): ItemInfo[] {
 	if (item.isGallery) {
-		return item.galleryURLs.map((el, index) => {
-			return {
-				url: el,
-				name: getName(
-					`${item.title}_${String(index + 1)}`,
-					el.split(".").slice(-1)[0],
-				),
-				folder: cleanString(item.title),
-				needYtDl: item.needYtDl,
-			};
-		});
+		return item.galleryURLs.map((el, index) => ({
+			url: el,
+			name: getName(
+				`${item.title}_${String(index + 1)}`,
+				el.split(".").slice(-1)[0],
+			),
+			folder: cleanString(item.title),
+			needYtDl: item.needYtDl,
+		}));
 	}
 	return [getItemInfo(item)];
 }
@@ -231,20 +230,20 @@ export function download(items: SavedContent | SavedContent[]): void {
 export async function batchDownload(items: SavedContent[]): Promise<void> {
 	const medias: SavedContent[] = [];
 	const texts: SavedContent[] = [];
-	items.forEach(item => {
+	items.forEach((item) => {
 		if (item.hasImage) {
 			medias.push(item);
 		} else {
 			texts.push(item);
 		}
 	});
-	const textContents = texts.map(el => ({
+	const textContents = texts.map((el) => ({
 		name: getName(el.title, "txt"),
 		content: getText(el),
 	}));
 
 	const archive = await getMediaArchive(medias);
-	textContents.forEach(el => {
+	textContents.forEach((el) => {
 		archive.file(el.name, el.content);
 	});
 	const zip = await archive.generateAsync({ type: "uint8array" });
@@ -274,7 +273,7 @@ async function batchDownloadMedia(items: SavedContent[]): Promise<Blob | null> {
 		needYtDl: boolean;
 		folder: string;
 	}[] = [];
-	items.forEach(el => {
+	items.forEach((el) => {
 		urls.push(...batchGetItemInfo(el));
 	});
 
@@ -283,8 +282,8 @@ async function batchDownloadMedia(items: SavedContent[]): Promise<Blob | null> {
 		const blob = await fetchData(x, downloadIndicator);
 		if (blob) {
 			void loadAsync(blob)
-				.then(el => el.files["result.json"].async("string"))
-				.then(res => {
+				.then((el) => el.files["result.json"].async("string"))
+				.then((res) => {
 					const arrays = JSON.parse(res) as SuccessList;
 					if (arrays.fail.length > 0) {
 						throw new PartialDownloadError(arrays);

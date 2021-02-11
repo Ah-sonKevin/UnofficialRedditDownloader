@@ -34,10 +34,7 @@ async function isDownloadable(url: string): Promise<boolean> {
 }
 
 function cleanFallback(url: string) {
-	return url
-		.split("/")
-		.slice(0, -1)
-		.join("/");
+	return url.split("/").slice(0, -1).join("/");
 }
 // later use composition & object literal
 // eslint-disable-next-line max-params
@@ -137,7 +134,7 @@ export async function buildMedia(
 			getImage(data),
 		);
 	}
-	if (webExtensionsList.some(el => urlExtension === el)) {
+	if (webExtensionsList.some((el) => urlExtension === el)) {
 		return returnMedia(
 			postType.LINK,
 			data.url_overridden_by_dest,
@@ -146,7 +143,7 @@ export async function buildMedia(
 	}
 	if (
 		postHint === "image" ||
-		imageExtensionList.some(el => urlExtension === el)
+		imageExtensionList.some((el) => urlExtension === el)
 	) {
 		return returnMedia(
 			postType.IMAGE,
@@ -200,7 +197,7 @@ export async function buildMedia(
 		);
 	}
 	if (
-		videoExtensionList.some(el => urlExtension === el) ||
+		videoExtensionList.some((el) => urlExtension === el) ||
 		data?.media?.oembed?.type === "video"
 	) {
 		return returnMedia(

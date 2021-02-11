@@ -102,7 +102,7 @@ export default class SavedContent {
 		} else if (data.is_gallery) {
 			this.type = postType.IMAGE;
 			this.isGallery = data.is_gallery;
-			Object.keys(data.media_metadata).forEach(el => {
+			Object.keys(data.media_metadata).forEach((el) => {
 				this.galleryURLs.push(`https://i.redd.it/${el}.jpg`);
 			});
 			this.imageLink = this.galleryURLs[0];

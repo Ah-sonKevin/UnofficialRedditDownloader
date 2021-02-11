@@ -108,7 +108,7 @@ import {
 	ComputedRef,
 } from "vue";
 import { sorter } from "@/enum/sorter";
-import { ElLoading, ElMessage } from "element-plus";
+import { ElLoading } from "element-plus";
 import { itemPerPageList } from "@/enum/itemPerPageList";
 import {
 	recGetItems,
@@ -191,14 +191,14 @@ export default defineComponent({
 		const categoriesList: Ref<string[]> = ref([]);
 
 		function unselectAll() {
-			selectedItem.forEach(el => {
+			selectedItem.forEach((el) => {
 				el.isSelected = false;
 			});
 			selectedItem = [];
 		}
 
 		function selectAll() {
-			filteredItems.value.forEach(el => {
+			filteredItems.value.forEach((el) => {
 				el.isSelected = true;
 				selectedItem.push(el);
 			});
@@ -210,14 +210,12 @@ export default defineComponent({
 				text: "Loading Reddit Data",
 			});
 			fetchUser()
-				.then(user => {
+				.then((user) => {
 					isGold.value = user.isGold;
 					return user;
 				})
-				.then(user => {
-					return recGetItems(user.name);
-				})
-				.then(fetchedItems => {
+				.then((user) => recGetItems(user.name))
+				.then((fetchedItems) => {
 					items.value = fetchedItems;
 					subredditList.value = setSubredditList(fetchedItems);
 					loading.value = false;
@@ -229,7 +227,7 @@ export default defineComponent({
 					}
 					return [];
 				})
-				.then(categories => {
+				.then((categories) => {
 					categoriesList.value = categories;
 					return categoriesList;
 				})
@@ -258,7 +256,6 @@ export default defineComponent({
 
 		// later accessibilité
 		// later manage tablet/phone/4k
-		// later lint staged
 
 		function getPageElement(itemsList: SavedContent[]) {
 			const res = itemsList.slice(

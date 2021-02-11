@@ -9,14 +9,12 @@ export function getSortedContent(
 		case sorter.ADDED_DATE:
 			return content;
 		case sorter.TITLE:
-			return content.sort((el1, el2) => {
-				return el1.title.localeCompare(el2.title);
-			});
+			return content.sort((el1, el2) => el1.title.localeCompare(el2.title));
 
 		case sorter.AUTHOR:
-			return content.sort((el1: SavedContent, el2: SavedContent) => {
-				return el1.author.localeCompare(el2.author);
-			});
+			return content.sort((el1: SavedContent, el2: SavedContent) =>
+				el1.author.localeCompare(el2.author),
+			);
 
 		case sorter.CREATION_DATE:
 			return content.sort((el1: SavedContent, el2: SavedContent) => {
@@ -29,9 +27,9 @@ export function getSortedContent(
 				return 0;
 			});
 		case sorter.SUBREDDIT:
-			return content.sort((el1: SavedContent, el2: SavedContent) => {
-				return el1.subreddit.localeCompare(el2.subreddit);
-			});
+			return content.sort((el1: SavedContent, el2: SavedContent) =>
+				el1.subreddit.localeCompare(el2.subreddit),
+			);
 		default:
 			return content.sort();
 	}

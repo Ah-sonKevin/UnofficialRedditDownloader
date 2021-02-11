@@ -47,7 +47,7 @@ export function managerErrors(err: RedditManagerError): void {
 							let message = "";
 							let title = "";
 							message = "The following files couldn't be downloaded \n<ul>";
-							err.fail.forEach(el => {
+							err.fail.forEach((el) => {
 								message += `<li>${el}</li>`;
 							});
 							message += "</ul>";

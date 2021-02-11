@@ -14,7 +14,7 @@ export function filterItems(
 	) {
 		return items;
 	}
-	const res = items.filter(el => {
+	const res = items.filter((el) => {
 		if (
 			typeFilter.includes(el.type) ||
 			(el.category && categoryFilter.includes(el.category)) ||
@@ -30,9 +30,9 @@ export function searchByText(
 	items: SavedContent[],
 	searchInput: string,
 ): SavedContent[] {
-	return items.filter(item => {
-		return item.title.toLowerCase().includes(searchInput.toLowerCase());
-	});
+	return items.filter((item) =>
+		item.title.toLowerCase().includes(searchInput.toLowerCase()),
+	);
 }
 export function hideDeleted(
 	items: SavedContent[],
@@ -42,7 +42,7 @@ export function hideDeleted(
 	if (showDeleted) {
 		res = items;
 	} else {
-		res = items.filter(el => !el.isDeleted);
+		res = items.filter((el) => !el.isDeleted);
 	}
 	return res;
 }

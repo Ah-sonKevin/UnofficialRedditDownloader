@@ -25,7 +25,7 @@ export async function recGetItems(
 	const result: RawItem = (await res.json()) as RawItem;
 	result.data.children.forEach((el: RawItemUnit) => {
 		buildContent(el)
-			.then(item => items.push(item))
+			.then((item) => items.push(item))
 			.catch((err: Error) => {
 				logger.error(
 					`${err.message} \n\n${err.stack ?? "NO STACK"}\n\n ${JSON.stringify(
@@ -45,7 +45,7 @@ export async function recGetItems(
 export async function fetchUser(): Promise<User> {
 	const userRes = await fetchOapi("/api/v1/me");
 	if (userRes.ok) {
-		return userRes.json().then(userData => {
+		return userRes.json().then((userData) => {
 			const user = new User(userData);
 			return user;
 		});
@@ -80,7 +80,7 @@ export function unsave(toDelete: SavedContent): void {
 }
 
 export function unsaveArray(toDelete: SavedContent[]): void {
-	toDelete.forEach(el => {
+	toDelete.forEach((el) => {
 		unsave(el);
 	});
 }
@@ -91,7 +91,7 @@ export function save(toDelete: SavedContent): void {
 }
 
 export function saveArray(toDelete: SavedContent[]): void {
-	toDelete.forEach(el => {
+	toDelete.forEach((el) => {
 		save(el);
 	});
 }
