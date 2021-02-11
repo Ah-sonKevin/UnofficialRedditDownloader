@@ -8,11 +8,7 @@ import { createApp } from "vue";
 import { RedditManagerError } from "./errors/error";
 
 const app = createApp(App);
-app
-	.use(store)
-	.use(router)
-	.use(ElementPlus)
-	.mount("#app");
+app.use(store).use(router).use(ElementPlus).mount("#app");
 
 window.onunhandledrejection = (promiseEvent: PromiseRejectionEvent) => {
 	const error: unknown = promiseEvent.reason;

@@ -40,5 +40,5 @@ api/media/*
 
 #Logs
 api/log/**/*
+app/coverage/*
 
-log/errors/clientsErrors
