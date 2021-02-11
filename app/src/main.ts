@@ -1,4 +1,5 @@
 import { managerErrors } from "@/errors/manageError";
+import "@/info/secret/redditAppsIDs";
 import router from "@/router";
 import { store } from "@/store";
 import App from "@/views/App.vue";

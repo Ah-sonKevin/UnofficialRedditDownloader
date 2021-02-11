@@ -1,9 +1,7 @@
 import { AuthError, DataNotFoundError } from "@/errors/restartError";
 import Auth from "@/User/Auth";
 import { Module, Mutation, VuexModule } from "vuex-module-decorators";
-import { AUTH_ID, AUTH_SECRET } from "../info/secret/redditAppsIDs";
 
-// @Module({ dynamic: true, store, name: 'auth', preserveState: true })
 @Module({ name: "auth" })
 export default class AuthStore extends VuexModule {
 	rawAuth?: Auth;
@@ -26,15 +24,16 @@ export default class AuthStore extends VuexModule {
 		const AUTH_SCOPE = "save identity history";
 
 		const authRedirect = `http://${window.location.hostname}:8080/Login`;
-
-		const authLink = `https://www.reddit.com/api/v1/authorize?client_id=${AUTH_ID}&response_type=code&
+		const authID: string = globalThis.AUTH_ID;
+		const authSecret: string = globalThis.AUTH_SECRET;
+		const authLink = `https://www.reddit.com/api/v1/authorize?client_id=${authID}&response_type=code&
 			state=${authString}&redirect_uri=${authRedirect}&duration=permanent&scope=${AUTH_SCOPE}`;
 		this.rawAuth = new Auth(
-			AUTH_ID,
+			authID,
 			authString,
 			AUTH_SCOPE,
 			authRedirect,
-			AUTH_SECRET,
+			authSecret,
 			authLink,
 		);
 	}
