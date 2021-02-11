@@ -5,11 +5,11 @@
 				class="checkbox"
 				variant="rect"
 				style="
-          height: 1em;
-          width: 1em;
-          margin: auto 1em auto 1em;
-          display: flex;
-        "
+					height: 1em;
+					width: 1em;
+					margin: auto 1em auto 1em;
+					display: flex;
+				"
 			/><!-- Checkbox -->
 		</el-aside>
 		<el-skeleton-item

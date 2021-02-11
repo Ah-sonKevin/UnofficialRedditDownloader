@@ -37,7 +37,7 @@ export default defineComponent({
 		const context = useContext();
 		const searchInputCompt = computed({
 			get: () => props.searchInput,
-			set: val => context.emit("updateInput", val),
+			set: (val) => context.emit("updateInput", val),
 		});
 
 		const listTitle: ComputedRef<string[]> = computed(() => {
@@ -57,7 +57,7 @@ export default defineComponent({
 			}
 			const res: { value: string }[] = [];
 
-			array.forEach(content => {
+			array.forEach((content) => {
 				if (content.toLowerCase().includes(query.toLowerCase())) {
 					res.push({ value: content });
 				}

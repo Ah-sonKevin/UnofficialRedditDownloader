@@ -72,22 +72,22 @@ export default defineComponent({
 		const context = useContext();
 		const showDeletedComp = computed({
 			get: () => props.showDeleted,
-			set: val => context.emit("changeShowDelete", val),
+			set: (val) => context.emit("changeShowDelete", val),
 		});
 
 		const itemPerPageComp = computed({
 			get: () => props.itemPerPage,
-			set: val => context.emit("changeItemPerPage", val),
+			set: (val) => context.emit("changeItemPerPage", val),
 		});
 
 		const selectedSorterComp = computed({
 			get: () => props.selectedSorter,
-			set: val => context.emit("changeSelectedSorter", val),
+			set: (val) => context.emit("changeSelectedSorter", val),
 		});
 
 		onBeforeMount(() => {
-			Object.values(sorter).forEach(el => sorterList.push(el));
-			Object.values(itemPerPageList).forEach(el =>
+			Object.values(sorter).forEach((el) => sorterList.push(el));
+			Object.values(itemPerPageList).forEach((el) =>
 				activesElementListNumberElement.push(el),
 			);
 		});

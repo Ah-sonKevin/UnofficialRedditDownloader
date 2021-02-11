@@ -62,15 +62,11 @@
 					<el-button v-if="item.isLink" @click="openLink">
 						Open link
 					</el-button>
-					<el-button v-else @click="download">
-						Download
-					</el-button>
+					<el-button v-else @click="download"> Download </el-button>
 					<el-button @click="changeCollapse">
 						{{ collapseMessage }}
 					</el-button>
-					<el-button @click="seeOnReddit">
-						See on Reddit
-					</el-button>
+					<el-button @click="seeOnReddit"> See on Reddit </el-button>
 				</template>
 				<template v-else>
 					<el-button type="text" @click="save">Undo</el-button>
@@ -117,7 +113,7 @@ export default defineComponent({
 
 		const itemCategory = computed({
 			get: () => props.item.category,
-			set: val => context.emit("setItemCategory", val),
+			set: (val) => context.emit("setItemCategory", val),
 		});
 		const isCollapsed = ref(false);
 

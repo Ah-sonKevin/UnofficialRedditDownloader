@@ -54,7 +54,7 @@ export default defineComponent({
 			array: SavedContent[],
 			func: (el: SavedContent) => void,
 		): void {
-			array.forEach(el => func(el));
+			array.forEach((el) => func(el));
 		}
 
 		function applyToSelected(func: (el: SavedContent) => void) {
@@ -75,7 +75,7 @@ export default defineComponent({
 		}
 
 		function getSelectedURLs() {
-			const urls = props.selectedItem.map(el => el.redditUrl); 
+			const urls = props.selectedItem.map((el) => el.redditUrl);
 			downloadObject(downloadObject, "redditUrls.txt");
 		}
 
