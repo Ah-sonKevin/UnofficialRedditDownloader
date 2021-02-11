@@ -177,7 +177,7 @@ module.exports = {
 	transform: {
 		//"^.+\\.[t|j]sx?$": "babel-jest",
 		"^.+\\.tsx?$": "ts-jest",
-		".*\\.(vue)$": "vue-jest",
+		".*\\.vue$": "vue-jest",
 		".+\\.(css|styl|less|sass|scss|png|jpg|ttf|woff|woff2)$":
 			"jest-transform-stub",
 		"^.+\\.js?$": "babel-jest",
