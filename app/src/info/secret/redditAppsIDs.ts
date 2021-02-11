@@ -1,0 +1,2 @@
+global.AUTH_ID = "<REDDIT_APP_API>";
+global.AUTH_SECRET = "<REDDIT_APP_SECRET>";

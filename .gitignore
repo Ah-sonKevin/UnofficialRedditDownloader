@@ -33,7 +33,7 @@ app/**/*.js
 app/_Local
 
 #Token
-app/**/redditAppsIDs.ts
+#app/**/redditAppsIDs.ts
 
 #Media
 api/media/*
