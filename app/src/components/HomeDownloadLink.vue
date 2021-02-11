@@ -46,7 +46,7 @@ export default defineComponent({
 			checkValidity();
 			if (isValid.value) {
 				fetch(`${urlInput.value}.json`)
-					.then(el => {
+					.then((el) => {
 						if (el.ok) {
 							return el.json();
 						}
@@ -56,9 +56,9 @@ export default defineComponent({
 						const content = json[0].data.children[0];
 						return buildContent({ kind: content.kind, data: content.data });
 					})
-					.then(item => download(item))
-					.catch(() => {
-						throw new DownloadError();
+					.then((item) => download(item))
+					.catch((err) => {
+						throw new DownloadError(err);
 					});
 			}
 		}
