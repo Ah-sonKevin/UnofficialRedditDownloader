@@ -2,8 +2,8 @@ import { AuthError, NetworkError } from "@/errors/restartError";
 import AuthStore from "@/store/authStore";
 import { useStore } from "vuex";
 import { getModule } from "vuex-module-decorators";
-import { Couple } from "../helper/fetchHelper/requestArgument";
 import { postOapi, postRedditAPI } from "../helper/fetchHelper/fetchHelper";
+import { Couple } from "../helper/fetchHelper/requestArgument";
 
 export class CodeTruple {
 	state: string;
@@ -18,7 +18,7 @@ export class CodeTruple {
 		this.error = _error;
 	}
 }
-
+// todo secret type
 export function resetToken(): void {
 	const authModule = getModule(AuthStore, useStore());
 	postOapi("/api/v1/revoke_token", [
@@ -32,7 +32,7 @@ export function resetToken(): void {
 			]),
 		)
 		.then(() => authModule.resetToken())
-		.catch(err => {
+		.catch((err) => {
 			throw new AuthError(err);
 		});
 }
