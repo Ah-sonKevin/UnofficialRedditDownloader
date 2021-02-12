@@ -6,7 +6,7 @@
 				We will only access the information we need, the authentification is
 				securised by reedit, we will not have access to your credential
 				<router-link v-slot="{ href, navigate }" to="/about#security">
-					<NavLink :href="href" @click="navigate"> Read more </NavLink>
+					<a :href="href" @click="navigate"> Read more </a>
 				</router-link>
 			</template>
 			<i class="el el-info-circle">Is this safe</i>
