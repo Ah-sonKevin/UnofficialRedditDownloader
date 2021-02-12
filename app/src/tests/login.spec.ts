@@ -8,7 +8,8 @@ const App = {
 	  <router-view />
 	`,
 };
-
+process.on("unhandledRejection", () => console.warn("Login"));
+process.on("unhandledRejection", console.warn);
 describe("Login.vue", () => {
 	const wrapper = mount(App, { global: { plugins: [ElementPlus, router] } });
 
