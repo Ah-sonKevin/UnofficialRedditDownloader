@@ -1,17 +1,17 @@
-import router from "@/router";
+import TheNavigation from "@/components/General/TheNavigation.vue";
 import { store } from "@/store";
-import Home from "@/views/Home.vue";
 import { mount } from "@vue/test-utils";
 import ElementPlus from "element-plus";
 
+// tocheck who really need store ?
 const mockRouter = {
 	push: jest.fn(),
 };
 
 const getWrapper = () =>
-	mount(Home, {
+	mount(TheNavigation, {
 		global: {
-			plugins: [ElementPlus, store, router],
+			plugins: [ElementPlus, store],
 			mocks: { $router: mockRouter },
 		},
 	});
