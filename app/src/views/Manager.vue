@@ -50,23 +50,16 @@
 						<ManagerSkeletonLine />
 					</template>
 					<template #default>
-						<ul v-if="getActive().length > 0">
-							<li v-for="item in getActive()" :key="item.id">
-								<ManagerLineList
-									:item="item"
-									:is-gold="isGold"
-									@unsave="unsave($event)"
-									@save="save($event)"
-									@download="download(item)"
-									@select="select(item, $event)"
-									@setItemCategory="setItemCategory(item, $event)"
-								/>
-							</li>
-						</ul>
-						<el-empty
-							v-else
-							description="You don't have any saved content"
-						></el-empty>
+						<ManagerSavedContentList
+							items:getActive()
+							@unsave="unsave($event)"
+							@save="save($event)"
+							@download="download(item)"
+							@select="select(item, $event)"
+							@setItemCategory="setItemCategory(item, $event)"
+						>
+						</ManagerSavedContentList>
+						//tocheck maybe move download
 					</template>
 				</el-skeleton>
 			</el-main>
@@ -97,7 +90,8 @@ import ManagerSideMenu from "@managerComponents/ManagerSideMenu.vue";
 import ManagerHeader from "@managerComponents/ManagerHeader.vue";
 import ManagerTools from "@managerComponents/ManagerTools.vue";
 import ManagerSkeletonLine from "@managerComponents/ManagerSkeletonLine.vue";
-import ManagerLineList from "@managerComponents/ManagerLineList.vue";
+
+import ManagerSavedContentList from "@managerComponents/ManagerSavedContentList.vue";
 
 import {
 	defineComponent,
@@ -133,12 +127,12 @@ import { getSortedContent } from "../helper/sorter";
 export default defineComponent({
 	components: {
 		ManagerTools,
-		ManagerLineList,
 		ManagerSkeletonLine,
 		ManagerHeader,
 		ManagerSideMenu,
 		ManagerSearch,
 		ManagerShowSelectedItemsDialog,
+		ManagerSavedContentList,
 	},
 	setup() {
 		const selectedSorter = ref(sorter.ADDED_DATE);
@@ -197,11 +191,36 @@ export default defineComponent({
 			selectedItem = [];
 		}
 
+		function getPageElement(itemsList: SavedContent[]) {
+			const res = itemsList.slice(
+				(page.value - 1) * itemPerPage.value,
+				page.value * itemPerPage.value,
+			);
+			return res;
+		}
+
 		function selectAll() {
 			filteredItems.value.forEach((el) => {
 				el.isSelected = true;
 				selectedItem.push(el);
 			});
+		}
+
+		function getActive() {
+			const filtered = filterItems(
+				items.value,
+				typeFilter.value,
+				categoryFilter.value,
+				subredditFilter.value,
+			);
+			partiallyFilteredItems.value = filtered; // todo need better name
+			const filterInput = searchByText(filtered, searchInput.value);
+			const notHidden = hideDeleted(filterInput, showDeleted.value);
+			filteredItems.value = notHidden;
+			const res = getPageElement(
+				getSortedContent(notHidden, selectedSorter.value),
+			);
+			return res;
 		}
 
 		onBeforeMount(() => {
@@ -231,9 +250,9 @@ export default defineComponent({
 					categoriesList.value = categories;
 					return categoriesList;
 				})
-				.catch(() => {
+				.catch((err) => {
 					// throw new NetworkError(`Fail when getting data ${String(reason)}`);
-					throw new UnauthorizedAccess();
+					throw err;
 				})
 				.finally(() => {
 					loadingSpinner.close();
@@ -256,31 +275,6 @@ export default defineComponent({
 
 		// later accessibilité
 		// later manage tablet/phone/4k
-
-		function getPageElement(itemsList: SavedContent[]) {
-			const res = itemsList.slice(
-				(page.value - 1) * itemPerPage.value,
-				page.value * itemPerPage.value,
-			);
-			return res;
-		}
-
-		function getActive() {
-			const filtered = filterItems(
-				items.value,
-				typeFilter.value,
-				categoryFilter.value,
-				subredditFilter.value,
-			);
-			partiallyFilteredItems.value = filtered;
-			const filterInput = searchByText(filtered, searchInput.value);
-			const notHidden = hideDeleted(filterInput, showDeleted.value);
-			filteredItems.value = notHidden;
-			const res = getPageElement(
-				getSortedContent(notHidden, selectedSorter.value),
-			);
-			return res;
-		}
 
 		return {
 			itemPerPage,
