@@ -11,6 +11,7 @@
 		"lint-fix": "vue-cli-service lint --fix",
 		"eslint-fix": "eslint . --ext .ts",
 		"test": "vue-cli-service test:unit --runInBand --watchAll ",
+		"testWatch": "vue-cli-service test:unit --runInBand "
 	},
 	"lint-staged": {
 		"src/**/*.ts": [
