@@ -4,7 +4,7 @@ import AuthStore from "./authStore";
 import userStore from "./userStore";
 
 const pathsArray = ["auth", "user"];
-
+// todo keep alive manager
 export const store = createStore({
 	state: {},
 	actions: {},
@@ -21,7 +21,7 @@ export const store = createStore({
 		}),
 	],
 
-	// strict: true
+	strict: true,
 });
 
 // showError : ({ rawError: true })

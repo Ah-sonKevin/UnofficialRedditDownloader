@@ -210,7 +210,7 @@ ul li {
 .checkbox .el-checkbox {
 	margin: none;
 }
-
+//todo move checktoken outsifde of manager
 .imageArea.thumbnail,
 .videoArea.thumbnail {
 	border: 1px solid white;

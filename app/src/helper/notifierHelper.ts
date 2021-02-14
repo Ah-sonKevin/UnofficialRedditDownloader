@@ -7,3 +7,4 @@ export function notify(msg: string): void {
 export function notifyError(msg: string): void {
 	ElMessage.error(msg);
 }
+// todo handle limit 601/call api / s

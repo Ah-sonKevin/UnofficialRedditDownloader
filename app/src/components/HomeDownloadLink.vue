@@ -43,7 +43,7 @@ export default defineComponent({
 		}
 
 		function downloadItem() {
-			checkValidity();
+			// todo checkValidity();
 			if (isValid.value) {
 				fetch(`${urlInput.value}.json`)
 					.then((el) => {
@@ -73,4 +73,4 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss" scoped></style>
+<style scoped></style>
