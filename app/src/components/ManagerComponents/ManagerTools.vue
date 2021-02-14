@@ -4,9 +4,9 @@
 	<el-button @click="applyToSelected(unsave)"> Unsave </el-button>
 	<el-button @click="downloadSelected()"> Download </el-button>
 	<el-button @click="getSelectedURLs()"> Get all URLs </el-button>
-	<!--  <el-button v-if="isGold" @click="applyToSelected(changeCategory)" 
-    >Change Category</el-button-->
-	>
+	<el-button v-if="isGold" @click="applyToSelected(changeCategory)">
+		Change Category
+	</el-button>
 
 	{{ "Selected items: " + selectedItem.length }}
 	<el-button type="text" @click="showSelectedDialog">See selected</el-button>
@@ -30,7 +30,7 @@ export default defineComponent({
 			type: Boolean,
 		},
 	},
-	emits: ["unsave", "selectAll", "unselectAll"],
+	emits: ["unsave", "selectAll", "unselectAll", "showSelectedDialog"], // tocheck why
 	setup(props) {
 		const context = useContext();
 
@@ -76,8 +76,10 @@ export default defineComponent({
 
 		function getSelectedURLs() {
 			const urls = props.selectedItem.map((el) => el.redditUrl);
-			downloadObject(downloadObject, "redditUrls.txt");
+			// downloadObject(new Blob(urls), "redditUrls.txt");
 		}
+
+		function changeCategory() {}
 
 		return {
 			downloadSelected,
@@ -89,6 +91,7 @@ export default defineComponent({
 			unselectAll,
 			showSelectedDialog,
 			getSelectedURLs,
+			changeCategory,
 		};
 	},
 });

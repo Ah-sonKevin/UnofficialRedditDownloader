@@ -9,15 +9,8 @@
 
 <script lang="ts">
 import ManagerLineList from "@managerComponents/ManagerLineList.vue";
-import {
-	filterItems,
-	searchByText,
-	hideDeleted,
-	setFilter,
-} from "@/helper/filterHelper";
 import SavedContent from "@/savedContent/savedContent";
 import { defineComponent, PropType } from "vue";
-import { getSortedContent } from "../helper/sorter";
 
 export default defineComponent({
 	name: "ManagerSavedContentList",
@@ -28,6 +21,10 @@ export default defineComponent({
 		items: {
 			required: true,
 			type: Array as PropType<SavedContent[]>,
+		},
+		isGold: {
+			required: true,
+			type: Boolean,
 		},
 	},
 });
