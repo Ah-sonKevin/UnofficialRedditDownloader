@@ -1,19 +1,20 @@
 <template>
+	<div></div>
 	<el-menu class="el-menu-vertical-demo theSideMenu">
 		<el-submenu index="1">
 			<template #title>
 				<i class="el-icon-location"></i>
 				<span>Post</span>
 			</template>
-			<el-menu-item v-for="el in postType" :key="el">
+			<div v-for="el in type" :key="el">
 				<el-button
 					:class="{ selected: isSelected(el, typeFilter) }"
 					type="text"
-					@click="changeFilter(el, typeFilter)"
+					@click="changeFilter('el', typeFilter)"
 				>
-					{{ el }}
+					{{ "el" }}
 				</el-button>
-			</el-menu-item>
+			</div>
 		</el-submenu>
 		<el-submenu index="2">
 			<template #title>
@@ -21,15 +22,15 @@
 				<span> Category </span>
 			</template>
 			<template v-if="isGold">
-				<el-menu-item v-for="el in postType" :key="el">
+				<div v-for="el in categoriesList" :key="el">
 					<el-button
-						:class="{ selected: isSelected(el, categoryFilter) }"
+						:class="{ selected: isSelected('el', categoryFilter) }"
 						type="text"
-						@click="changeFilter(el, categoryFilter)"
+						@click="changeFilter('el', categoryFilter)"
 					>
-						{{ el }}
+						{{ "el" }}
 					</el-button>
-				</el-menu-item>
+				</div>
 			</template>
 			<i v-else>Need Reddit Premium</i>
 		</el-submenu>
@@ -38,7 +39,13 @@
 				<i class="el-icon-menu"></i>
 				<span> Subreddit </span>
 			</template>
-			<el-menu-item v-for="subreddit in subredditList" :key="subreddit">
+			<!-- //warning Using el-menu-item cause infinite loop : ToReport -->
+			<div
+				v-for="subreddit in subredditList"
+				:key="subreddit"
+				:index="subreddit"
+			>
+				<!--{{ tellMeCall(subreddit) }}-->
 				<el-button
 					:class="{ selected: isSelected(subreddit, subredditFilter) }"
 					type="text"
@@ -46,13 +53,13 @@
 				>
 					{{ subreddit }}
 				</el-button>
-			</el-menu-item>
+			</div>
 		</el-submenu>
 	</el-menu>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, useContext } from "vue";
+import { computed, defineComponent, PropType, useContext } from "vue";
 import { postType } from "@/enum/postType";
 
 export default defineComponent({
@@ -78,14 +85,22 @@ export default defineComponent({
 			required: true,
 			type: Array as PropType<string[]>,
 		},
+		categoriesList: {
+			required: true,
+			type: Array as PropType<string[]>,
+		},
 	},
 	emits: ["changeFilter"],
-	setup() {
-		const type: string[] = Object.keys(postType);
+	setup(props) {
+		const type: string[] = Object.values(postType);
 		const context = useContext();
 
 		function changeFilter(el: string, list: string[]) {
 			context.emit("changeFilter", el, list);
+		}
+
+		function tellMeCall(el: string) {
+			console.log(`call  ${el}`);
 		}
 
 		function isSelected(el: string, array: string[]): boolean {
@@ -100,6 +115,7 @@ export default defineComponent({
 			postType,
 			isSelected,
 			changeFilter,
+			tellMeCall,
 		};
 	},
 });
