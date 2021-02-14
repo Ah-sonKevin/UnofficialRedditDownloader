@@ -98,7 +98,8 @@
             "max-params": ["error", 3],
 			"comma-dangle": "off",
 			"@typescript-eslint/comma-dangle": "off",
-			"vue/html-closing-bracket-newline":"off"
+			"vue/html-closing-bracket-newline":"off",
+			"guard-for-in":"error"
     },
     "overrides": [{
         "files": ["**/enum/**"],
