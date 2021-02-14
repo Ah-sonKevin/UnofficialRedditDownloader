@@ -1,3 +1,6 @@
+/**
+ * @jest-environment jsdom
+ */
 import HomeDownloadLink from "@/components/HomeDownloadLink.vue";
 import { mount } from "@vue/test-utils";
 import ElementPlus from "element-plus";
