@@ -25,6 +25,7 @@ import { store } from "@/store";
 import { useRouter } from "vue-router";
 
 export default defineComponent({
+	name: "Home",
 	components: { HomeDownloadLink },
 	setup() {
 		const router = useRouter();
