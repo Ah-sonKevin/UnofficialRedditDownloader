@@ -21,7 +21,6 @@ export async function recGetItems(
 	if (!res.ok) {
 		throw new NetworkError(res.statusText);
 	}
-
 	const result: RawItem = (await res.json()) as RawItem;
 	result.data.children.forEach((el: RawItemUnit) => {
 		buildContent(el)
@@ -29,7 +28,7 @@ export async function recGetItems(
 			.catch((err: Error) => {
 				logger.error(
 					`${err.message} \n\n${err.stack ?? "NO STACK"}\n\n ${JSON.stringify(
-						err,
+						el,
 					)}  ${JSON.stringify(el)}`,
 				);
 				throw new PartialRedditFetchError(el.data.name);
