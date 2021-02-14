@@ -247,6 +247,7 @@ export async function buildContent(saved: {
 	kind: string;
 	data: RedditRawData;
 }): Promise<SavedContent> {
+
 	if (saved.kind === "t1" || saved.data.is_self) {
 		return new SavedContent(saved.kind, saved.data, "", "", "", "", false);
 	}

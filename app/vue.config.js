@@ -10,7 +10,7 @@ module.exports = {
 			},
 		},
 	},
-	chainWebpack: config => {
+	chainWebpack: (config) => {
 		config.resolve.alias.set(
 			"@managerComponents",
 			path.resolve(__dirname, "src/components/ManagerComponents"),
