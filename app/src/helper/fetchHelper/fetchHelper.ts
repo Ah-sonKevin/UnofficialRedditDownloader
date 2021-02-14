@@ -1,12 +1,13 @@
 import { DataNotFoundError, NetworkError } from "@/errors/restartError";
 import { store } from "@/store";
 import AuthStore from "@/store/authStore";
+import "isomorphic-fetch";
 import { useRouter } from "vue-router";
 import { getModule } from "vuex-module-decorators";
 import { Couple } from "./requestArgument";
 
 const REDDIT_API = "https://www.reddit.com";
-const OAUTH_API = "https://oauth.reddit.com";
+export const OAUTH_API = "https://oauth.reddit.com";
 
 function getRedditHeader(): Headers {
 	const authModule = getModule(AuthStore, store);
@@ -73,8 +74,8 @@ export async function fetchOapi(
 		method: "GET",
 		headers: getOauthHeader(),
 	};
-	const request = new Request(`${OAUTH_API}${endpoint}`, init);
-	const response = await fetch(request);
+	// const request = new Request();
+	const response = await fetch(`${OAUTH_API}${endpoint}`, init);
 	if (!response.ok) {
 		if (response.status === 401 && !retry) {
 			await refreshAccessToken();
@@ -86,7 +87,7 @@ export async function fetchOapi(
 	}
 }
 
-export async function postOapi(
+export async function postOapi( // todo limit api rate
 	endpoint: string,
 	args: Couple[],
 	retry = false,
