@@ -47,4 +47,5 @@ describe("Home.vue", () => {
 			() => !wrapper.vm.loading, // tocheck
 			LOADING_TIMEOUT,
 		).then(() => expect(wrapper.exists()).toBeTruthy());
-	}) 
+	});
+});
