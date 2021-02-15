@@ -125,6 +125,7 @@ import { postOapi } from "@/helper/fetchHelper/fetchHelper";
 import { getSortedContent } from "../helper/sorter";
 
 export default defineComponent({
+	name: "Manager",
 	components: {
 		ManagerTools,
 		ManagerSkeletonLine,
