@@ -3,10 +3,12 @@
 		<el-aside>
 			<ManagerSideMenu
 				class="TheSideMenu"
+				:is-gold="isGold"
 				:type-filter="typeFilter"
 				:category-filter="categoryFilter"
 				:subreddit-filter="subredditFilter"
 				:subreddit-list="subredditList"
+				:categories-list="categoriesList"
 				@changeFilter="setFilter"
 			/>
 		</el-aside>
@@ -313,6 +315,7 @@ export default defineComponent({
 
 			setFilter,
 			subredditList,
+			categoriesList,
 			selectAll,
 			searchInput,
 			updateInput,
