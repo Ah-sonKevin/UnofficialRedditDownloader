@@ -17,8 +17,4 @@ export class PartialDownloadError extends NotifError {
 
 export class DownloadError extends NotifError {}
 
-export class PartialRedditFetchError extends NotifError {
-	constructor(name: string) {
-		super("");
-	}
-}
+export class PartialRedditFetchError extends NotifError {}
