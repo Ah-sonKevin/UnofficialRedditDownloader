@@ -20,7 +20,6 @@
 						:item-per-page="itemPerPage"
 						:selected-sorter="selectedSorter"
 						:number-items="numberItems"
-						:is-gold="isGold"
 						@changeShowDelete="changeShowDelete"
 						@changeItemPerPage="changeItemPerPage"
 						@changeSelectedSorter="changeSelectedSorter"
