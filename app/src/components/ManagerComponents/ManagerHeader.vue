@@ -32,16 +32,9 @@
 </template>
 
 <script lang="ts">
-import {
-	defineComponent,
-	useContext,
-	computed,
-	onBeforeMount,
-	PropType,
-} from "vue";
+import { defineComponent, useContext, computed, onBeforeMount } from "vue";
 import { itemPerPageList } from "@/enum/itemPerPageList";
 import { sorter } from "@/enum/sorter";
-import SavedContent from "@/savedContent/savedContent";
 
 export default defineComponent({
 	name: "ManagerHeader",

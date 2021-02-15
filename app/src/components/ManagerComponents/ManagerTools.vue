@@ -76,7 +76,7 @@ export default defineComponent({
 
 		function getSelectedURLs() {
 			const urls = props.selectedItem.map((el) => el.redditUrl);
-			// downloadObject(new Blob(urls), "redditUrls.txt");
+			downloadObject(new Blob(urls), "redditUrls.txt"); // tocheck
 		}
 
 		function changeCategory() {}

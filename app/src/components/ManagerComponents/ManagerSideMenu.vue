@@ -59,7 +59,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType, useContext } from "vue";
+import { defineComponent, PropType, useContext } from "vue";
 import { postType } from "@/enum/postType";
 
 export default defineComponent({
@@ -91,7 +91,7 @@ export default defineComponent({
 		},
 	},
 	emits: ["changeFilter"],
-	setup(props) {
+	setup() {
 		const type: string[] = Object.values(postType);
 		const context = useContext();
 

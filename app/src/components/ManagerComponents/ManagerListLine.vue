@@ -12,10 +12,10 @@
 				v-if="!isCollapsed && !item.isDeleted"
 				class="imageArea thumbnail"
 			>
-				<ManagerLineListListImage :item="item"></ManagerLineListListImage>
+				<ManagerListLineImage :item="item"></ManagerListLineImage>
 			</el-aside>
 		</transition>
-
+		//todo change names manager components
 		<el-container class="mainContainer">
 			<el-main>
 				<h2 class="titleArea">{{ item.title }}</h2>
@@ -47,11 +47,11 @@
 								<source :src="item.embeddedUrl" />
 							</video>
 						</template>
-						<ManagerLineListListImage
+						<ManagerListLineImage
 							v-else
 							class="imageArea"
 							:item="item"
-						></ManagerLineListListImage>
+						></ManagerListLineImage>
 					</template>
 				</div>
 				<i v-else>This post has been deleted</i>
@@ -86,11 +86,11 @@ import {
 	nextTick,
 } from "vue";
 import SavedContent from "@/savedContent/savedContent";
-import ManagerLineListListImage from "./ManagerLineListListImage.vue";
+import ManagerListLineImage from "./ManagerListLineImage.vue";
 
 export default defineComponent({
 	name: "ManagerLineList",
-	components: { ManagerLineListListImage },
+	components: { ManagerListLineImage },
 	props: {
 		item: {
 			required: true,
@@ -106,14 +106,15 @@ export default defineComponent({
 		const context = useContext();
 		const isChecked = computed({
 			get: () => props.item.isSelected,
-			set: (val: boolean) => {
-				context.emit("select", val);
+			set: (value: boolean) => {
+				context.emit("select", { item: props.item, value });
 			},
 		});
 
 		const itemCategory = computed({
 			get: () => props.item.category,
-			set: (val) => context.emit("setItemCategory", val),
+			set: (val) =>
+				context.emit("setItemCategory", { item: props.item, category: val }),
 		});
 		const isCollapsed = ref(false);
 
