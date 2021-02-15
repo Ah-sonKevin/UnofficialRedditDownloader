@@ -1,12 +1,10 @@
-import { store } from "@/store";
-import AuthStore from "@/store/authStore";
+import { useTypedStore } from "@/store";
 import About from "@/views/About.vue";
 import Home from "@/views/Home.vue";
 import Login from "@/views/Login.vue";
 import Manager from "@/views/Manager.vue";
 import NotFound from "@/views/NotFound.vue";
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
-import { getModule } from "vuex-module-decorators";
 
 const routes: Array<RouteRecordRaw> = [
 	{
@@ -15,9 +13,9 @@ const routes: Array<RouteRecordRaw> = [
 		name: "Manager",
 		props: true,
 		beforeEnter() {
-			const authModule = getModule(AuthStore, store);
+			const store = useTypedStore();
 
-			if (authModule.isConnected) {
+			if (store.getters.isConnected) {
 				return true;
 			}
 			return { name: "Home" };
