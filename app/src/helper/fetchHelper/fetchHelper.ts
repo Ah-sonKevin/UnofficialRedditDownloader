@@ -1,20 +1,19 @@
 import { DataNotFoundError, NetworkError } from "@/errors/restartError";
-import { store } from "@/store";
-import AuthStore from "@/store/authStore";
+import { useTypedStore } from "@/store";
 import "isomorphic-fetch";
 import { useRouter } from "vue-router";
-import { getModule } from "vuex-module-decorators";
+import { MutationsNames } from "../../store/authStore/authStoreMutationTypes";
 import { Couple } from "./requestArgument";
 
 const REDDIT_API = "https://www.reddit.com";
 export const OAUTH_API = "https://oauth.reddit.com";
 
 function getRedditHeader(): Headers {
-	const authModule = getModule(AuthStore, store);
+	const store = useTypedStore();
 	const authHeaders = new Headers();
 	authHeaders.append(
 		"Authorization",
-		`Basic ${authModule.auth.AUTH_AUTHORIZATION}`,
+		`Basic ${store.getters.auth.AUTH_AUTHORIZATION}`,
 	);
 	authHeaders.append("Content-Type", "application/x-www-form-urlencoded");
 	return authHeaders;
@@ -36,9 +35,9 @@ export function postRedditAPI(
 }
 
 function getOauthHeader(): Headers {
-	const authModule = getModule(AuthStore, store);
+	const store = useTypedStore();
 	const authHeaders = new Headers();
-	const apiToken = authModule.token;
+	const apiToken = store.getters.token;
 	authHeaders.append("Authorization", `Bearer ${apiToken}`);
 	authHeaders.append("Content-Type", "application/x-www-form-urlencoded");
 
@@ -46,8 +45,8 @@ function getOauthHeader(): Headers {
 }
 
 export async function refreshAccessToken(): Promise<void> {
-	const authModule = getModule(AuthStore, store);
-	const refreshToken = authModule.refreshToken;
+	const store = useTypedStore();
+	const refreshToken = store.getters.refreshToken;
 	let tokenBody: string;
 
 	if (refreshToken) {
@@ -56,9 +55,9 @@ export async function refreshAccessToken(): Promise<void> {
 		if (result.ok) {
 			const res = (await result.json()) as { access_token: string };
 			const apiToken: string = res.access_token;
-			authModule.setToken(apiToken);
+			store.commit(MutationsNames.SET_TOKEN, apiToken);
 		} else {
-			authModule.resetToken();
+			store.commit(MutationsNames.RESET_TOKEN, undefined);
 			void useRouter().push({ name: "Home" });
 		}
 	} else {

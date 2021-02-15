@@ -19,21 +19,20 @@
 <script lang="ts">
 import HomeDownloadLink from "@/components/HomeDownloadLink.vue";
 import { defineComponent } from "vue";
-import { getModule } from "vuex-module-decorators";
-import AuthStore from "@/store/authStore";
-import { store } from "@/store";
 import { useRouter } from "vue-router";
+import { MutationsNames } from "@/store/authStore/authStoreMutationTypes";
+import { useTypedStore } from "@/store";
 
 export default defineComponent({
 	name: "Home",
 	components: { HomeDownloadLink },
 	setup() {
 		const router = useRouter();
-		const authModule = getModule(AuthStore, store);
+		const store = useTypedStore();
 		function connectToReddit(): void {
-			if (!authModule.isConnected) {
-				authModule.createAuthData();
-				window.location.href = authModule.auth.AUTH_LINK;
+			if (!store.getters.isConnected) {
+				store.commit(MutationsNames.CREATE_AUTH_DATA, undefined);
+				window.location.href = store.getters.auth.AUTH_LINK;
 			} else {
 				void router.push({ name: "Manager" });
 			}

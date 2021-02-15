@@ -13,20 +13,19 @@
 
 <script lang="ts">
 import { defineComponent, computed, ComputedRef } from "vue";
-import { getModule } from "vuex-module-decorators";
-import { useStore } from "vuex";
-import AuthStore from "@/store/authStore";
 import { useRouter } from "vue-router";
+import { useTypedStore } from "@/store";
+import { MutationsNames } from "@/store/authStore/authStoreMutationTypes";
 
 export default defineComponent({
 	name: "TheNavigation",
 	setup() {
-		const authModule = getModule(AuthStore, useStore());
+		const store = useTypedStore();
 		const isConnected: ComputedRef<boolean> = computed(
-			() => authModule.isConnected,
+			() => store.getters.isConnected,
 		);
 		function disconnect() {
-			authModule.resetToken();
+			store.commit(MutationsNames.RESET_TOKEN, undefined);
 			void useRouter().push({ name: "Home" });
 		}
 		return {
