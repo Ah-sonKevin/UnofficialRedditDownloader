@@ -48,18 +48,21 @@
 			<el-main class="listElement">
 				<el-skeleton :loading="loading" animated :count="5" :throttle="500">
 					<template #template>
-						<ManagerSkeletonLine />
+						<ManagerListLineSkeleton />
 					</template>
 					<template #default>
-						<ManagerSavedContentList
-							items:getActive()
+						//tocheck 3 last events //tocheck download
+						<ManagerList
+							:items="getActive()"
+							:is-gold="isGold"
+							@select="select($event)"
+							@setItemCategory="setItemCategory($event)"
 							@unsave="unsave($event)"
 							@save="save($event)"
-							@download="download(item)"
-							@select="select(item, $event)"
-							@setItemCategory="setItemCategory(item, $event)"
+							@download="download($event)"
 						>
-						</ManagerSavedContentList>
+						</ManagerList>
+
 						//tocheck maybe move download
 					</template>
 				</el-skeleton>
@@ -77,11 +80,12 @@
 			</el-footer>
 		</el-container>
 	</el-container>
+	//todo check these function argument object
 	<ManagerShowSelectedItemsDialog
 		:show-selected-dialog="showSelectedDialog"
 		:selected-item="selectedItem"
 		@changeShowSelectedDialog="changeShowSelectedDialog"
-		@unselect="select($event, false)"
+		@unselect="select({ item: $event, value: false })"
 	></ManagerShowSelectedItemsDialog>
 </template>
 <script lang="ts">
@@ -90,9 +94,9 @@ import ManagerSearch from "@managerComponents/ManagerSearch.vue";
 import ManagerSideMenu from "@managerComponents/ManagerSideMenu.vue";
 import ManagerHeader from "@managerComponents/ManagerHeader.vue";
 import ManagerTools from "@managerComponents/ManagerTools.vue";
-import ManagerSkeletonLine from "@managerComponents/ManagerSkeletonLine.vue";
+import ManagerListLineSkeleton from "@managerComponents/ManagerListLineSkeleton.vue";
 
-import ManagerSavedContentList from "@managerComponents/ManagerSavedContentList.vue";
+import ManagerList from "@managerComponents/ManagerList.vue";
 
 import {
 	defineComponent,
@@ -129,12 +133,12 @@ export default defineComponent({
 	name: "Manager",
 	components: {
 		ManagerTools,
-		ManagerSkeletonLine,
+		ManagerListLineSkeleton,
 		ManagerHeader,
 		ManagerSideMenu,
 		ManagerSearch,
 		ManagerShowSelectedItemsDialog,
-		ManagerSavedContentList,
+		ManagerList,
 	},
 	setup() {
 		const selectedSorter = ref(sorter.ADDED_DATE);
@@ -167,8 +171,16 @@ export default defineComponent({
 		function updateInput(val: string) {
 			searchInput.value = val;
 		}
-		function setItemCategory(item: SavedContent, val: string) {
-			item.category = val;
+		function setItemCategory({
+			item,
+			category,
+		}: {
+			item: SavedContent;
+			category: string;
+		}) {
+			console.log(item);
+			console.log(category);
+			item.category = category;
 		}
 
 		function changeShowSelectedDialog() {
@@ -265,12 +277,15 @@ export default defineComponent({
 			void postOapi("/api/saved_categories", []);
 		}
 
-		function select(content: SavedContent, value: boolean) {
-			content.isSelected = value;
+		function select({ item, value }: { item: SavedContent; value: boolean }) {
+			// tocheck
+			console.log(item);
+			console.log(value);
+			item.isSelected = value;
 			if (value) {
-				selectedItem.push(content);
+				selectedItem.push(item);
 			} else {
-				const index = selectedItem.indexOf(content);
+				const index = selectedItem.indexOf(item);
 				selectedItem.splice(index, 1);
 			}
 		}
