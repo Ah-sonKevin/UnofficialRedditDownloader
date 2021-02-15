@@ -36,10 +36,4 @@ describe("Home.vue", () => {
 			10000,
 		).then(() => expect(wrapper.exists()).toBeTruthy());
 	});
-
-	test("Baddly formed url", () => {});
-
-	test("Well formed  but invalid url", () => {});
-
-	test("Well formed  & valid url", () => {});
 });
