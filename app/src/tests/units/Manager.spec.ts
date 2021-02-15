@@ -44,7 +44,7 @@ describe("Home.vue", () => {
 		const wrapper = getWrapper();
 		return waitUntil(
 			() => !wrapper.vm.loading, // tocheck
-			10000,
+			LOADING_TIMEOUT,
 		).then(() => expect(wrapper.exists()).toBeTruthy());
 	});
 });
