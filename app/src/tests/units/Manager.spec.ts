@@ -1,6 +1,7 @@
 /**
  * @jest-environment jsdom
  */
+import { OAUTH_API } from "@/helper/fetchHelper/fetchHelper";
 import { StoreTypeTemp, useTypedStore } from "@/store";
 import Manager from "@/views/Manager.vue";
 import { mount } from "@vue/test-utils";
@@ -40,11 +41,10 @@ describe("Home.vue", () => {
 			.persist();
 	});
 
-	test("Input text", () => {
-		const wrapper = getWrapper();
+	test("Input text", async () => {
+		const wrapper = getWrapper(store);
 		return waitUntil(
 			() => !wrapper.vm.loading, // tocheck
 			LOADING_TIMEOUT,
 		).then(() => expect(wrapper.exists()).toBeTruthy());
-	});
-});
+	}) 
