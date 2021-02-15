@@ -5,7 +5,7 @@ import HomeDownloadLink from "@/components/HomeDownloadLink.vue";
 import { mount } from "@vue/test-utils";
 import ElementPlus from "element-plus";
 
-// todo updates reddits data
+// todo updates reddit data
 const mockRouter = {
 	push: jest.fn(),
 };
@@ -19,10 +19,10 @@ const getWrapper = () =>
 
 describe("Home.vue", () => {
 	test("Input text", () => {
-		const wrapper = getWrapper();
+		//	const wrapper = getWrapper();
 	});
 
-	test("Baddly formed url", () => {});
+	test("Badly formed url", () => {});
 
 	test("Well formed  but invalid url", () => {});
 
