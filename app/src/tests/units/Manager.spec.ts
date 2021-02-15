@@ -1,19 +1,21 @@
 /**
  * @jest-environment jsdom
  */
+import { StoreTypeTemp, useTypedStore } from "@/store";
 import Manager from "@/views/Manager.vue";
 import { mount } from "@vue/test-utils";
 import waitUntil from "async-wait-until";
 import ElementPlus from "element-plus";
 import nock from "nock";
-import { OAUTH_API } from "../../helper/fetchHelper/fetchHelper";
+import { MutationsNames } from "../../store/authStore/authStoreMutationTypes";
 import items from "./mockFetchData/items.json";
 import user from "./mockFetchData/user.json";
 
-const getWrapper = () =>
+const LOADING_TIMEOUT = 1000;
+const getWrapper = (store: StoreTypeTemp) =>
 	mount(Manager, {
 		global: {
-			plugins: [ElementPlus],
+			plugins: [ElementPlus, store],
 		},
 	});
 
