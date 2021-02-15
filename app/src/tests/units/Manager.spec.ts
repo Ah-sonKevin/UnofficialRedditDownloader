@@ -19,8 +19,17 @@ const getWrapper = () =>
 
 // todo nock doc Memory issues with Jest
 describe("Home.vue", () => {
-	beforeAll(() => {
+	let store: StoreTypeTemp;
+
+	beforeEach(async () => {
 		jest.resetAllMocks();
+		store = useTypedStore();
+		store.commit(MutationsNames.CREATE_AUTH_DATA, undefined);
+		store.commit(MutationsNames.SET_TOKEN, "Token");
+		store.commit(MutationsNames.SET_REFRESH_TOKEN, "Refresh Token");
+	});
+
+	beforeAll(() => {
 		nock(OAUTH_API)
 			.get("/api/v1/me")
 			.reply(200, user)
