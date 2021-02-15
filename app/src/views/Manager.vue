@@ -238,7 +238,7 @@ export default defineComponent({
 				.then((fetchedItems) => {
 					items.value = fetchedItems;
 					subredditList.value = setSubredditList(fetchedItems);
-					loading.value = false;
+					loading.value = false; // tocheck move in finally ?
 					return items;
 				})
 				.then(() => {
