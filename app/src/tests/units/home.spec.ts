@@ -1,14 +1,11 @@
 /**
  * @jest-environment jsdom
  */
-
 import router from "@/router";
-import AuthStore from "@/store/authStore";
-import userStore from "@/store/userStore";
+import { useTypedStore } from "@/store";
 import Home from "@/views/Home.vue";
 import { mount } from "@vue/test-utils";
 import ElementPlus from "element-plus";
-import { createStore } from "vuex";
 
 const mockRouter = {
 	push: jest.fn(),
@@ -20,15 +17,7 @@ jest.mock("vue-router", () => ({
 	useRouter: () => mockRouter,
 }));
 
-const store = createStore({
-	// todo refresh each time
-	modules: {
-		user: userStore,
-		auth: AuthStore,
-	},
-	strict: true,
-});
-
+const store = useTypedStore(); // tocheck
 const getWrapper = () =>
 	mount(Home, {
 		global: {
