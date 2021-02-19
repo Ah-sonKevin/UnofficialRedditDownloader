@@ -27,6 +27,9 @@
 		"plugin:jest-formatting/recommended",
 		"plugin:import/warnings",
 		"plugin:import/typescript",
+		"plugin:jest-dom/recommended",
+		"plugin:testing-library/recommended",
+		"plugin:testing-library/vue",
         "prettier"
     ],
 
@@ -52,6 +55,8 @@
 		"optimize-regex",
 		"promise",
 		"no-loops",
+		"jest-dom",
+		"testing-library",
 		"prettier"
     ],
     "rules": {
@@ -99,12 +104,36 @@
 			"comma-dangle": "off",
 			"@typescript-eslint/comma-dangle": "off",
 			"vue/html-closing-bracket-newline":"off",
-			"guard-for-in":"error"
+			"guard-for-in":"error",
+			"max-lines-per-function": ["error", 50],
+			"max-statements": ["error", 10],
+			"complexity": ["error", { "max": 20 }],
+			"max-nested-callbacks": ["error", 10],
+			"max-depth": ["error", 4]
     },
     "overrides": [{
         "files": ["**/enum/**"],
         "rules": {
             "no-magic-numbers": "off"
         }
-    }]
+    },{
+		"files":["*.vue"],
+		"rules":{
+			"max-lines-per-function": ["warn", 50],
+			"max-statements": ["warn",10, {"ignoreTopLevelFunctions": true }],
+			"complexity": ["warn", { "max": 20 }],
+			"max-nested-callbacks": ["warn", 10],
+			"max-depth": ["warn", 4]
+		}
+	}
+		,{
+			"files":["*.spec.ts"],
+			"rules":{
+				"max-lines-per-function": "off",
+				"max-statements": ["warn",10, {"ignoreTopLevelFunctions": true }],
+				"complexity": ["warn", { "max": 20 }],
+				"max-nested-callbacks": ["warn", 10],
+				"max-depth": ["warn", 4]
+			}
+	}]
 }
