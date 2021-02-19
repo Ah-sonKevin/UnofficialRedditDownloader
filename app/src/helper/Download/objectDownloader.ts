@@ -1,3 +1,4 @@
+/* eslint-disable max-statements */
 import { postType } from "@/enum/postType";
 import { DownloadError, PartialDownloadError } from "@/errors/notifError";
 import { NetworkError, UnknowTypeError } from "@/errors/restartError";
@@ -75,6 +76,7 @@ function updateDownloadSpinner(
 	);
 }
 
+// eslint-disable-next-line max-lines-per-function
 async function fetchData(
 	x: Response,
 	downloadIndicator: ILoadingInstance,
