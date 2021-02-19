@@ -87,6 +87,7 @@ module.exports = {
 		"^@/(.*)$": "<rootDir>/src/$1",
 		"^@managerComponents/(.*)$":
 			"<rootDir>/src/components/ManagerComponents/$1",
+		"^@homeComponents/(.*)$": "<rootDir>/src/components/HomeComponents/$1",
 		"\\.(css|less)$": "<rootDir>/__mocks__/styleMock.js",
 	},
 
@@ -108,6 +109,7 @@ module.exports = {
 
 	// Use this configuration option to add custom reporters to Jest
 	// reporters: undefined,
+	//reporters: [["jest-silent-reporter", { showWarnings: true }]],
 
 	// Automatically reset mock state between every test
 	resetMocks: true, //tocheck

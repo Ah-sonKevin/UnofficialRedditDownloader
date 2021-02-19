@@ -27,6 +27,9 @@
       ],
       "@managerComponents/*": [
         "src/components/ManagerComponents/*"
+      ],
+			"@homeComponents/*": [
+        "src/components/HomeComponents/*"
       ]
     },
     "lib": [
@@ -45,7 +48,7 @@
 		"src/**/*.d.ts",
 		"src/**/*.js",
 		"src/tests/**/*.spec.ts"
-, "src/tests copy/units/HomeDownloadLink.spec.ts.todo", "src/tests copy/units/cleanName.spec.ts.todo", "src/tests copy/units/Manager.spec.ts.todo", "src/tests copy/units/router.spec.ts.todo", "src/tests copy/router.spec.ts.todo"],
+],
   "exclude": [
 		"node_modules",
 		"dist" 
