@@ -4,7 +4,12 @@ import Home from "@/views/Home.vue";
 import Login from "@/views/Login.vue";
 import Manager from "@/views/Manager.vue";
 import NotFound from "@/views/NotFound.vue";
-import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
+import {
+	createRouter,
+	createWebHistory,
+	Router,
+	RouteRecordRaw,
+} from "vue-router";
 
 const routes: Array<RouteRecordRaw> = [
 	{
@@ -54,9 +59,13 @@ const routes: Array<RouteRecordRaw> = [
 	},
 ];
 
-const router = createRouter({
-	history: createWebHistory(),
-	routes,
-});
+export function getRouter(): Router {
+	return createRouter({
+		history: createWebHistory(),
+		routes,
+	});
+}
+
+const router = getRouter();
 
 export default router;
