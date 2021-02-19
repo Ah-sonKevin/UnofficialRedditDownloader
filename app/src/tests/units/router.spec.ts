@@ -18,7 +18,8 @@ const getWrapper = () =>
 		},
 	});
 
-describe("Home.vue", () => {
+describe("Router Test", () => {
+	// todo cehck create fresh store/router
 	test("Exist", () => {
 		const wrapper = getWrapper();
 		// expect(wrapper.exists()).toBeTruthy();
