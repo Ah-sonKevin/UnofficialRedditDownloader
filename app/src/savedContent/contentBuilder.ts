@@ -105,7 +105,77 @@ function getEmbed(data: RedditRawData): string {
 	}
 	return "";
 }
+function returnLinkMedia(data: RedditRawData) {
+	// todo need getImage ?
+	// tocheck really pass getImage ?
+	return returnMedia(
+		postType.LINK,
+		data.url_overridden_by_dest,
+		getImage(data),
+	);
+}
 
+function returnImageMedia(url: string) {
+	return returnMedia(postType.IMAGE, url, url, false);
+}
+function returnVideoMedia({
+	url,
+	data,
+	needYtDl = false,
+	embed,
+}: {
+	url: string;
+	data: RedditRawData;
+	needYtDl?: boolean;
+	embed?: string;
+}) {
+	const embedString = embed ?? getEmbed(data);
+	return returnMedia(
+		postType.VIDEO,
+		url,
+		getImage(data),
+		needYtDl,
+		embedString,
+	);
+}
+
+function getVideoMedia(data: RedditRawData) {
+	if (data.domain === "youtube.com" || data.domain === "youtu.be") {
+		return returnVideoMedia({
+			url: data.url_overridden_by_dest,
+			data,
+			needYtDl: true,
+		});
+	}
+	if (data.is_reddit_media_domain && data?.media?.reddit_video?.fallback_url) {
+		return returnVideoMedia({
+			url: cleanFallback(data?.media?.reddit_video?.fallback_url),
+			data,
+			needYtDl: true,
+			embed: data?.media?.reddit_video?.fallback_url,
+		});
+	}
+	if (data?.media?.oembed?.thumbnail_url) {
+		let embed = "";
+		if (data?.media?.oembed?.html) {
+			embed = data?.media?.oembed?.html; // todo check embed
+		}
+
+		return returnVideoMedia({
+			url: data.media.oembed.thumbnail_url,
+			data,
+			embed,
+		});
+	}
+	return returnVideoMedia({
+		url: data.url_overridden_by_dest,
+		data,
+		needYtDl: true,
+	});
+}
+
+// eslint-disable-next-line complexity
+// eslint-disable-next-line max-statements
 export async function buildMedia(
 	data: RedditRawData,
 ): Promise<{
@@ -122,127 +192,53 @@ export async function buildMedia(
 		urlExtension = getExtension(data.url_overridden_by_dest);
 	}
 
-	/** ****************** LINK  *************************** */
 	if (postHint === "link") {
 		const parentList = data.crosspost_parent_list;
 		if (parentList && parentList[0]) {
 			return buildMedia(parentList[0]);
 		}
-		return returnMedia(
-			postType.LINK,
-			data.url_overridden_by_dest,
-			getImage(data),
-		);
+		return returnLinkMedia(data);
 	}
 	if (webExtensionsList.some((el) => urlExtension === el)) {
-		return returnMedia(
-			postType.LINK,
-			data.url_overridden_by_dest,
-			getImage(data),
-		);
+		return returnLinkMedia(data);
 	}
 	if (
 		postHint === "image" ||
 		imageExtensionList.some((el) => urlExtension === el)
 	) {
-		return returnMedia(
-			postType.IMAGE,
-			data.url_overridden_by_dest,
-			data.url_overridden_by_dest,
-			false,
-		);
+		return returnImageMedia(data.url_overridden_by_dest);
 	}
 	if (postHint === "rich:video" || postHint === "hosted:video") {
-		if (data.domain === "youtube.com" || data.domain === "youtu.be") {
-			return returnMedia(
-				postType.VIDEO,
-				data.url_overridden_by_dest,
-				getImage(data),
-				true,
-				getEmbed(data),
-			);
-		}
-		if (
-			data.is_reddit_media_domain &&
-			data?.media?.reddit_video?.fallback_url
-		) {
-			return returnMedia(
-				postType.VIDEO,
-				cleanFallback(data?.media?.reddit_video?.fallback_url),
-				getImage(data),
-				true,
-				data?.media?.reddit_video?.fallback_url,
-			);
-		}
-		if (data?.media?.oembed?.thumbnail_url) {
-			let embed = "";
-			if (data?.media?.oembed?.html) {
-				embed = data?.media?.oembed?.html;
-			}
-
-			return returnMedia(
-				postType.VIDEO,
-				data.media.oembed.thumbnail_url,
-				getImage(data),
-				false,
-				embed,
-			);
-		}
-		return returnMedia(
-			postType.VIDEO,
-			data.url_overridden_by_dest,
-			getImage(data),
-			true,
-			getEmbed(data),
-		);
+		return getVideoMedia(data);
 	}
 	if (
 		videoExtensionList.some((el) => urlExtension === el) ||
 		data?.media?.oembed?.type === "video"
 	) {
-		return returnMedia(
-			postType.VIDEO,
-			data.url_overridden_by_dest,
-			getImage(data),
-			false,
-			getEmbed(data),
-		);
+		return returnVideoMedia({ url: data.url_overridden_by_dest, data });
 	}
-	const fallback = data.preview?.reddit_video_preview?.fallback_url;
+	const fallback = // todo check embed of those url
+		data.preview?.reddit_video_preview?.fallback_url ??
+		data?.media?.reddit_video?.fallback_url;
 	if (fallback) {
-		return returnMedia(
-			postType.VIDEO,
-			cleanFallback(fallback),
-			getImage(data),
-			true,
-			fallback,
-		);
-	}
-	if (data?.media?.reddit_video?.fallback_url) {
-		return returnMedia(
-			postType.VIDEO,
-			cleanFallback(data?.media?.reddit_video?.fallback_url),
-			getImage(data),
-			true,
-			data?.media?.reddit_video?.fallback_url,
-		);
+		return returnVideoMedia({
+			url: cleanFallback(fallback),
+			data,
+			needYtDl: true,
+			embed: fallback,
+		});
 	}
 	const isDown = await isDownloadable(data.url_overridden_by_dest);
 	if (isDown) {
-		return returnMedia(
-			postType.VIDEO,
-			data.url_overridden_by_dest,
-			getImage(data),
-			true,
-		);
+		return returnVideoMedia({
+			url: data.url_overridden_by_dest,
+			data,
+			needYtDl: true,
+		});
 	}
-	return returnMedia(
-		postType.LINK,
-		data.url_overridden_by_dest,
-		getImage(data),
-	);
+	return returnLinkMedia(data);
 }
-
+// todo to refactore
 export async function buildContent(saved: {
 	kind: string;
 	data: RedditRawData;
