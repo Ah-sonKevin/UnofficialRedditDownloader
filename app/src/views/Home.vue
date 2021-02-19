@@ -17,7 +17,7 @@
 </template>
 
 <script lang="ts">
-import HomeDownloadLink from "@/components/HomeDownloadLink.vue";
+import HomeDownloadLink from "@homeComponents/HomeDownloadLink.vue";
 import { defineComponent } from "vue";
 import { useRouter } from "vue-router";
 import { MutationsNames } from "@/store/authStore/authStoreMutationTypes";
@@ -44,20 +44,4 @@ export default defineComponent({
 	},
 });
 </script>
-<style scoped>
-input:valid {
-	border: solid 1px black;
-}
-input:invalid {
-	border: solid 1px red;
-}
-
-label {
-	color: red;
-	visibility: hidden;
-}
-label.active {
-	display: inline;
-	visibility: visible;
-}
-</style>
+<style scoped></style>
