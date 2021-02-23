@@ -1,7 +1,7 @@
 import { AuthError, DataNotFoundError } from "@/errors/restartError";
-import { StoreState } from "@/store";
 import Auth from "@/User/Auth";
 import { GetterTree } from "vuex";
+import { StoreState } from "../StoreState";
 import { AuthStoreState } from "./state";
 
 export type GettersType = {
