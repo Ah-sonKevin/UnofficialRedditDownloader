@@ -15,6 +15,11 @@ export class PartialDownloadError extends NotifError {
 	}
 }
 
-export class DownloadError extends NotifError {}
+export class DownloadError extends NotifError {
+	// eslint-disable-next-line @typescript-eslint/no-useless-constructor
+	constructor(msg: string) {
+		super(msg);
+	}
+}
 
 export class PartialRedditFetchError extends NotifError {}
