@@ -62,7 +62,7 @@
     "rules": {
       "vue/no-multiple-template-root": "off",
         "no-magic-numbers": ["warn", {
-            "ignore": [-1, 0, 1, 401],
+            "ignore": [-1, 0, 1, 401,200,404], // index & http error codes
             "ignoreArrayIndexes": true,
             "enforceConst": true,
             "detectObjects": true
@@ -109,7 +109,13 @@
 			"max-statements": ["error", 10],
 			"complexity": ["error", { "max": 20 }],
 			"max-nested-callbacks": ["error", 10],
-			"max-depth": ["error", 4]
+			"max-depth": ["error", 4],
+			"jest/expect-expect": [
+				"error",
+				{
+				  "assertFunctionNames": ["expect","^assert*"]
+				}
+			  ]
     },
     "overrides": [{
         "files": ["**/enum/**"],
