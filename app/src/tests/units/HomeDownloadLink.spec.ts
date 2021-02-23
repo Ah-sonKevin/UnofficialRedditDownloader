@@ -3,215 +3,216 @@
  */
 // eslint-disable-next-line eslint-comments/disable-enable-pair
 /* eslint-disable max-statements */
-// eslint-disable-next-line eslint-comments/disable-enable-pair
-/* eslint-disable no-console */
-// eslint-disable-next-line eslint-comments/disable-enable-pair
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-// eslint-disable-next-line eslint-comments/disable-enable-pair
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-// eslint-disable-next-line eslint-comments/disable-enable-pair
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import * as Downloader from "@/helper/Download/objectDownloader";
 import HomeDownloadLink from "@homeComponents/HomeDownloadLink.vue";
+import userEvent from "@testing-library/user-event";
 import { render, screen, waitFor } from "@testing-library/vue";
 import ElementPlus from "element-plus";
 import nock from "nock";
 import { mocked } from "ts-jest/utils";
-import { getWrapper } from "../wrapperFactory";
 import item from "./mockFetchData/soloItem.json";
 
-// todo updates reddit data
-const mockRouter = {
-	push: jest.fn(),
-};
 jest.mock("@/helper/Download/objectDownloader");
-const mockDownloader = mocked(Downloader, true); // todo check true
+// const mockDownloader = mocked(Downloader, true); // todo check true
+
+//
 
 describe("HomeDownloadLink", () => {
-	const BASE_URL = "https://www.reddit.com";
-	const VALID_URL =
-		"/r/announcements/comments/hrrh23/now_you_can_make_posts_with_multiple_images/";
-	const INVALID_URL = "/r/URL";
+	const BASE_URL = "www.reddit.com";
+	const EXTENSION = "/r/URL"; // todo rename
+	const badlyStructuredUrl = `red.com${EXTENSION}`;
+	const wellStructuredUrl = BASE_URL + EXTENSION;
+	const wellStructuredUrlWithExtension = `${EXTENSION}.json`;
 
-	beforeAll(() => {
-		nock(BASE_URL)
-			.get(/.*\.json/)
+	const VALID_URL = "/r/VALID_URL";
+	const INVALID_URL = "/r/INVALID_URL";
+	const validUrlWithExtension = `${VALID_URL}.json`;
+	const invalidUrlWithExtension = `${INVALID_URL}.json`;
+	const fullValidUrl = BASE_URL + VALID_URL;
+	const fullInvalidUrl = BASE_URL + INVALID_URL;
+
+	beforeEach(() => {
+		render(HomeDownloadLink, {
+			global: { plugins: [ElementPlus] },
+		});
+
+		mocked(Downloader.download).mockClear();
+
+		nock(`https://${BASE_URL}`) // todo move
+			.get(validUrlWithExtension)
 			.reply(200, item)
+			.get(validUrlWithExtension)
+			.reply(200, item)
+			.get(wellStructuredUrlWithExtension) // check how to isolate and test
+			.reply(200, item)
+			.get(invalidUrlWithExtension)
+			.reply(404)
 			.persist();
 	});
 
+	afterEach(() => {
+		if (!nock.isActive()) nock.activate();
+	});
+
+	const DOWNLOAD_ERROR_TEXT =
+		"The Download fail, please check that this url correspond to a reddit post";
+	const STRURCTURE_ERROR_TEXT = "This url is invalid, please enter a valid url";
+	// todo doc throwSuggestions (experimental)
+	// todo mail fac
+	// todo add popup for download error / not testable in unit test
+	// todo tooltip or <abbr>
+	// todo <aside> ?
+	// todo hide token global variable (encrypt ?) (web inspector)
+	// todo move nock
+	// todo chant wait for end function
+	// todo not change when just change value
+	// todo change again when new input
+	// todo use better links
+	// todo use find for specific role
+	// todo remove abstraction
+	// todo checl change different error message
+	// todo test aria message not send when update BAD to bad
+	// todo check chjangement error message
+	// todo add download error message
+	// toremember jest limited access component,
+	// toremember should not focus on implementation
+	// tocheck check exception
+	// tocheck error to check on git/stack
+
+	function updateInput(url: string) {
+		const input = screen.getByRole("textbox");
+		userEvent.type(input, url); // tocheck
+	}
+	function submitForm() {
+		userEvent.click(screen.getByRole("button", { name: "Download" }));
+	}
+
 	describe("Start", () => {
 		test("No error on create", () => {
-			const wrapper = getWrapper(HomeDownloadLink);
-			expect(wrapper.find("#errorMessage").isVisible()).toBe(false);
+			const errorMessage = screen.getByRole("alert", { hidden: true });
+			expect(errorMessage).not.toBeVisible();
 		});
 	});
 
-	// todo show format possible
 	describe("url structure", () => {
+		// mock fetch
 		describe("Good structure", () => {
-			// todo hide token global variable (encrypt ?)
+			async function assertGoodStructure(url: string) {
+				updateInput(url);
+				submitForm();
+				const structureError = screen.getByRole("alert", {
+					hidden: true,
+				});
+				await waitFor(() =>
+					expect(mocked(Downloader.download)).toHaveBeenCalledTimes(1),
+				);
+				await waitFor(() => expect(structureError).not.toBeVisible());
+			}
+
 			test("subreddit url", async () => {
-				const wrapper = getWrapper(HomeDownloadLink);
-				const input = wrapper.find("#inputText");
-				await input.setValue(
-					"/r/programminghorror/comments/lhq9bv/microsoft_word_is_the_best_coding_ide/",
-				); // tocheck
-				await wrapper.find("#formButton").trigger("click");
-				expect(wrapper.find("#errorMessage").isVisible()).toBe(false);
+				await assertGoodStructure(VALID_URL);
 			});
 
 			test("http://www.reddit.com/r/...", async () => {
-				// todo
-				const wrapper = getWrapper(HomeDownloadLink);
-				const input = wrapper.find("#inputText");
-				await input.setValue(
-					// todo
-					"http://www.reddit.com/r/programminghorror/comments/lhq9bv/microsoft_word_is_the_best_coding_ide/", // todo other url
-				); // tocheck
-
-				const button = wrapper.find("#formButton");
-				await button.trigger("click");
-				expect(wrapper.find("#errorMessage").isVisible()).toBe(false);
+				await assertGoodStructure(`http://${BASE_URL}${VALID_URL}`);
 			});
 
 			test("https://www.reddit.com/r/...", async () => {
-				const wrapper = getWrapper(HomeDownloadLink);
-				const input = wrapper.find("#inputText");
-				await input.setValue(
-					"https://www.reddit.com/r/programminghorror/comments/lhq9bv/microsoft_word_is_the_best_coding_ide/",
-				); // tocheck
-
-				await wrapper.find("#formButton").trigger("click");
-				expect(wrapper.find("#errorMessage").isVisible()).toBe(false);
+				await assertGoodStructure(`https://${BASE_URL}${VALID_URL}`);
 			});
 
 			test("reddit.com/r/...", async () => {
-				const wrapper = getWrapper(HomeDownloadLink);
-				const input = wrapper.find("#inputText");
-				await input.setValue(
-					"reddit.com/r/programminghorror/comments/lhq9bv/microsoft_word_is_the_best_coding_ide/",
-				); // tocheck
-				await wrapper.find("#formButton").trigger("click");
-				expect(wrapper.find("#errorMessage").isVisible()).toBe(false);
+				await assertGoodStructure(`reddit.com${VALID_URL}`);
 			});
 
 			test("www.reddit.com/r/...", async () => {
-				const wrapper = getWrapper(HomeDownloadLink);
-				const input = wrapper.find("#inputText");
-				await input.setValue(
-					"www.reddit.com/r/programminghorror/comments/lhq9bv/microsoft_word_is_the_best_coding_ide/",
-				); // tocheck
-				await wrapper.find("#formButton").trigger("click");
-				expect(wrapper.find("#errorMessage").isVisible()).toBe(false);
+				await assertGoodStructure(`${BASE_URL}${VALID_URL}`);
 			});
 
 			test("/r/...", async () => {
-				const wrapper = getWrapper(HomeDownloadLink);
-				const input = wrapper.find("#inputText");
-				await input.setValue(
-					"/r/programminghorror/comments/lhq9bv/microsoft_word_is_the_best_coding_ide/",
-				); // tocheck
-				await wrapper.find("#formButton").trigger("click");
-				expect(wrapper.find("#errorMessage").isVisible()).toBe(false);
+				await assertGoodStructure(`${VALID_URL}`);
 			});
 		});
 
 		describe("Bad structure", () => {
+			async function assertBadStructure(url: string) {
+				updateInput(url);
+				submitForm();
+				const structureError = screen.getByRole("alert", {
+					// check accessible name in other tests
+					hidden: true,
+				});
+
+				await waitFor(() => expect(structureError).toBeVisible());
+				//	await waitFor(() => expect(getStructureError()).toBeVisible());
+			}
+
 			test("end in .json", async () => {
-				const wrapper = getWrapper(HomeDownloadLink);
-				const input = wrapper.find("#inputText");
-				await input.setValue(
-					"http://www.reddit.com/r/programminghorror/comments/lhq9bv/microsoft_word.json",
-				);
-				await wrapper.find("#formButton").trigger("click");
-				expect(wrapper.find("#errorMessage").isVisible()).toBe(true);
+				await assertBadStructure(validUrlWithExtension);
 			});
 
 			test("https://www.red.com/r/...", async () => {
-				const wrapper = getWrapper(HomeDownloadLink);
-				const input = wrapper.find("#inputText");
-				await input.setValue(
-					"https://www.re.com/r/programminghorror/comments/lhq9bv/microsoft_word_is_the_best_coding_ide/",
-				);
-				await wrapper.find("#formButton").trigger("click");
-				expect(wrapper.find("#errorMessage").isVisible()).toBe(true);
+				await assertBadStructure(`https://www.re.com${VALID_URL}`);
 			});
 		});
 	});
 
 	describe("Update url", () => {
-		// todo not change when just change value
-		// todo change again when new input
-		// todo use better links
-		const BAD_URL =
-			"reddi.com/r/programminghorror/comments/lhq9bv/microsoft_word_is_the_best_coding_ide/";
-		const GOOD_URL =
-			"reddit.com/r/programminghorror/comments/lhq9bv/microsoft_word_is_the_best_coding_ide/";
-
 		test("Badly formed url To Well formed", async () => {
-			const wrapper = getWrapper(HomeDownloadLink);
-			const input = wrapper.find("#inputText");
-			await input.setValue(); // tocheck
-			await wrapper.find("#formButton").trigger("click");
-			expect(wrapper.find("#errorMessage").isVisible()).toBe(true);
-			await input.setValue(GOOD_URL); // tocheck
-			await wrapper.find("#formButton").trigger("click");
-			expect(wrapper.find("#errorMessage").isVisible()).toBe(false);
+			const input = screen.getByRole("textbox");
+			const submitButton = screen.getByRole("button", { name: "Download" });
+			userEvent.type(input, badlyStructuredUrl);
+			userEvent.click(submitButton);
+			const errorMessage = await screen.findByRole("alert");
+			await waitFor(() => expect(errorMessage).toBeVisible());
+			userEvent.clear(input);
+			userEvent.type(input, wellStructuredUrl);
+			userEvent.click(submitButton);
+			const errorMessage2 = await screen.findByRole("alert");
+			await waitFor(() => expect(errorMessage2).not.toBeVisible());
+			await waitFor(() =>
+				expect(mocked(Downloader.download)).toHaveBeenCalledTimes(1),
+			);
 		});
 
 		test("Well formed url To badly formed", async () => {
-			// tochange
-			// todo use const
-			const wrapper = getWrapper(HomeDownloadLink);
-			const input = wrapper.find("#inputText");
-			await input.setValue(GOOD_URL); // tocheck
-			await wrapper.find("#formButton").trigger("click");
-			expect(wrapper.find("#errorMessage").isVisible()).toBe(false);
-			await input.setValue(BAD_URL); // tocheck
-			await wrapper.find("#formButton").trigger("click");
-			expect(wrapper.find("#errorMessage").isVisible()).toBe(true);
+			updateInput(wellStructuredUrl);
+			submitForm();
+			await waitFor(() =>
+				expect(mocked(Downloader.download)).toHaveBeenCalledTimes(1),
+			);
+			const errorMessage = screen.getByRole("alert", { hidden: true });
+			await waitFor(() => expect(errorMessage).not.toBeVisible());
+			updateInput(badlyStructuredUrl);
+			submitForm();
+			const errorMessage2 = await screen.findByRole("alert");
+			await waitFor(() => expect(errorMessage2).toBeVisible());
 		});
 	});
 
-	// torembmer jest limitecd access compoennt,
-	// should not focus on implementation
-	// tocheck check exception
-	// todo chant wait for end function
-	// wait for event
-	// todo mauybe extract function
 	describe("url validity", () => {
-		test("Invalid url", async () => {
-			const wrapper = getWrapper(HomeDownloadLink);
-
-			render(HomeDownloadLink, {
-				global: { plugins: [ElementPlus] },
-			});
-			// todo get by role
-			const input = wrapper.find("#inputText");
-			await input.setValue(INVALID_URL);
-
-			//	console.log(screen.getByPlaceholderText("Enter item's URL"));
-			console.log(screen.getByPlaceholderText("Enter item's URL"));
-
-			// todo template throw unvalidate error
-			/*	expect(async () => wrapper.find("#formButton").trigger("click")).toThrow(
-				DownloadError,
-			); */
-			// todo errors
-			expect(mockDownloader.download).not.toHaveBeenCalled();
-			expect(wrapper.find("#errorMessage").isVisible()).toBe(true);
+		test("Valid url", async () => {
+			mocked(Downloader.download).mockClear();
+			expect(mocked(Downloader.download)).toHaveBeenCalledTimes(0);
+			updateInput(fullValidUrl);
+			submitForm();
+			await waitFor(() =>
+				expect(mocked(Downloader.download)).toHaveBeenCalledTimes(1),
+			);
+			const errorMessage = screen.getByRole("alert", { hidden: true });
+			expect(errorMessage).not.toBeVisible();
+			expect(mocked(Downloader.download)).toHaveBeenCalledTimes(1);
 		});
 
-		test("Valid url", async () => {
-			const wrapper = getWrapper(HomeDownloadLink);
-			const input = wrapper.find("#inputText");
-			await input.setValue(VALID_URL);
-			await wrapper.find("#formButton").trigger("click");
-			await waitFor(() => expect(mockDownloader.download).toHaveBeenCalled());
+		test("Invalid url", async () => {
+			mocked(Downloader.download).mockReset();
+			expect(mocked(Downloader.download)).toHaveBeenCalledTimes(0);
+			const errorMessage = screen.getByRole("alert", { hidden: true });
+			expect(errorMessage).not.toBeVisible();
+			updateInput(fullInvalidUrl);
+			submitForm();
+			await waitFor(() => expect(errorMessage).toBeVisible());
+			expect(mocked(Downloader.download)).toHaveBeenCalledTimes(0);
 		});
 	});
 });
-// todo check if error ?
-// todo extract function
-// tocheck test speed

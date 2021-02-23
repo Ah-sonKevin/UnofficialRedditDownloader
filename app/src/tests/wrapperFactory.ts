@@ -1,7 +1,8 @@
 import router, { getRouter } from "@/router";
 import { StoreTypeTemp, useTypedStore } from "@/store";
-import { mount, VueWrapper } from "@vue/test-utils";
+import { render, RenderResult } from "@testing-library/vue";
 import ElementPlus from "element-plus";
+import { MockedObjectDeep } from "ts-jest/dist/utils/testing";
 import { mocked } from "ts-jest/utils";
 import { Router } from "vue-router";
 
@@ -12,9 +13,9 @@ interface GetWrapperOption {
 	useRealRouter?: boolean;
 }
 export function getWrapper(
-	component: any,
+	component: unknown,
 	options?: GetWrapperOption,
-): VueWrapper<any> {
+): RenderResult {
 	const plugins = [];
 	plugins.push(ElementPlus);
 	if (options) {
@@ -29,41 +30,39 @@ export function getWrapper(
 			plugins.push(getRouter());
 		}
 	}
-	return mount(component, {
+	return render(component, {
 		global: {
 			plugins,
 		},
 	});
 }
 // toremember not use getElementById in component
-// can't print unpinrtable html element as any (return nothing, no t even null/blanlk)
-export function getFullWrapper(component: any) {
+// can't print unprintable html element as any (return nothing, no t even null/blank)
+export function getFullWrapper(component: unknown): RenderResult {
 	return getWrapper(component, { useRealRouter: true, useRealStore: true });
 }
 
-export function getEmptyWrapper(component: any) {
+export function getEmptyWrapper(component: unknown): RenderResult {
 	return getWrapper(component);
 }
 
 export function getMockedWrapper(
-	component: any,
-	options: {
-		gettersValue: {
+	component: unknown,
+	// todo tocheck
+	/* options: {
+		 gettersValue: { 
 			auth?: Record<string, unknown>;
 			user: Record<string, unknown>;
-		};
-	}, // tocheck tokeep ?
-): any {
+		}; 
+	}, // tocheck to keep ?
+	*/
+): {
+	wrapper: RenderResult;
+	mockRouter: MockedObjectDeep<Router>;
+	mockStore: MockedObjectDeep<StoreTypeTemp>; // todo change name interface
+} {
 	jest.mock("router");
 	jest.mock("store");
-
-	const mockStores = {
-		commit: jest.fn(),
-		dispatch: jest.fn(),
-		getters: {
-			...options.gettersValue,
-		},
-	};
 
 	const mockRouter = mocked(router, true);
 	const mockStore = mocked(useTypedStore(), true); // tocheck is working ?
