@@ -31,9 +31,19 @@ describe("HomeDownloadLink", () => {
 	const fullValidUrl = BASE_URL + VALID_URL;
 	const fullInvalidUrl = BASE_URL + INVALID_URL;
 
+	const errorHandler = (err: unknown) => {
+		/*	if (err instanceof RedditManagerError) {
+			managerErrors(err);
+		} */
+		console.log();
+	};
+
 	beforeEach(() => {
 		render(HomeDownloadLink, {
-			global: { plugins: [ElementPlus] },
+			global: {
+				plugins: [ElementPlus],
+				config: { errorHandler },
+			},
 		});
 
 		mocked(Downloader.download).mockClear();
