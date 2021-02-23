@@ -1,4 +1,3 @@
-/* eslint-disable max-statements */
 import { postType } from "@/enum/postType";
 import { DownloadError, PartialDownloadError } from "@/errors/notifError";
 import { NetworkError, UnknowTypeError } from "@/errors/restartError";
@@ -20,7 +19,10 @@ const SIZE_DECIMAL_PRECISION = 2;
 export function cancelDownload(): void {
 	cancelController.abort();
 }
-
+// todo test hover
+// todo test notif
+// todo test download a part
+// todo test throw error
 function getName(text: string, extension: string): string {
 	return `${text}.${extension}`;
 }
@@ -76,7 +78,7 @@ function updateDownloadSpinner(
 	);
 }
 
-// eslint-disable-next-line max-lines-per-function
+// eslint-disable-next-line max-statements
 async function fetchData(
 	x: Response,
 	downloadIndicator: ILoadingInstance,
@@ -105,7 +107,6 @@ async function fetchData(
 
 		// eslint-disable-next-line no-loops/no-loops
 		while (reading) {
-			// replace no for loop
 			// eslint-disable-next-line no-await-in-loop
 			const { done, value } = await reader.read();
 			if (done) {
@@ -130,6 +131,7 @@ async function fetchData(
 	throw new DownloadError(`Undefined Response Error`);
 }
 
+// eslint-disable-next-line max-statements
 async function downloadMedia(item: SavedContent) {
 	const downloadIndicator = ElLoading.service({
 		fullscreen: true,
@@ -262,6 +264,7 @@ async function getMediaArchive(items: SavedContent[]): Promise<JSZip> {
 	return new JSZip();
 }
 
+// eslint-disable-next-line max-statements
 async function batchDownloadMedia(items: SavedContent[]): Promise<Blob | null> {
 	const downloadIndicator = ElLoading.service({
 		fullscreen: true,
