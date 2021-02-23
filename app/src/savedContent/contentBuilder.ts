@@ -37,6 +37,7 @@ function cleanFallback(url: string) {
 	return url.split("/").slice(0, -1).join("/");
 }
 // later use composition & object literal
+
 // eslint-disable-next-line max-params
 function returnMedia(
 	type: string,
@@ -174,7 +175,6 @@ function getVideoMedia(data: RedditRawData) {
 	});
 }
 
-// eslint-disable-next-line complexity
 // eslint-disable-next-line max-statements
 export async function buildMedia(
 	data: RedditRawData,
@@ -238,7 +238,7 @@ export async function buildMedia(
 	}
 	return returnLinkMedia(data);
 }
-// todo to refactore
+// todo to refactor
 export async function buildContent(saved: {
 	kind: string;
 	data: RedditRawData;

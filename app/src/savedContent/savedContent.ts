@@ -1,3 +1,5 @@
+// eslint-disable-next-line eslint-comments/disable-enable-pair
+/* eslint-disable max-params */
 import { postType } from "@/enum/postType";
 import { RedditRawData } from "./redditDataInterface";
 
@@ -61,7 +63,7 @@ export default class SavedContent {
 
 	needYtDl = false;
 
-	// eslint-disable-next-line max-params
+	// eslint-disable-next-line max-statements
 	constructor(
 		kind: string,
 		_data: RedditRawData,
