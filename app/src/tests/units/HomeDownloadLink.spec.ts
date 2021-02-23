@@ -200,6 +200,7 @@ describe("HomeDownloadLink", () => {
 		});
 	});
 
+	// toremember : calm down, put things on paper, draw, pause, don't acharne
 	describe("url validity", () => {
 		test("Valid url", async () => {
 			mocked(Downloader.download).mockClear();
