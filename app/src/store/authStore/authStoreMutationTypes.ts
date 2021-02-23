@@ -38,8 +38,8 @@ export const mutations: MutationTree<AuthStoreState> & MutationsTypes = {
 		state.rawRefreshToken = token;
 	},
 	[MutationsNames.CREATE_AUTH_DATA](state: AuthStoreState): void {
-		// eslint-disable-next-line no-magic-numbers
-		const authString = Math.random().toString(36);
+		const BASE = 36;
+		const authString = Math.random().toString(BASE);
 		const AUTH_SCOPE = "save identity history";
 
 		const authRedirect = `http://${window.location.hostname}:8080/Login`;

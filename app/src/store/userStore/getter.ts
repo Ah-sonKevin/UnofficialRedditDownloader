@@ -1,7 +1,7 @@
 import { DataNotFoundError } from "@/errors/restartError";
-import { StoreState } from "@/store";
 import User from "@/User/User";
 import { GetterTree } from "vuex";
+import { StoreState } from "../StoreState";
 import { UserStoreState } from "./states";
 
 export type GettersType = {

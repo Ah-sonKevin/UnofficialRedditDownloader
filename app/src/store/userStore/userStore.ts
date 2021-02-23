@@ -1,5 +1,5 @@
-import { StoreState } from "@/store";
 import { CommitOptions, Module, Store as VuexStore } from "vuex";
+import { StoreState } from "../StoreState";
 import { Getters, GettersType } from "./getter";
 import { mutations, MutationsTypes } from "./mutationsTypes";
 import { UserState, UserStoreState } from "./states";
