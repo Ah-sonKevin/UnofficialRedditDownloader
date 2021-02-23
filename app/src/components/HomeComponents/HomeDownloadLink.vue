@@ -1,11 +1,10 @@
 <template>
-	ezdfgdfh
 	<form id="inputForm" ref="formElement">
-		<label for="inputText">bla</label>
+		<label for="inputText">Enter a post's URL</label>
 		<el-input
 			id="inputText"
 			v-model="urlInput"
-			placeholder="Enter item's URL"
+			placeholder="http://reddit.com/r/..."
 			required
 			pattern="^((((http(s)?:\/\/)?www\.)?reddit\.com)?\/r\/(\w|\/)+)$"
 		>
@@ -15,41 +14,74 @@
 				</el-button>
 			</template>
 		</el-input>
-		<p v-show="!isValid" id="errorMessage">Please enter a valid reddit URL</p>
+		<p v-show="!validity.isValid" id="errorMessage" role="alert">
+			{{ getErrorMessage }}
+		</p>
 		<input id="button" type="submit" />
 	</form>
 </template>
 
 <script lang="ts">
-// eslint-disable-next-line eslint-comments/disable-enable-pair
-/* eslint-disable max-lines-per-function */
-import {
-	defineComponent,
-	ref,
-	onBeforeMount,
-	computed,
-	onMounted,
-	Ref,
-} from "vue";
+import { computed, defineComponent, reactive, ref, Ref, UnwrapRef } from "vue";
 
 import { BadLinkError } from "@/errors/restartError";
 import { RawItem } from "@/savedContent/rawItemInterface";
 import { buildContent } from "@/savedContent/contentBuilder";
 import { download } from "@/helper/Download/objectDownloader";
 import { DownloadError } from "@/errors/notifError";
+import { notifyError } from "@/helper/notifierHelper";
 
 export default defineComponent({
 	name: "HomeDownloadLink",
 
+	// eslint-disable-next-line max-lines-per-function
 	setup() {
 		const urlInput = ref(""); // tocheck
-		const isValid = ref(true);
 		const formElement: Ref<HTMLFormElement | null> = ref(null);
+
+		type ValidityType = "downloadError" | "structureError" | null;
+		const validity: {
+			isValid: boolean;
+			reason: ValidityType;
+		} = reactive({
+			isValid: true,
+			reason: null, // tocheck need type null
+		});
+
+		const getErrorMessage = computed(() => {
+			switch (validity.reason) {
+				case "downloadError":
+					return "The Download fail, please check that this url correspond to a reddit post";
+				case "structureError":
+					return "This url is invalid, please enter a valid url";
+				case null:
+					return "";
+				default:
+					throw new Error(); // todo change type error & add error handler
+			}
+		});
+
+		function setInvalid(type: ValidityType) {
+			validity.isValid = false;
+			validity.reason = type;
+		}
+
+		function setValid() {
+			validity.isValid = true;
+			validity.reason = null;
+		}
 
 		function checkValidity() {
 			const form = formElement.value;
 			if (form) {
-				isValid.value = form.reportValidity();
+				// needed ?
+				if (form.reportValidity()) {
+					setValid();
+				} else {
+					setInvalid("structureError");
+				}
+			} else {
+				setInvalid("structureError");
 			}
 		}
 
@@ -71,45 +103,70 @@ export default defineComponent({
 			throw new BadLinkError("Couldn't access link");
 		}
 		// eslint-disable-next-line max-statements
+
+		function isValidRedditPost(posts: RawItem[]): boolean {
+			// tocheck type, not sure RawItem, cxan't instanceof
+			/*	console.log(posts);
+			console.log(
+				`TEST validity : ${Array.isArray(posts)} ${posts.length}  ${
+					posts[0].data.children[0].kind
+				}`,
+			); */
+			if (Array.isArray(posts) && posts.length > 0) {
+				const content = posts[0].data.children[0];
+				const kind = content.kind;
+				if (kind === "t1" || kind === "t3") {
+					return true;
+				}
+			}
+			return false;
+		}
+
+		// toremember can't convert async PromiseReject error to 'normal' error
+		// eslint-disable-next-line max-statements
 		async function downloadItem() {
 			checkValidity();
-			console.log("Download");
-			console.log(isValid.value);
-			if (isValid.value) {
-				// const url = getRedditUrl(urlInput.value);
-				// eslint-disable-next-line const-case/uppercase
-				const url =
-					"https://www.reddit.com/r/deals/comments/lmm76b/mcdonalds_is_offering_a_free_sandwich_with_any/";
+			if (validity.isValid) {
 				try {
+					const url = getRedditUrl(urlInput.value);
 					const el = await fetch(`${url}.json`); // tocheck invalid value
-					console.log(`THEN 1${el.ok}`);
 					if (el.ok) {
 						const json = (await el.json()) as RawItem[];
-						const content = json[0].data.children[0];
-						const item = await buildContent({
-							kind: content.kind,
-							data: content.data,
-						});
-						console.log("THEN 3");
-						await download(item);
-						console.log("DONE");
+						if (isValidRedditPost(json)) {
+							const content = json[0].data.children[0];
+							const item = await buildContent({
+								kind: content.kind,
+								data: content.data,
+							});
+							download(item);
+						} else {
+							throw new DownloadError(`INVALID POST ${url}`);
+						}
 					} else {
-						isValid.value = true;
-						throw new BadLinkError("Couldn't access link");
+						throw new BadLinkError(`-- Couldn't access link  ${url}`);
 					}
 				} catch (err) {
-					console.log(err);
-					throw new DownloadError(err);
+					// why can"t cast error
+					if (err instanceof Error) {
+						if (err instanceof DownloadError) {
+							setInvalid("downloadError");
+						} else if (err instanceof BadLinkError) {
+							// todo structure error ?
+							setInvalid("downloadError");
+						}
+					}
+					throw err;
 				}
 			}
 		}
-
+		// todo animate error
 		return {
 			checkValidity,
 			downloadItem,
 			urlInput,
-			isValid,
+			validity,
 			formElement,
+			getErrorMessage,
 		};
 	},
 });
