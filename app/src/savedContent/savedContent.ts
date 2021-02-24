@@ -23,9 +23,9 @@ export default class SavedContent {
 
 	author: string;
 
-	postAuthor = "";
+	postAuthor?: string;
 
-	postLink = "";
+	postLink?: string;
 
 	subreddit: string;
 
@@ -35,9 +35,9 @@ export default class SavedContent {
 
 	title: string;
 
-	text = "";
+	text?: string;
 
-	htmlText = "";
+	htmlText?: string;
 
 	redditUrl: string;
 
@@ -79,8 +79,8 @@ export default class SavedContent {
 		this.id = data.id;
 		this.fullname = data.name;
 		this.subreddit = data.subreddit;
-		this.title = data.title;
-		this.category = data.category;
+		this.title = data.title ?? ""; //tocheck comment
+		this.category = data.category ?? "";
 		this.creationDate = new Date(data.created_utc);
 		this.redditUrl = `https://www.reddit.com${data.permalink}`;
 
@@ -94,19 +94,22 @@ export default class SavedContent {
 			this.type = postType.COMMENT;
 			this.text = data.body ?? "";
 			this.htmlText = decodeHtml(data.body_html ?? "");
-			this.title = data.link_title;
-			this.postAuthor = data.link_author;
-			this.postLink = data.link_url;
+			this.title = data.link_title ?? ""; // tocheck
+			this.postAuthor = data.link_author ?? "";
+			this.postLink = data.link_url ?? "";
 		} else if (data.is_self) {
 			this.type = postType.TEXT;
-			this.text = data.selftext;
+			this.text = data.selftext ?? ""; // tocheck
 			this.htmlText = decodeHtml(data.selftext_html ?? "");
 		} else if (data.is_gallery) {
 			this.type = postType.IMAGE;
 			this.isGallery = data.is_gallery;
-			Object.keys(data.media_metadata).forEach((el) => {
-				this.galleryURLs.push(`https://i.redd.it/${el}.jpg`);
-			});
+			if (data.media_metadata) {
+				// tocheck
+				Object.keys(data.media_metadata).forEach((el) => {
+					this.galleryURLs.push(`https://i.redd.it/${el}.jpg`);
+				});
+			}
 			this.imageLink = this.galleryURLs[0];
 		}
 		this.hasImage =

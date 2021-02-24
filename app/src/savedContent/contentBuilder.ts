@@ -86,9 +86,12 @@ const imageExtensionList = ["jpg", "jpeg", "png", "gif"];
 const videoExtensionList = ["mp4", "gifv"];
 
 function getImage(data: RedditRawData): string {
-	const tempImage = data.preview?.images[0]?.source?.url;
-	if (tempImage) {
-		return tempImage;
+	const previewImage = data?.preview?.images;
+	if (previewImage) {
+		const tempImage = previewImage[0]?.source?.url;
+		if (tempImage) {
+			return tempImage;
+		}
 	}
 	const tempImage2 = data?.media?.oembed?.thumbnail_url;
 	if (tempImage2) {
@@ -111,7 +114,7 @@ function returnLinkMedia(data: RedditRawData) {
 	// tocheck really pass getImage ?
 	return returnMedia(
 		postType.LINK,
-		data.url_overridden_by_dest,
+		data.url_overridden_by_dest ?? "", // tocheck
 		getImage(data),
 	);
 }
@@ -143,7 +146,7 @@ function returnVideoMedia({
 function getVideoMedia(data: RedditRawData) {
 	if (data.domain === "youtube.com" || data.domain === "youtu.be") {
 		return returnVideoMedia({
-			url: data.url_overridden_by_dest,
+			url: data.url_overridden_by_dest ?? "", // tocheck
 			data,
 			needYtDl: true,
 		});
@@ -169,7 +172,7 @@ function getVideoMedia(data: RedditRawData) {
 		});
 	}
 	return returnVideoMedia({
-		url: data.url_overridden_by_dest,
+		url: data.url_overridden_by_dest ?? "", // tocheck
 		data,
 		needYtDl: true,
 	});
@@ -206,7 +209,10 @@ export async function buildMedia(
 		postHint === "image" ||
 		imageExtensionList.some((el) => urlExtension === el)
 	) {
-		return returnImageMedia(data.url_overridden_by_dest);
+		return returnImageMedia(data.url_overridden_by_dest ?? ""); // tocheck
+	}
+	if (data.is_gallery === true) {
+		return returnImageMedia("");
 	}
 	if (postHint === "rich:video" || postHint === "hosted:video") {
 		return getVideoMedia(data);
@@ -215,7 +221,7 @@ export async function buildMedia(
 		videoExtensionList.some((el) => urlExtension === el) ||
 		data?.media?.oembed?.type === "video"
 	) {
-		return returnVideoMedia({ url: data.url_overridden_by_dest, data });
+		return returnVideoMedia({ url: data.url_overridden_by_dest ?? "", data }); // tocheck
 	}
 	const fallback = // todo check embed of those url
 		data.preview?.reddit_video_preview?.fallback_url ??
@@ -228,10 +234,10 @@ export async function buildMedia(
 			embed: fallback,
 		});
 	}
-	const isDown = await isDownloadable(data.url_overridden_by_dest);
+	const isDown = await isDownloadable(data.url_overridden_by_dest ?? ""); // tocheck
 	if (isDown) {
 		return returnVideoMedia({
-			url: data.url_overridden_by_dest,
+			url: data.url_overridden_by_dest ?? "", // tocheck
 			data,
 			needYtDl: true,
 		});

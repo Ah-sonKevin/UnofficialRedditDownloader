@@ -1,3 +1,4 @@
+// todo reduce
 interface RedditVideo {
 	fallback_url: string;
 	height: number;
@@ -10,15 +11,15 @@ interface RedditVideo {
 }
 
 interface SecureMedia {
-	reddit_video: RedditVideo;
-	type: string;
-	oembed: Oembed;
+	reddit_video?: Partial<RedditVideo>;
+	type?: string;
+	oembed?: Partial<Oembed>;
 }
 
 interface Media {
-	reddit_video: RedditVideo;
-	type: string;
-	oembed: Oembed;
+	reddit_video?: Partial<RedditVideo>;
+	type?: string;
+	oembed?: Partial<Oembed>;
 }
 
 interface Source {
@@ -41,9 +42,8 @@ interface Image {
 
 interface Preview {
 	images: Image[];
-	enabled: boolean;
-
-	reddit_video_preview: RedditVideoPreview;
+	enabled?: boolean;
+	reddit_video_preview?: Partial<RedditVideoPreview>;
 }
 
 export interface SecureMediaEmbed {
@@ -67,62 +67,44 @@ export interface RedditRawData {
 	author: string;
 	body?: string;
 	body_html?: string;
-	category: string;
-	clicked: boolean;
-	content_categories?: string;
-	contest_mode: boolean;
+	category?: string | null;
+	content_categories?: string | null;
 	created_utc: number;
 	created: number;
-	crosspost_parent_list: RedditRawData[];
-	crosspost_parent: string;
-	domain: string;
-	downs: number;
-	edited: boolean;
-	gilded: number;
-	hidden: boolean;
-	hide_score: boolean;
+	crosspost_parent_list?: RedditRawData[];
+	crosspost_parent?: string;
+	domain?: string;
 	id: string;
-	is_crosspostable: boolean;
-	is_meta: boolean;
-	is_original_content: boolean;
-	is_reddit_media_domain: boolean;
-	is_robot_indexable: boolean;
-	is_self: boolean;
-	is_video: boolean;
-	media_embed?: MediaEmbed;
-	media_metadata: MediaMetadata;
-	media_only: boolean;
-	media?: Media;
+	is_crosspostable?: boolean;
+	is_reddit_media_domain?: boolean;
+	is_self?: boolean | null;
+	is_video?: boolean;
+	media_embed?: Partial<MediaEmbed> | null;
+	media_metadata?: Partial<MediaMetadata> | null;
+	media_only?: boolean;
+	media?: Partial<Media> | null;
 	name: string;
-	no_follow: boolean;
-	num_comments: number;
-	over_18: boolean;
-	parent_whitelist_status: string;
 	permalink: string;
-	pinned: boolean;
-	post_hint: string;
-	preview: Preview;
-	secure_media_embed: SecureMediaEmbed;
-	secure_media?: SecureMedia;
-	selftext_html?: string;
-	selftext: string;
+	post_hint?: string;
+	preview?: Partial<Preview>;
+	secure_media_embed?: Partial<SecureMediaEmbed> | null;
+	secure_media?: Partial<SecureMedia> | null;
+	selftext_html?: string | null;
+	selftext?: string | null;
 	subreddit_id: string;
-	subreddit_name_prefixed: string;
-	subreddit_subscribers: number;
-	subreddit_type: string;
 	subreddit: string;
-	thumbnail_height?: number;
-	thumbnail_width?: number;
-	thumbnail: string;
-	title: string;
-	url_overridden_by_dest: string;
-	url: string;
-	link_id: string;
-	link_title: string;
-	link_permalink: string;
-	link_author: string;
-	link_url: string;
-	is_gallery: boolean;
+	thumbnail_height?: number | null;
+	thumbnail_width?: number | null;
+	thumbnail?: string;
+	title?: string;
+	url_overridden_by_dest?: string;
+	url?: string;
+	link_id?: string;
+	link_title?: string;
+	link_permalink?: string;
+	link_author?: string;
+	link_url?: string;
+	is_gallery?: boolean;
 }
 
 export interface Oembed {
@@ -152,27 +134,6 @@ export interface RedditVideoPreview {
 	is_gif: boolean;
 }
 
-export interface P {
-	y: number;
-	x: number;
-	u: string;
-}
-
-export interface S {
-	y: number;
-	x: number;
-	u: string;
-}
-
-interface Metadata {
-	status: string;
-	e: string;
-	m: string;
-	p: P[];
-	s: S;
-	id: string;
-}
-
 interface MediaMetadata {
-	[key: string]: Metadata;
+	[key: string]: unknown;
 }
