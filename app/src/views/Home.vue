@@ -31,7 +31,7 @@ export default defineComponent({
 		const store = useTypedStore();
 		function connectToReddit(): void {
 			if (!store.getters.isConnected) {
-				store.commit(MutationsNames.CREATE_AUTH_DATA, undefined);
+				store.commit(MutationsNames.CREATE_AUTH_DATA, undefined); // tocheck move ?
 				window.location.href = store.getters.auth.AUTH_LINK;
 			} else {
 				void router.push({ name: "Manager" });
