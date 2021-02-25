@@ -79,7 +79,7 @@ export default class SavedContent {
 		this.id = data.id;
 		this.fullname = data.name;
 		this.subreddit = data.subreddit;
-		this.title = data.title ?? ""; //tocheck comment
+		this.title = data.title ?? ""; // tocheck comment
 		this.category = data.category ?? "";
 		this.creationDate = new Date(data.created_utc);
 		this.redditUrl = `https://www.reddit.com${data.permalink}`;
