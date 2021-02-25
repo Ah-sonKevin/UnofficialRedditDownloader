@@ -17,22 +17,24 @@
 </template>
 
 <script lang="ts">
-import HomeDownloadLink from "@homeComponents/HomeDownloadLink.vue";
 import { defineComponent } from "vue";
+import HomeDownloadLink from "@homeComponents/HomeDownloadLink.vue";
 import { useRouter } from "vue-router";
 import { MutationsNames } from "@/store/authStore/authStoreMutationTypes";
-import { useTypedStore } from "@/store";
+import { StoreTypeTemp } from "@/store";
+import { useStore } from "vuex";
 
 export default defineComponent({
 	name: "Home",
 	components: { HomeDownloadLink },
 	setup() {
 		const router = useRouter();
-		const store = useTypedStore();
+		const store = useStore() as StoreTypeTemp;
 		function connectToReddit(): void {
 			if (!store.getters.isConnected) {
 				store.commit(MutationsNames.CREATE_AUTH_DATA, undefined); // tocheck move ?
-				window.location.href = store.getters.auth.AUTH_LINK;
+				// globalThis.location.href = store.getters.auth.AUTH_LINK;
+				globalThis.location.assign(store.getters.auth.AUTH_LINK);
 			} else {
 				void router.push({ name: "Manager" });
 			}

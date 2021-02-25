@@ -1,4 +1,3 @@
-import { useTypedStore } from "@/store";
 import About from "@/views/About.vue";
 import Home from "@/views/Home.vue";
 import Login from "@/views/Login.vue";
@@ -10,6 +9,7 @@ import {
 	Router,
 	RouteRecordRaw,
 } from "vue-router";
+import { getTypedStore } from "../store/index";
 
 const routes: Array<RouteRecordRaw> = [
 	{
@@ -18,8 +18,7 @@ const routes: Array<RouteRecordRaw> = [
 		name: "Manager",
 		props: true,
 		beforeEnter() {
-			const store = useTypedStore();
-
+			const store = getTypedStore(); // todo check which store is used
 			if (store.getters.isConnected) {
 				return true;
 			}
@@ -31,11 +30,11 @@ const routes: Array<RouteRecordRaw> = [
 		component: Login,
 		name: "Login",
 		beforeEnter(to) {
-			const query = to.query;
-			if (!(query && query.state && query.code)) {
-				return { name: "Home" };
+			/*	const query = to.query;
+			if (query && query.state && query.code && !query.error) {
+				return true;
 			}
-			return true;
+			return { name: "Home" }; */
 		},
 	},
 
@@ -59,13 +58,19 @@ const routes: Array<RouteRecordRaw> = [
 	},
 ];
 
-export function getRouter(): Router {
-	return createRouter({
+let router: Router;
+
+export function makeRouter(): Router {
+	router = createRouter({
 		history: createWebHistory(),
 		routes,
 	});
+	return router;
 }
 
-const router = getRouter();
-
-export default router;
+export function getRouter(): Router {
+	if (router) {
+		return router;
+	}
+	throw new Error("Missing router"); // tocheck
+}

@@ -1,5 +1,5 @@
 import { AuthError, NetworkError } from "@/errors/restartError";
-import { useTypedStore } from "@/store";
+import { getTypedStore } from "@/store";
 import { postOapi, postRedditAPI } from "../helper/fetchHelper/fetchHelper";
 import { Couple } from "../helper/fetchHelper/requestArgument";
 import { MutationsNames } from "../store/authStore/authStoreMutationTypes";
@@ -19,7 +19,7 @@ export class CodeTruple {
 }
 // todo secret type
 export function resetToken(): void {
-	const store = useTypedStore();
+	const store = getTypedStore();
 	postOapi("/api/v1/revoke_token", [
 		new Couple("token", store.getters.token),
 		new Couple("token_type_hint", "access_token"),
@@ -37,7 +37,7 @@ export function resetToken(): void {
 }
 
 export async function generateAccessToken(received: CodeTruple): Promise<void> {
-	const store = useTypedStore();
+	const store = getTypedStore();
 	if (
 		received.error ||
 		received.state !== store.getters.auth.AUTH_STRING ||

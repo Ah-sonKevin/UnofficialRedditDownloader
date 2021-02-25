@@ -21,7 +21,9 @@ export default defineComponent({
 			})
 				.then(() => router.push("Manager"))
 				.catch((reason: unknown) => {
-					throw new NetworkError(JSON.stringify(reason));
+					if (reason instanceof Error) {
+						throw new NetworkError(reason.message);
+					}
 				});
 		});
 	},

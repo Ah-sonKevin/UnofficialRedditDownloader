@@ -1,8 +1,8 @@
 import { logger } from "@/helper/logger";
 import { notifyError } from "@/helper/notifierHelper";
-import router from "@/router";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { IMessageOptions } from "element-plus/lib/el-message/src/types";
+import { getRouter } from "../router/index";
 import { RedditManagerError } from "./error";
 import {
 	NotifError,
@@ -21,6 +21,7 @@ function getMessage(msg: string, html = false): IMessageOptions {
 		dangerouslyUseHTMLString: html,
 	};
 }
+// eslint-disable-next-line max-statements
 export function managerErrors(err: RedditManagerError): void {
 	logger.error({
 		error: err,
@@ -29,7 +30,7 @@ export function managerErrors(err: RedditManagerError): void {
 		message: err.message,
 	});
 	if (err instanceof RestartError) {
-		void router.push({ name: "Home" });
+		void getRouter().push({ name: "Home" });
 		ElMessage({ message: err.popupMessage, showClose: true });
 	} else if (err instanceof NotifError) {
 		if (err instanceof PartialDownloadError) {
@@ -63,6 +64,7 @@ export function managerErrors(err: RedditManagerError): void {
 					const htmlNode = `Some files couldn't be download  <button type="button" id='buttonNotif'">See which one</button>`;
 					const message = ElMessage(getMessage(htmlNode, true));
 					const button = document.getElementById("buttonNotif");
+					// eslint-disable-next-line max-depth
 					if (!button) {
 						throw new Error("PartialDownloadError button not found");
 					}

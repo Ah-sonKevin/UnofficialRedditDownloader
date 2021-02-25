@@ -1,7 +1,7 @@
 import { DataNotFoundError, NetworkError } from "@/errors/restartError";
-import { useTypedStore } from "@/store";
+import { getRouter } from "@/router";
+import { getTypedStore } from "@/store";
 import "isomorphic-fetch";
-import { useRouter } from "vue-router";
 import { MutationsNames } from "../../store/authStore/authStoreMutationTypes";
 import { Couple } from "./requestArgument";
 
@@ -9,7 +9,7 @@ const REDDIT_API = "https://www.reddit.com";
 export const OAUTH_API = "https://oauth.reddit.com";
 
 function getRedditHeader(): Headers {
-	const store = useTypedStore();
+	const store = getTypedStore();
 	const authHeaders = new Headers();
 	authHeaders.append(
 		"Authorization",
@@ -35,7 +35,7 @@ export function postRedditAPI(
 }
 
 function getOauthHeader(): Headers {
-	const store = useTypedStore();
+	const store = getTypedStore();
 	const authHeaders = new Headers();
 	const apiToken = store.getters.token;
 	authHeaders.append("Authorization", `Bearer ${apiToken}`);
@@ -44,8 +44,9 @@ function getOauthHeader(): Headers {
 	return authHeaders;
 }
 
+// eslint-disable-next-line max-statements
 export async function refreshAccessToken(): Promise<void> {
-	const store = useTypedStore();
+	const store = getTypedStore();
 	const refreshToken = store.getters.refreshToken;
 	let tokenBody: string;
 
@@ -58,7 +59,7 @@ export async function refreshAccessToken(): Promise<void> {
 			store.commit(MutationsNames.SET_TOKEN, apiToken);
 		} else {
 			store.commit(MutationsNames.RESET_TOKEN, undefined);
-			void useRouter().push({ name: "Home" });
+			void getRouter().push({ name: "Home" });
 		}
 	} else {
 		throw new DataNotFoundError("Refresh Token Not Found ");
@@ -86,6 +87,7 @@ export async function fetchOapi(
 	}
 }
 
+// eslint-disable-next-line max-statements
 export async function postOapi( // todo limit api rate
 	endpoint: string,
 	args: Couple[],
