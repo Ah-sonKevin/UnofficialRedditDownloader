@@ -30,11 +30,11 @@ const routes: Array<RouteRecordRaw> = [
 		component: Login,
 		name: "Login",
 		beforeEnter(to) {
-			/*	const query = to.query;
+			const query = to.query;
 			if (query && query.state && query.code && !query.error) {
 				return true;
 			}
-			return { name: "Home" }; */
+			return { name: "Home" };
 		},
 	},
 
