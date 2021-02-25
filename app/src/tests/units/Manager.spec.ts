@@ -2,16 +2,15 @@
  * @jest-environment jsdom
  */
 import { OAUTH_API } from "@/helper/fetchHelper/fetchHelper";
-import { StoreTypeTemp, useTypedStore } from "@/store";
+import { getTypedStore, StoreTypeTemp } from "@/store";
 import Manager from "@/views/Manager.vue";
 import { mount } from "@vue/test-utils";
-import waitUntil from "async-wait-until";
 import ElementPlus from "element-plus";
 import nock from "nock";
 import { MutationsNames } from "../../store/authStore/authStoreMutationTypes";
 import items from "./mockFetchData/items.json";
 import user from "./mockFetchData/user.json";
-//todo
+// todo
 const LOADING_TIMEOUT = 1000;
 const getWrapper = (store: StoreTypeTemp) =>
 	mount(Manager, {
@@ -26,7 +25,7 @@ describe("Home.vue", () => {
 
 	beforeEach(async () => {
 		jest.resetAllMocks();
-		store = useTypedStore();
+		store = getTypedStore();
 		store.commit(MutationsNames.CREATE_AUTH_DATA, undefined);
 		store.commit(MutationsNames.SET_TOKEN, "Token");
 		store.commit(MutationsNames.SET_REFRESH_TOKEN, "Refresh Token");

@@ -32,6 +32,7 @@ describe("HomeDownloadLink", () => {
 	const fullInvalidUrl = BASE_URL + INVALID_URL;
 
 	const errorHandler = (err: unknown) => {
+		// todo
 		/*	if (err instanceof RedditManagerError) {
 			managerErrors(err);
 		} */

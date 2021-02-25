@@ -1,32 +1,59 @@
-/*
-jest.mock("@/router");
-jest.mock("@/store");
+/**
+ * @jest-environment jsdom
+ */
+// todo stub ?
 
-// todo mock store
+import Home from "@/views/Home.vue";
+import userEvent from "@testing-library/user-event";
+import { render, screen } from "@testing-library/vue";
+import ElementPlus from "element-plus";
+import { makeRouter } from "../../router/index";
+import { MutationsNames } from "../../store/authStore/authStoreMutationTypes";
+import { makeCustomTypedStore } from "../../store/index";
+
+// todo be sure same router/store everywhere
+const mockPush = jest.fn();
+function renderHome(isConnected: boolean) {
+	// todo mock
+	const mockRouter = makeRouter();
+
+	const mockStore = makeCustomTypedStore({
+		getters: {
+			isConnected: () => isConnected,
+			auth: () => ({
+				AUTH_LINK: "VALUE",
+			}),
+		},
+		mutations: {
+			[MutationsNames.CREATE_AUTH_DATA](state: unknown) {},
+		},
+	});
+
+	mockRouter.push = mockPush;
+	return render(Home, {
+		global: {
+			plugins: [ElementPlus, mockStore, mockRouter],
+		},
+	});
+}
+
 describe("Home.vue", () => {
 	beforeAll(() => jest.resetAllMocks());
 
 	beforeEach(() => {
-		const storeEl = store;
-
-		// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-		mocked(storeEl, true).getters.isConnected = true;
-		render(Home, { global: { plugins: [ElementPlus] } });
+		/*	// eslint-disable-next-line const-case/uppercase
+		const url = "dummy";
+		globalThis.location.href = "aa";
+		Object.defineProperty(window, "location", {
+			value: { href: url },
+			writable: true,
+		}); */
 	});
 
-	test("Already connected", () => {
-		// eslint-disable-next-line @typescript-eslint/unbound-method
-		expect(mocked(router).push).toHaveBeenCalledWith("Manager");
+	test("Already connected", async () => {
+		renderHome(true);
+		userEvent.click(screen.getByRole("button", { name: "connectToReddit" }));
+		expect(mockPush).toHaveBeenCalledWith({ name: "Manager" });
+		expect(mockPush).toHaveBeenCalledTimes(1);
 	});
-
-	test("Not yet connected", () => {
-		// todo test
-		// eslint-disable-next-line @typescript-eslint/unbound-method
-		expect(mocked(router.push)).not.toHaveBeenCalled();
-	});
-});
-*/
-
-test("Not yet connected", () => {
-	expect(true).toBe(true);
 });
