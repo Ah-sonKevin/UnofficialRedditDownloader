@@ -140,6 +140,7 @@ export default defineComponent({
 		ManagerShowSelectedItemsDialog,
 		ManagerList,
 	},
+	// eslint-disable-next-line max-lines-per-function
 	setup() {
 		const selectedSorter = ref(sorter.ADDED_DATE);
 		const itemPerPage = ref(itemPerPageList.SMALL);
@@ -265,7 +266,7 @@ export default defineComponent({
 					return categoriesList;
 				})
 				.catch((err) => {
-					// throw new NetworkError(`Fail when getting data ${String(reason)}`);
+					console.log("err  ");
 					throw err;
 				})
 				.finally(() => {
