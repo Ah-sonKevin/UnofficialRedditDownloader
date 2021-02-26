@@ -179,8 +179,6 @@ export default defineComponent({
 			item: SavedContent;
 			category: string;
 		}) {
-			console.log(item);
-			console.log(category);
 			item.category = category;
 		}
 
@@ -266,7 +264,6 @@ export default defineComponent({
 					return categoriesList;
 				})
 				.catch((err) => {
-					console.log("err  ");
 					throw err;
 				})
 				.finally(() => {
@@ -279,9 +276,6 @@ export default defineComponent({
 		}
 
 		function select({ item, value }: { item: SavedContent; value: boolean }) {
-			// tocheck
-			console.log(item);
-			console.log(value);
 			item.isSelected = value;
 			if (value) {
 				selectedItem.push(item);
