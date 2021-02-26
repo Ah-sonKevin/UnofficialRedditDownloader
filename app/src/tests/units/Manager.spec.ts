@@ -4,17 +4,16 @@
 import { OAUTH_API } from "@/helper/fetchHelper/fetchHelper";
 import { StoreTypeTemp } from "@/store";
 import Manager from "@/views/Manager.vue";
-import { mount } from "@vue/test-utils";
+import { render } from "@testing-library/vue";
 import ElementPlus from "element-plus";
 import nock from "nock";
-import { MutationsNames } from "../../store/authStore/authStoreMutationTypes";
-import { makeCustomTypedStore } from "../../store/index";
 import items from "./mockFetchData/items.json";
 import user from "./mockFetchData/user.json";
 // todo
+
 const LOADING_TIMEOUT = 1000;
-const getWrapper = (store: StoreTypeTemp) =>
-	mount(Manager, {
+const renderManager = (store: StoreTypeTemp) =>
+	render(Manager, {
 		global: {
 			plugins: [ElementPlus, store],
 		},
@@ -22,14 +21,8 @@ const getWrapper = (store: StoreTypeTemp) =>
 
 // todo nock doc Memory issues with Jest
 describe("Home.vue", () => {
-	let store: StoreTypeTemp;
-
 	beforeEach(async () => {
 		jest.resetAllMocks();
-		store = makeCustomTypedStore({});
-		store.commit(MutationsNames.CREATE_AUTH_DATA, undefined);
-		store.commit(MutationsNames.SET_TOKEN, "Token");
-		store.commit(MutationsNames.SET_REFRESH_TOKEN, "Refresh Token");
 	});
 
 	beforeAll(() => {
