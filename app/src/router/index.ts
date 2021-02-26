@@ -7,7 +7,7 @@ import {
 	createRouter,
 	createWebHistory,
 	Router,
-	RouteRecordRaw,
+	RouteRecordRaw
 } from "vue-router";
 import { getTypedStore } from "../store/index";
 
@@ -18,7 +18,7 @@ const routes: Array<RouteRecordRaw> = [
 		name: "Manager",
 		props: true,
 		beforeEnter() {
-			const store = getTypedStore(); // todo check which store is used
+			const store = getTypedStore();
 			if (store.getters.isConnected) {
 				return true;
 			}
@@ -69,5 +69,5 @@ export function getRouter(): Router {
 	if (router) {
 		return router;
 	}
-	throw new Error("Missing router"); // tocheck
+	throw new Error("Missing router");
 }

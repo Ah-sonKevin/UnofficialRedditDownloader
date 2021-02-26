@@ -9,7 +9,7 @@ import ElementPlus from "element-plus";
 import nock from "nock";
 import items from "./mockFetchData/items.json";
 import user from "./mockFetchData/user.json";
-// todo
+
 
 const LOADING_TIMEOUT = 1000;
 const renderManager = (store: StoreTypeTemp) =>
@@ -22,7 +22,7 @@ const renderManager = (store: StoreTypeTemp) =>
 // todo nock doc Memory issues with Jest
 describe("Home.vue", () => {
 	beforeEach(async () => {
-		jest.resetAllMocks();
+		jest.resetAllMocks(); // todo mock getItem
 	});
 
 	beforeAll(() => {
@@ -37,4 +37,56 @@ describe("Home.vue", () => {
 	test("Input text", async () => {
 		expect(true).toBeTruthy();
 	});
+
+	describe("number of items", () => {
+		test("Number of items shown", async () => {});
+	});
+
+	test("Number of element (number)", async () => {});
+
+	test("Empty element", async () => {});
 });
+
+describe("Pages", () => {
+	test("Number of pages", async () => {});
+
+	test("Change of pages", async () => {});
+});
+
+describe("Elements", () => {
+	test("Unsave", async () => {});
+
+	test("Undo unsave", async () => {});
+
+	test("Collapse", async () => {});
+
+	test("Uncollapse", async () => {});
+});
+
+describe("Selection", () => {
+	test("Select", async () => {});
+
+	test("Unselect", async () => {});
+
+	test("Select All", async () => {});
+
+	test("Unselect All", async () => {});
+
+	test("Unsave selected", async () => {});
+
+	test("Popup show selected");
+});
+
+describe("Filter", () => {
+	test("One filter", async () => {});
+
+	test("Undo filter", async () => {});
+
+	test("Combine filter", async () => {});
+
+	test("Unselect All", async () => {});
+
+	test("Unsave selected", async () => {});
+});
+
+// todo test error popup

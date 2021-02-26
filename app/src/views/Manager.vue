@@ -159,7 +159,7 @@ export default defineComponent({
 		function changePage(_page: number) {
 			page.value = _page;
 		}
-		// later save on pocket
+		// nextRelease save on pocket
 		function changeShowDelete(val: boolean) {
 			showDeleted.value = val;
 		}

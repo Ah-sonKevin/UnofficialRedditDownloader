@@ -60,14 +60,13 @@ function renderComponent(
 	});
 }
 
-// todo initial state
+
 describe("Router Test", () => {
 	beforeEach(() => {
 		router = makeRouter();
 	});
-	// todo recreate router /bug
 
-	// todo cehck create fresh store/router
+	// todo cehck create fresh store/router  | initial state
 
 	describe("Connection", () => {
 		test("Is Connected", async () => {

@@ -14,7 +14,6 @@ const pathsArray = ["auth", "user"];
 // todo keep alive manager
 export const makeStore = () =>
 	createStore<StoreState>({
-		// tocheck
 		// tocheck remove export
 		modules: {
 			user: userModule,
@@ -38,7 +37,7 @@ export function getTypedStore(): StoreTypeTemp {
 	if (store) {
 		return store;
 	}
-	throw new Error("Store is missing"); // tocheck
+	throw new Error("Store is missing"); 
 }
 
 export function makeCustomTypedStore({

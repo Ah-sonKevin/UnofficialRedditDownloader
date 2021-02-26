@@ -36,7 +36,7 @@ export default defineComponent({
 
 	// eslint-disable-next-line max-lines-per-function
 	setup() {
-		const urlInput = ref(""); // tocheck
+		const urlInput = ref(""); 
 		const formElement: Ref<HTMLFormElement | null> = ref(null);
 
 		type ValidityType = "downloadError" | "structureError" | null;

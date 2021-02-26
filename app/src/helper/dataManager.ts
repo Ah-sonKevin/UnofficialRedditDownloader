@@ -8,6 +8,7 @@ import { fetchOapi, postOapi } from "./fetchHelper/fetchHelper";
 import { Couple } from "./fetchHelper/requestArgument";
 import { logger } from "./logger";
 
+// eslint-disable-next-line max-statements
 export async function recGetItems(
 	username: string,
 	after = "",
@@ -35,8 +36,7 @@ export async function recGetItems(
 			});
 	});
 	if (result.data.after) {
-		// toChange return recGetSave(username, result.data.after, items);
-		return items;
+		return recGetItems(username, result.data.after, items);
 	}
 	return items;
 }

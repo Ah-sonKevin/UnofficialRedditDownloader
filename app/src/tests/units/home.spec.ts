@@ -1,7 +1,6 @@
 /**
  * @jest-environment jsdom
  */
-// todo stub ?
 
 import { makeRouter } from "@/router";
 import { makeCustomTypedStore } from "@/store";
@@ -12,10 +11,9 @@ import { render, screen } from "@testing-library/vue";
 import { flushPromises } from "@vue/test-utils";
 import ElementPlus from "element-plus";
 
-// todo be sure same router/store everywhere
 const mockPush = jest.fn();
 function renderHome(isConnected: boolean) {
-	// todo mock
+	// todo mock router & store
 	const mockRouter = makeRouter();
 	mockRouter.push = mockPush;
 

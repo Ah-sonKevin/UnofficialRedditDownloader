@@ -13,9 +13,6 @@ import { mocked } from "ts-jest/utils";
 import item from "./mockFetchData/soloItem.json";
 
 jest.mock("@/helper/Download/objectDownloader");
-// const mockDownloader = mocked(Downloader, true); // todo check true
-
-//
 
 describe("HomeDownloadLink", () => {
 	const BASE_URL = "www.reddit.com";

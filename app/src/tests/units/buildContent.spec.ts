@@ -94,7 +94,7 @@ By framing the design philosophy to include single-player, where everyone alread
 				galleryURLs: [],
 				hasImage: false,
 				category: "",
-				creationDate: new Date(content.creationDate), // todo use date constructor
+				creationDate: new Date(content.creationDate),
 				embeddedUrl: "",
 				externalUrl: "",
 			} as SavedContent);
@@ -127,7 +127,7 @@ By framing the design philosophy to include single-player, where everyone alread
 				category: "",
 				postAuthor: "Unicornglitteryblood",
 				postLink: "https://i.redd.it/ck2300n8mfv41.jpg",
-				creationDate: new Date(content.creationDate), // todo use date constructor
+				creationDate: new Date(content.creationDate),
 				embeddedUrl: "",
 				externalUrl: "",
 				text: `Since you say it doesn't exist I'm guessing you didn't find one?
@@ -214,7 +214,7 @@ https://www.youtube.com/playlist?list=PLfItiEY3o1msEiqMm3FukoGiFFcbAccdp`,
 				galleryURLs: [],
 				hasImage: true,
 				category: "",
-				creationDate: new Date(content.creationDate), // todo use date constructor
+				creationDate: new Date(content.creationDate),
 				embeddedUrl: "",
 				externalUrl: "https://i.redd.it/nxkfpkbm54a61.jpg",
 			} as SavedContent);
@@ -248,7 +248,7 @@ https://www.youtube.com/playlist?list=PLfItiEY3o1msEiqMm3FukoGiFFcbAccdp`,
 				],
 				hasImage: true,
 				category: "",
-				creationDate: new Date(content.creationDate), // todo use date constructor
+				creationDate: new Date(content.creationDate),
 				embeddedUrl: "",
 				externalUrl: "",
 			} as SavedContent);

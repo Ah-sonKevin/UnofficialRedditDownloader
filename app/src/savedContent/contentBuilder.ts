@@ -111,7 +111,6 @@ function getEmbed(data: RedditRawData): string {
 }
 function returnLinkMedia(data: RedditRawData) {
 	// todo need getImage ?
-	// tocheck really pass getImage ?
 	return returnMedia(
 		postType.LINK,
 		data.url_overridden_by_dest ?? "", // tocheck

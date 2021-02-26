@@ -1,7 +1,6 @@
 <template>
 	<ul v-if="items">
 		<li v-for="item in items" :key="item.id">
-			//tocheck 3 event
 			<ManagerListLine :item="item" :is-gold="isGold" />
 		</li>
 	</ul>
