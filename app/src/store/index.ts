@@ -41,11 +41,6 @@ export function getTypedStore(): StoreTypeTemp {
 	throw new Error("Store is missing"); // tocheck
 }
 
-export function makeTypedStore(_store: Store<StoreState>): StoreTypeTemp {
-	store = _store as StoreTypeTemp;
-	return store;
-}
-
 export function makeCustomTypedStore({
 	modules,
 	plugins,
