@@ -1,6 +1,5 @@
 <template>
-	<div></div>
-	<el-menu class="el-menu-vertical-demo theSideMenu">
+	<el-menu>
 		<el-submenu index="1">
 			<template #title>
 				<i class="el-icon-location"></i>
@@ -122,7 +121,6 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.TheSideMenu,
 .el-menu {
 	background-color: #1a1a1b;
 	color: white;
@@ -132,14 +130,14 @@ export default defineComponent({
 	color: white;
 }
 
-.el-menu-vertical-demo {
+.el-menu {
 	height: 100px;
 }
 .el-submenu,
 .el-menu-item {
 	color: white;
 }
-.el-menu-vertical-demo:not(.el-menu--collapse) {
+.el-menu:not(.el-menu--collapse) {
 	width: 200px;
 	min-height: 400px;
 	width: 100%;
