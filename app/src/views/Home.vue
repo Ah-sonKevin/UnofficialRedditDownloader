@@ -3,8 +3,8 @@
 		<img alt="Vue logo" src="assets/logo.png" />
 		<el-tooltip placement="top">
 			<template #content>
-				We will only access the information we need, the authentification is
-				securised by reedit, we will not have access to your credential
+				We will only access the information we need, the authentication is
+				secured by reedit, we will not have access to your credential
 				<router-link v-slot="{ href, navigate }" to="/about#security">
 					<a :href="href" @click="navigate"> Read more </a>
 				</router-link>
@@ -33,7 +33,6 @@ export default defineComponent({
 		function connectToReddit(): void {
 			if (!store.getters.isConnected) {
 				store.commit(MutationsNames.CREATE_AUTH_DATA, undefined); // tocheck move ?
-				// globalThis.location.href = store.getters.auth.AUTH_LINK;
 				globalThis.location.assign(store.getters.auth.AUTH_LINK);
 			} else {
 				void router.push({ name: "Manager" });
