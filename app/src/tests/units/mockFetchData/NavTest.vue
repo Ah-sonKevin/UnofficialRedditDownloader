@@ -34,9 +34,9 @@ export default defineComponent({
 
 		const router = useRouter();
 
-		void router
-			.push({ path: route, query })
-			.catch((err: Error) => console.log(`+++  ${err.message}`));
+		void router.push({ path: route, query }).catch((err: Error) => {
+			throw err;
+		});
 	},
 });
 </script>
