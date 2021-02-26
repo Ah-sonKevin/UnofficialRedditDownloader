@@ -31,19 +31,10 @@ describe("HomeDownloadLink", () => {
 	const fullValidUrl = BASE_URL + VALID_URL;
 	const fullInvalidUrl = BASE_URL + INVALID_URL;
 
-	const errorHandler = (err: unknown) => {
-		// todo
-		/*	if (err instanceof RedditManagerError) {
-			managerErrors(err);
-		} */
-		console.log();
-	};
-
 	beforeEach(() => {
 		render(HomeDownloadLink, {
 			global: {
 				plugins: [ElementPlus],
-				config: { errorHandler },
 			},
 		});
 
@@ -106,7 +97,6 @@ describe("HomeDownloadLink", () => {
 	});
 
 	describe("url structure", () => {
-		// mock fetch
 		describe("Good structure", () => {
 			async function assertGoodStructure(url: string) {
 				updateInput(url);
