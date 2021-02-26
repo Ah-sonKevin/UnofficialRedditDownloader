@@ -3,19 +3,21 @@
  */
 // todo stub ?
 
+import { makeRouter } from "@/router";
+import { makeCustomTypedStore } from "@/store";
+import { MutationsNames } from "@/store/authStore/authStoreMutationTypes";
 import Home from "@/views/Home.vue";
 import userEvent from "@testing-library/user-event";
 import { render, screen } from "@testing-library/vue";
+import { flushPromises } from "@vue/test-utils";
 import ElementPlus from "element-plus";
-import { makeRouter } from "../../router/index";
-import { MutationsNames } from "../../store/authStore/authStoreMutationTypes";
-import { makeCustomTypedStore } from "../../store/index";
 
 // todo be sure same router/store everywhere
 const mockPush = jest.fn();
 function renderHome(isConnected: boolean) {
 	// todo mock
 	const mockRouter = makeRouter();
+	mockRouter.push = mockPush;
 
 	const mockStore = makeCustomTypedStore({
 		getters: {
@@ -29,7 +31,6 @@ function renderHome(isConnected: boolean) {
 		},
 	});
 
-	mockRouter.push = mockPush;
 	return render(Home, {
 		global: {
 			plugins: [ElementPlus, mockStore, mockRouter],
@@ -40,20 +41,12 @@ function renderHome(isConnected: boolean) {
 describe("Home.vue", () => {
 	beforeAll(() => jest.resetAllMocks());
 
-	beforeEach(() => {
-		/*	// eslint-disable-next-line const-case/uppercase
-		const url = "dummy";
-		globalThis.location.href = "aa";
-		Object.defineProperty(window, "location", {
-			value: { href: url },
-			writable: true,
-		}); */
-	});
-
 	test("Already connected", async () => {
 		renderHome(true);
 		userEvent.click(screen.getByRole("button", { name: "connectToReddit" }));
+		await flushPromises();
 		expect(mockPush).toHaveBeenCalledWith({ name: "Manager" });
 		expect(mockPush).toHaveBeenCalledTimes(1);
 	});
 });
+// toremember need to await router.isReady ou flushPromise after router.push because rooting is asynchrone
