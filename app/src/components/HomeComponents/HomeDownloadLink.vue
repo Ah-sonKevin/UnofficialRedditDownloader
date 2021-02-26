@@ -105,13 +105,7 @@ export default defineComponent({
 		// eslint-disable-next-line max-statements
 
 		function isValidRedditPost(posts: RawItem[]): boolean {
-			// tocheck type, not sure RawItem, cxan't instanceof
-			/*	console.log(posts);
-			console.log(
-				`TEST validity : ${Array.isArray(posts)} ${posts.length}  ${
-					posts[0].data.children[0].kind
-				}`,
-			); */
+			// tocheck type, not sure RawItem, can't instanceof
 			if (Array.isArray(posts) && posts.length > 0) {
 				const content = posts[0].data.children[0];
 				const kind = content.kind;
@@ -146,6 +140,7 @@ export default defineComponent({
 						throw new BadLinkError(`-- Couldn't access link  ${url}`);
 					}
 				} catch (err) {
+					// tocheck when to throw ? add error handler ? add popup ?
 					// why can"t cast error
 					if (err instanceof Error) {
 						if (err instanceof DownloadError) {
@@ -153,9 +148,12 @@ export default defineComponent({
 						} else if (err instanceof BadLinkError) {
 							// todo structure error ?
 							setInvalid("downloadError");
+						} else {
+							throw err;
 						}
+					} else {
+						throw err;
 					}
-					throw err;
 				}
 			}
 		}
