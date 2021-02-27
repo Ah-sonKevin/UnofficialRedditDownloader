@@ -1,23 +1,97 @@
 {
-    "env": {
-        "node": true,
-        "es2020": true
-    },
-    "extends": ["eslint:recommended", "plugin:node/recommended","airbnb-base", "prettier"],
-    "parser":"@babel/eslint-parser",
-    "parserOptions": {
-        "sourceType": "module",
-        "ecmaVersion": 2020,
-        "ecmaFeatures": {
-            "impliedStrict": true
-        }
-    },
-    "rules": {
-        "prettier/prettier": "error",
-        "no-undef": ["error"],
-        "no-undefined": ["error"],
-        "prefer-destructuring":"off",
-        "radix":"off"
-    },
-    "plugins": ["prettier"]
+  "env": {
+    "browser": true,
+    "commonjs": true,
+    "es2021": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking",
+    "plugin:jest/recommended",
+    "plugin:jest/style",
+    "plugin:regexp/recommended",
+    "plugin:promise/recommended",
+    "plugin:array-func/recommended",
+    "plugin:eslint-comments/recommended",
+    "airbnb-typescript/base",
+    "plugin:jest-formatting/recommended",
+    "plugin:import/warnings",
+    "plugin:import/typescript",
+    "prettier"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 12
+  },
+  "plugins": [
+    "@typescript-eslint",
+    "jest",
+    "jest-formatting",
+    "const-case",
+    "optimize-regex",
+    "promise",
+    "no-loops",
+    "prettier"
+  ],
+  "rules": {
+    "linebreak-style": ["error", "unix"],
+    "semi": "off",
+
+    "no-magic-numbers": [
+      "warn",
+      {
+        "ignore": [], // index & http error codes
+        "ignoreArrayIndexes": true,
+        "enforceConst": true,
+        "detectObjects": true
+      }
+    ],
+    "@typescript-eslint/restrict-template-expressions": [
+      "error",
+      {
+        "allowNumber": true,
+        "allowBoolean": true
+      }
+    ],
+    "quotes": "off",
+    "@typescript-eslint/quotes": "off",
+    "import/extensions": "off",
+    "prefer-destructuring": "off",
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": ["warn"],
+    "no-param-reassign": "off",
+    "no-void": "off",
+    "promise/catch-or-return": ["error", { "allowFinally": true }],
+    "const-case/uppercase": "error",
+    "optimize-regex/optimize-regex": "warn",
+    "no-loops/no-loops": "warn",
+    "no-use-before-define": "off",
+    "@typescript-eslint/no-use-before-define": "off",
+    "import/prefer-default-export": "off",
+    "prettier/prettier": [
+      "error",
+      { "singleQuote": false, "trailingComma": "all", "useTabs": true }
+    ],
+    "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
+    "indent": "off",
+    "@typescript-eslint/indent": "off",
+    "max-classes-per-file": "off",
+    "radix": ["error", "as-needed"],
+    "max-params": ["error", 3],
+    "comma-dangle": "off",
+    "@typescript-eslint/comma-dangle": "off",
+    "guard-for-in": "error",
+    "max-lines-per-function": ["error", 100],
+    "max-statements": ["error", 10],
+    "complexity": ["error", { "max": 20 }],
+    "max-nested-callbacks": ["error", 10],
+    "max-depth": ["error", 4],
+    "jest/expect-expect": [
+      "error",
+      {
+        "assertFunctionNames": ["expect", "^assert*"]
+      }
+    ]
+  }
 }
