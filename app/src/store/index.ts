@@ -37,7 +37,7 @@ export function getTypedStore(): StoreTypeTemp {
 	if (store) {
 		return store;
 	}
-	throw new Error("Store is missing"); 
+	throw new Error("Store is missing");
 }
 
 export function makeCustomTypedStore({
