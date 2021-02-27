@@ -100,6 +100,7 @@
 		"css-loader": "^5.0.2",
 		"element-theme-chalk": "^2.15.0",
 		"eslint": "^7.19.0",
+		"eslint-config-airbnb-base": "^14.2.1",
 		"eslint-config-airbnb-typescript": "^12.3.1",
 		"eslint-config-prettier": "^7.2.0",
 		"eslint-import-resolver-webpack": "^0.13.0",
