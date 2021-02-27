@@ -21,7 +21,7 @@ app.use(express.urlencoded({ extended: true }));
 
 const TEXT_SIZE = 30; // tocheck needed ? only one ?
 
-function isSIngleBody(item: any): item is { url: string } {
+function isSIngleBody(item: unknown): item is { url: string } {
 	return (item as { url: string }).url !== undefined;
 }
 
@@ -77,7 +77,7 @@ app.post("/api/downItem/", async (req, res, next) => {
 });
 
 function isMultipleBody(
-	item: any,
+	item: unknown,
 ): item is { needYtDl: string; folder?: string; name: string; url: string }[] {
 	const tmpArray = item as {
 		needYtDl: string;
