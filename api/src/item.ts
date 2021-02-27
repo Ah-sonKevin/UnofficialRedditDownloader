@@ -8,7 +8,7 @@ import { YoutubeDlInfo } from "./interface/youtubeDlInfo";
 
 function oneParameterYoutubeGetInfoFormat(
 	args: { url: string; format: string },
-	callback: (err: any, info: youtubeDl.Info) => void,
+	callback: (err: Error, info: youtubeDl.Info) => void,
 ): void {
 	// eslint-disable-next-line @typescript-eslint/no-unsafe-call
 	return youtubeDl.getInfo(
@@ -26,7 +26,7 @@ function oneParameterYoutubeGetInfoFormat(
 
 function oneParameterYoutubeGetInfo(
 	url: string,
-	callback: (err: any, info: youtubeDl.Info) => void,
+	callback: (err: Error, info: youtubeDl.Info) => void,
 ): void {
 	// eslint-disable-next-line @typescript-eslint/no-unsafe-call
 	return youtubeDl.getInfo(url, callback) as void;
@@ -72,7 +72,7 @@ export function getSize(url: string): Promise<number> {
  * @param {string} folder
  */
 export async function getAllInfo(item: RedditItem): Promise<ItemInfo> {
-	// tocheck does not need info interface for item without need to ydtl or specific interface N
+	// tocheck does not need info interface for item without need to youtubeDl or specific interface N
 	if (!item.needYtdl) {
 		const size = await getSize(item.url);
 		if (size) {
