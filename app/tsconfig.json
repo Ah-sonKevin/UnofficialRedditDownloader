@@ -1,5 +1,5 @@
 {
-  "compilerOptions": {
+  "compilerOptions": { //todo check target
     "target": "esnext",
     "module": "esnext",
     "strict": true,
@@ -9,6 +9,7 @@
     "forceConsistentCasingInFileNames": true,
     "noUnusedLocals": false,
     "jsx": "preserve",
+		"noFallthroughCasesInSwitch": true, 
     "importHelpers": true,
     "moduleResolution": "node",
     "experimentalDecorators": true,
