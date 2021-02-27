@@ -10,7 +10,6 @@ import nock from "nock";
 import items from "./mockFetchData/items.json";
 import user from "./mockFetchData/user.json";
 
-
 const LOADING_TIMEOUT = 1000;
 const renderManager = (store: StoreTypeTemp) =>
 	render(Manager, {
@@ -78,6 +77,20 @@ describe("Selection", () => {
 });
 
 describe("Filter", () => {
+	// todo test for each
+	test("One filter", async () => {});
+
+	test("Undo filter", async () => {});
+
+	test("Combine filter", async () => {});
+
+	test("Unselect All", async () => {});
+
+	test("Unsave selected", async () => {});
+});
+
+describe("Sorter", () => {
+	// todo test for each
 	test("One filter", async () => {});
 
 	test("Undo filter", async () => {});

@@ -60,7 +60,6 @@ function renderComponent(
 	});
 }
 
-
 describe("Router Test", () => {
 	beforeEach(() => {
 		router = makeRouter();
