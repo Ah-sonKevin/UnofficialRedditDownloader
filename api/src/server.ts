@@ -1,14 +1,21 @@
+
 /* eslint-disable node/no-unpublished-require */
-const express = require("express");
+import express, { NextFunction, Request, Response } from "express";
+import youtubeDl from "youtube-dl";
+import { downloader } from './downloader';
+import { RedditItem } from './interface/Item';
+import { ItemInfo } from './interface/itemInfo';
+import { getAllInfo } from './item';
+import { clientLogger, serverLogger } from "./logger";
+import Zipper from "./zipper";
+
+
+
+export { }; //todo needed for module with its own scope
 require("body-parser");
 require("express-zip");
-const youtubeDl = require("youtube-dl");
 const cors = require("cors");
 const compression = require("compression");
-const Zipper = require("./zipper");
-const downloader = require("./downloader");
-const getAllInfo = require("./item");
-const { clientLogger, serverLogger } = require("./logger");
 
 const app = express();
 app.use(compression());
@@ -18,8 +25,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.post("/api/getHead/", (req, res) => {
-  const { url } = req.body;
-  youtubeDl.getInfo(url, (err) => {
+   const { url } = req.body;
+  youtubeDl.getInfo(url, (err: Error) => {
     if (err) {
       res.send(false);
     } else {
@@ -33,23 +40,22 @@ app.post("/api/downItem/", async (req, res, next) => {
   const path = `${listPart.slice(-1)[0].substr(0, 30)}`;
   const needYtdl = req.body.needYdl ? JSON.parse(req.body.needYdl) : false;
 
-  const info = await getAllInfo(req.body.url, needYtdl, path, null);
+  const info = await getAllInfo({url:req.body.url, needYtdl: needYtdl, nameFile:path});
   res.setHeader("MediaSize", info.size);
   res.setHeader("MediaFormat", info.ext);
 
-  downloader(info)
-    .then((response) => {
+  downloader(info).then((response : NodeJS.ReadableStream) => {
       response
         .resume()
         .pipe(res)
-        .on("error", (err) => {
+        .on("error", (err: Error) => {
           next(err);
         })
         .on("close", () => {
           res.end();
         });
     })
-    .catch((err) => {
+    .catch((err: Error) => {
       next(err);
     });
 });
@@ -62,23 +68,28 @@ app.post("/api/downBatchInfo/", (req, res, next) => {
     .on("finish", () => {
       res.end();
     })
-    .on("error", (err) => next(err))
+    .on("error", (err: Error) => next(err))
     .pipe(res);
-  const prepPromiseArray = [];
-  const prepArray = [];
-  req.body.forEach((el) => {
-    const needYtdl = el.needYtDl ? JSON.parse(el.needYtDl) : false;
-    const folder = el.folder ? `${el.folder}/` : "";
-    const nameFile = folder + el.name.substr(0, 30);
+  const prepPromiseArray: Promise<void>[] = [];
+  const prepArray: ItemInfo[] = [];
+  const list:{needYtDl:string,folder?:string, name:string,url:string}[] = req.body
+  list.forEach((el) => {
+    const tmpFolder = el.folder ? `${el.folder}/` : ""; //todo name
+    const item: RedditItem = {
+      url: el.url,
+      needYtdl: el.needYtDl ? (JSON.parse(el.needYtDl) ) : false,
+      folder : tmpFolder,
+      nameFile : tmpFolder + el.name.substr(0, 30)
+    }
 
     prepPromiseArray.push(
       new Promise((prom, rej) => {
-        getAllInfo(el.url, needYtdl, nameFile, folder)
-          .then((elInfo) => {
+        getAllInfo(item)
+          .then((elInfo: ItemInfo) => {
             prepArray.push(elInfo);
             prom();
           })
-          .catch((err) => {
+          .catch((err: Error) => {
             archive.addDownloadFail(el, "Couldn't get Info");
             rej(err);
           });
@@ -91,15 +102,15 @@ app.post("/api/downBatchInfo/", (req, res, next) => {
 
     res.setHeader("MediaSize", totalSize);
 
-    const promiseArray = [];
+    const promiseArray: Promise<void>[] = [];
     prepArray.forEach((element) => {
       promiseArray.push(
-        new Promise((promise, reject) =>
+        new Promise((resolve, reject) =>
           downloader(element)
             .then((stream) => {
-              archive.addStream(stream, element.name, promise, reject);
+              return archive.addStream(stream, element.name, resolve, reject);
             })
-            .catch((err) => {
+            .catch((err: Error) => {
               archive.addDownloadFail(element, "Couldn't download the file");
               reject(err);
             })
@@ -117,7 +128,7 @@ app.post("/api/logError/", (req) => {
   clientLogger.error(req.body);
 });
 
-app.use((err, req, res) => {
+app.use((err: string, req: Request, res: Response, next:NextFunction) => { //tocheck type //test
   if (req.xhr) {
     serverLogger.error(err);
     res.status(400).send(new Error(err));

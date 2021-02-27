@@ -1,7 +1,8 @@
-const winston = require("winston");
+export { }; //todo needed for module with its own scope
+  import winston from "winston";
 
-module.exports = {
-  serverLogger: winston.createLogger({
+
+ export const serverLogger = winston.createLogger({
     format: winston.format.combine(
       winston.format.json(),
       winston.format.timestamp(),
@@ -14,14 +15,14 @@ module.exports = {
         filename: "log/errors/serverErrors.log",
       }),
     ],
-  }),
+  })
 
-  clientLogger: winston.createLogger({
+ export const  clientLogger =  winston.createLogger({
     format: winston.format.json(),
     transports: [
       new winston.transports.File({
         filename: "log/errors/clientErrors.log",
       }),
     ],
-  }),
-};
+  })
+

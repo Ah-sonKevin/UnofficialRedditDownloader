@@ -1,15 +1,19 @@
-const { createWriteStream, createReadStream, unlink } = require("fs");
+import ffmpeg from "fluent-ffmpeg";
+import { createReadStream, createWriteStream, unlink } from "fs";
+import fetch from "node-fetch";
+import { isMultiChannel, isOneChannel, ItemInfo, oneChannelItemInfo } from './interface/itemInfo';
+
+export { }; //todo needed for module with its own scope
 require("express-zip");
-const fetch = require("node-fetch").default;
-const ffmpeg = require("fluent-ffmpeg");
 
 const basePath = "media/";
 
-function download(uri) {
-  return fetch(uri);
+export async function download(item : oneChannelItemInfo) : Promise<NodeJS.ReadableStream> { //tocheck type
+  const res = await fetch(item.url)
+  return (res.body);
 }
 
-function cleanString(text) {
+export function cleanString(text:string) {
   return text
     .replace(/\W/gi, "_")
     .replace(/_+/gi, "_")
@@ -17,7 +21,8 @@ function cleanString(text) {
     .replace(/_$/, "");
 }
 
-async function youtubeDlDownload(itemInfo) {
+export async function youtubeDlDownload(itemInfo: ItemInfo): Promise<NodeJS.ReadableStream> {
+
   return new Promise((promise, reject) => {
     let videoStreamDone = false;
     let audioStreamDone = false;
@@ -39,7 +44,7 @@ async function youtubeDlDownload(itemInfo) {
           .audioCodec("copy")
           .videoCodec("copy")
           .saveToFile(nameFile) // cant directly output stream for mp4 format
-          .on("error", (err) => {
+          .on("error", (err: Error) => {
             clean();
             reject(err);
           })
@@ -61,7 +66,7 @@ async function youtubeDlDownload(itemInfo) {
       }
     }
 
-    if (itemInfo.isOneFile) {
+    if (isOneChannel(itemInfo)) {
       fetch(itemInfo.url)
         .then((res) => {
           if (res.ok) {
@@ -70,8 +75,8 @@ async function youtubeDlDownload(itemInfo) {
             reject();
           }
         })
-        .catch((err) => reject(err));
-    } else {
+        .catch((err: Error) => reject(err));
+    } else if(isMultiChannel(itemInfo)) {
       videoExt = itemInfo.video.ext;
       audioExt = itemInfo.audio.ext;
       videoNameFile = `${basePath}${cleanString(
@@ -94,11 +99,11 @@ async function youtubeDlDownload(itemInfo) {
                           videoStreamDone = true;
                           streamMerge();
                         })
-                        .on("error", (err) => {
+                        .on("error", (err: Error) => {
                           reject(err);
                         })
                     )
-                    .on("error", (err) => {
+                    .on("error", (err: Error) => {
                       reject(err);
                     });
 
@@ -109,32 +114,36 @@ async function youtubeDlDownload(itemInfo) {
                           audioStreamDone = true;
                           streamMerge();
                         })
-                        .on("error", (err) => {
+                        .on("error", (err: Error) => {
                           reject(err);
                         })
                     )
-                    .on("error", (err) => {
+                    .on("error", (err: Error) => {
                       reject(err);
                     });
                 } else {
                   reject();
                 }
               })
-              .catch((err) => reject(err));
+              .catch((err: Error) => reject(err));
           } else {
             reject();
           }
         })
-        .catch((err) => reject(err));
+        .catch((err: Error) => reject(err));
+    } else {
+      throw new Error('Invalid item info')
     }
   });
 }
 
-function downloader(itemInfo) {
+export function downloader(itemInfo: ItemInfo ):Promise<NodeJS.ReadableStream> {
   if (itemInfo.needYoutubeDl) {
     return youtubeDlDownload(itemInfo);
   }
-  return download(itemInfo.url);
+  if(isOneChannel(itemInfo)){
+    return download(itemInfo);
+  } else {
+    return Promise.reject(new Error('Invalid download info')) //check structure
+  }
 }
-
-module.exports = downloader;
