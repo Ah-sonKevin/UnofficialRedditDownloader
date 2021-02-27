@@ -1,7 +1,9 @@
+import youtubeDl from "youtube-dl";
 
-export interface youtubeDlInfo{
-  size: number,
-  filename: string,
-  url: string
-  ext:string
+export interface YoutubeDlInfo extends youtubeDl.Info {
+	size: number;
+	ext: string;
+	title: string;
+	url: string;
+	filename: string;
 }

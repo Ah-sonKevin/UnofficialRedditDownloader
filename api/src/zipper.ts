@@ -1,40 +1,55 @@
-export { }; //todo needed for module with its own scope
-const Packer = require("zip-stream");
 import Stream from "stream";
-import { serverLogger } from "./logger";
+import Packer from "zip-stream";
+import { ZipStream } from "../zipStream";
+import { clientLogger, serverLogger } from "./logger"; // todo needed for module with its own scope
+
+export {};
 
 export default class Zipper {
-	archive;
+	archive: ZipStream;
 
-  toZipList: {
-    stream: NodeJS.ReadableStream,
-    name: string,
-    promise: () => void,
-    reject: (err: Error) => void,
-  }[]  = [];
+	toZipList: {
+		stream: NodeJS.ReadableStream;
+		name: string;
+		resolve: () => void;
+		reject: (err: Error) => void;
+	}[] = [];
 
-	failArray: string[]  = [];
+	failArray: string[] = [];
 
-	fileArray: {name:string}[] = [];
+	fileArray: { name: string }[] = [];
 
 	zipping = false;
 
-  constructor() {
-     this.archive = new Packer({ store: true, zlib: { level: 0 } }).pause();
-    
+	constructor() {
+		this.archive = new Packer({
+			store: true,
+			zlib: { level: 0 },
+		}) as ZipStream;
+		this.archive.pause();
 	}
 
-	addStream(stream:NodeJS.ReadableStream, nameFile: string, promise: () => void, reject: (err: Error) => void) {
-		stream.on("error", (err :Error) => {
+	addStream({
+		stream,
+		nameFile,
+		resolve,
+		reject,
+	}: {
+		stream: NodeJS.ReadableStream;
+		nameFile: string;
+		resolve: () => void;
+		reject: (err: Error) => void;
+	}): void {
+		stream.on("error", (err: Error) => {
 			this.failArray.push(nameFile);
-      reject(err);  
+			reject(err);
 		});
 
 		if (this.zipping) {
 			this.toZipList.push({
 				stream,
 				name: nameFile,
-				promise,
+				resolve,
 				reject,
 			});
 		} else {
@@ -42,7 +57,7 @@ export default class Zipper {
 			this.toZipList.push({
 				stream,
 				name: nameFile,
-				promise,
+				resolve,
 				reject,
 			});
 
@@ -50,16 +65,16 @@ export default class Zipper {
 		}
 	}
 
-	addDownloadFail(item:{name:string}, message:string) {
+	addDownloadFail(item: { name: string }, message: string): void {
 		serverLogger.error(message);
 		this.failArray.push(item.name);
 	}
 
-	endArchive() {
+	endArchive(): void {
 		const stream = new Stream.Readable();
-		stream.on("error", (err: Error) => console.log(err));
+		stream.on("error", (err: Error) => clientLogger.error(err));
 		stream.push(
-			JSON.stringify({ success: this.fileArray, fail: this.failArray })
+			JSON.stringify({ success: this.fileArray, fail: this.failArray }),
 		);
 		stream.push(null);
 
@@ -74,11 +89,11 @@ export default class Zipper {
 		});
 	}
 
-	getArchive() {
+	getArchive(): ZipStream {
 		return this.archive;
 	}
 
-	startZip() {
+	startZip(): void {
 		if (this.toZipList.length > 0) {
 			let compressed = false;
 			const el = this.toZipList[0];
@@ -90,9 +105,9 @@ export default class Zipper {
 				})
 				.on("close", () => {
 					if (compressed) {
-						el.promise();
+						el.resolve();
 					} else {
-						el.reject(new Error('Compression Error'));
+						el.reject(new Error("Compression Error"));
 					}
 					this.toZipList.splice(0, 1);
 					this.startZip();
