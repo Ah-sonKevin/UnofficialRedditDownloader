@@ -31,6 +31,7 @@ app/**/*.js
 
 #LocalData
 app/_Local
+app/src/tests/units/mockFetchData/localHelper
 
 #Token
 app/**/redditAppsIDs.ts
