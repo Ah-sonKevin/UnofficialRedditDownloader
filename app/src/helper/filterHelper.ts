@@ -1,11 +1,16 @@
 import SavedContent from "@/savedContent/savedContent";
 
-// eslint-disable-next-line max-params
 export function filterItems(
 	items: SavedContent[],
-	typeFilter: string[],
-	categoryFilter: string[],
-	subredditFilter: string[],
+	{
+		typeFilter,
+		categoryFilter,
+		subredditFilter,
+	}: {
+		typeFilter: string[];
+		categoryFilter: string[];
+		subredditFilter: string[];
+	},
 ): SavedContent[] {
 	if (
 		typeFilter.length === 0 &&

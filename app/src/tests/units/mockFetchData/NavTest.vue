@@ -30,7 +30,6 @@ export default defineComponent({
 				state?: string;
 			};
 		}
-		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 
 		const router = useRouter();
 

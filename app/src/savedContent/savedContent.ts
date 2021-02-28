@@ -1,5 +1,3 @@
-// eslint-disable-next-line eslint-comments/disable-enable-pair
-/* eslint-disable max-params */
 import { postType } from "@/enum/postType";
 import { RedditRawData } from "./redditDataInterface";
 
@@ -17,7 +15,7 @@ export default class SavedContent {
 
 	kind: string;
 
-	id: string;
+	// tocheck	id: string;
 
 	fullname: string;
 
@@ -63,20 +61,29 @@ export default class SavedContent {
 
 	needYtDl = false;
 
+	// todo composition
 	// eslint-disable-next-line max-statements
 	constructor(
 		kind: string,
 		_data: RedditRawData,
-		_externalUrl: string,
-		_imageLink: string,
-		_type: string,
-		_embeddedUrl: string,
-		_needYtDl: boolean,
+		{
+			_externalUrl,
+			_imageLink,
+			_type,
+			_embeddedUrl,
+			_needYtDl,
+		}: {
+			_externalUrl: string;
+			_imageLink: string;
+			_type: string;
+			_embeddedUrl: string;
+			_needYtDl: boolean;
+		},
 	) {
 		this.kind = kind;
 		const data = _data;
 		this.author = data.author;
-		this.id = data.id;
+		//	this.id = data.id;
 		this.fullname = data.name;
 		this.subreddit = data.subreddit;
 		this.title = data.title ?? ""; // tocheck comment

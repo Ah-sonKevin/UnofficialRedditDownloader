@@ -13,15 +13,21 @@ export default class Auth {
 
 	AUTH_AUTHORIZATION: string;
 
-	// eslint-disable-next-line max-params
-	constructor(
-		id: string,
-		authString: string,
-		scope: string,
-		redirects: string,
-		secret: string,
-		link: string,
-	) {
+	constructor({
+		id,
+		authString,
+		scope,
+		redirects,
+		secret,
+		link,
+	}: {
+		id: string;
+		authString: string;
+		scope: string;
+		redirects: string;
+		secret: string;
+		link: string;
+	}) {
 		this.AUTH_ID = id;
 		this.AUTH_STRING = authString;
 		this.AUTH_SCOPE = scope;

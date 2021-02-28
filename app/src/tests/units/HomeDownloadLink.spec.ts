@@ -1,8 +1,7 @@
 /**
  * @jest-environment jsdom
  */
-// eslint-disable-next-line eslint-comments/disable-enable-pair
-/* eslint-disable max-statements */
+
 import * as Downloader from "@/helper/Download/objectDownloader";
 import HomeDownloadLink from "@homeComponents/HomeDownloadLink.vue";
 import userEvent from "@testing-library/user-event";

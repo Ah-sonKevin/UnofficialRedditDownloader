@@ -8,7 +8,6 @@ import { fetchOapi, postOapi } from "./fetchHelper/fetchHelper";
 import { Couple } from "./fetchHelper/requestArgument";
 import { logger } from "./logger";
 
-// eslint-disable-next-line max-statements
 export async function recGetItems(
 	username: string,
 	after = "",

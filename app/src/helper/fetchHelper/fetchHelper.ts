@@ -44,22 +44,19 @@ function getOauthHeader(): Headers {
 	return authHeaders;
 }
 
-// eslint-disable-next-line max-statements
 export async function refreshAccessToken(): Promise<void> {
 	const store = getTypedStore();
 	const refreshToken = store.getters.refreshToken;
-	let tokenBody: string;
 
 	if (refreshToken) {
-		tokenBody = `grant_type=refresh_token&refresh_token=${refreshToken}`;
+		const tokenBody = `grant_type=refresh_token&refresh_token=${refreshToken}`;
 		const result = await postRedditAPI("/api/v1/access_token", tokenBody);
 		if (result.ok) {
 			const res = (await result.json()) as { access_token: string };
-			const apiToken: string = res.access_token;
-			store.commit(MutationsNames.SET_TOKEN, apiToken);
+			store.commit(MutationsNames.SET_TOKEN, res.access_token);
 		} else {
 			store.commit(MutationsNames.RESET_TOKEN, undefined);
-			void getRouter().push({ name: "Home" });
+			void getRouter().push({ name: "Home" }); // tocheck
 		}
 	} else {
 		throw new DataNotFoundError("Refresh Token Not Found ");
@@ -87,7 +84,6 @@ export async function fetchOapi(
 	}
 }
 
-// eslint-disable-next-line max-statements
 export async function postOapi( // todo limit api rate
 	endpoint: string,
 	args: Couple[],

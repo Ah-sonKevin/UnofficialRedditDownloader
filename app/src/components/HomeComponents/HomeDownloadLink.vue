@@ -102,7 +102,6 @@ export default defineComponent({
 			}
 			throw new BadLinkError("Couldn't access link");
 		}
-		// eslint-disable-next-line max-statements
 
 		function isValidRedditPost(posts: RawItem[]): boolean {
 			// tocheck type, not sure RawItem, can't instanceof
@@ -117,43 +116,48 @@ export default defineComponent({
 		}
 
 		// toremember can't convert async PromiseReject error to 'normal' error
-		// eslint-disable-next-line max-statements
+
+		async function downloadPost(json: RawItem[]) {
+			const content = json[0].data.children[0];
+			const item = await buildContent({
+				kind: content.kind,
+				data: content.data,
+			});
+			download(item);
+		}
+
+		function downloadError(err: unknown) {
+			if (err instanceof Error) {
+				if (err instanceof DownloadError) {
+					setInvalid("downloadError");
+				} else if (err instanceof BadLinkError) {
+					// todo structure error ?
+					setInvalid("downloadError");
+				} else {
+					throw err;
+				}
+			} else {
+				throw err;
+			}
+		}
 		async function downloadItem() {
 			checkValidity();
 			if (validity.isValid) {
 				try {
 					const url = getRedditUrl(urlInput.value);
 					const el = await fetch(`${url}.json`); // tocheck invalid value
-					if (el.ok) {
-						const json = (await el.json()) as RawItem[];
-						if (isValidRedditPost(json)) {
-							const content = json[0].data.children[0];
-							const item = await buildContent({
-								kind: content.kind,
-								data: content.data,
-							});
-							download(item);
-						} else {
-							throw new DownloadError(`INVALID POST ${url}`);
-						}
-					} else {
+					if (!el.ok) {
 						throw new BadLinkError(`-- Couldn't access link  ${url}`);
 					}
-				} catch (err) {
+					const json = (await el.json()) as RawItem[];
+					if (!isValidRedditPost(json)) {
+						throw new DownloadError(`INVALID POST ${url}`);
+					}
+					await downloadPost(json);
 					// tocheck when to throw ? add error handler ? add popup ?
 					// why can"t cast error
-					if (err instanceof Error) {
-						if (err instanceof DownloadError) {
-							setInvalid("downloadError");
-						} else if (err instanceof BadLinkError) {
-							// todo structure error ?
-							setInvalid("downloadError");
-						} else {
-							throw err;
-						}
-					} else {
-						throw err;
-					}
+				} catch (err) {
+					downloadError(err);
 				}
 			}
 		}

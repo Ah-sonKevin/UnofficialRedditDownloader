@@ -38,14 +38,19 @@ function cleanFallback(url: string) {
 }
 // later use composition & object literal
 
-// eslint-disable-next-line max-params
-function returnMedia(
-	type: string,
-	externalUrl: string,
-	imageLink: string,
+function returnMedia({
+	type,
+	externalUrl,
+	imageLink,
 	needYtDl = false,
 	embeddedUrl = "",
-): {
+}: {
+	type: string;
+	externalUrl: string;
+	imageLink: string;
+	needYtDl: boolean;
+	embeddedUrl: string;
+}): {
 	type: string;
 	externalUrl: string;
 	imageLink: string;
@@ -111,15 +116,23 @@ function getEmbed(data: RedditRawData): string {
 }
 function returnLinkMedia(data: RedditRawData) {
 	// todo need getImage ?
-	return returnMedia(
-		postType.LINK,
-		data.url_overridden_by_dest ?? "", // tocheck
-		getImage(data),
-	);
+	return returnMedia({
+		type: postType.LINK,
+		externalUrl: data.url_overridden_by_dest ?? "", // tocheck
+		imageLink: getImage(data),
+		needYtDl: false, // tocheck needed ?
+		embeddedUrl: "",
+	});
 }
 
 function returnImageMedia(url: string) {
-	return returnMedia(postType.IMAGE, url, url, false);
+	return returnMedia({
+		type: postType.IMAGE,
+		externalUrl: url,
+		imageLink: url,
+		needYtDl: false,
+		embeddedUrl: "", // tocheck need embed
+	});
 }
 function returnVideoMedia({
 	url,
@@ -133,13 +146,13 @@ function returnVideoMedia({
 	embed?: string;
 }) {
 	const embedString = embed ?? getEmbed(data);
-	return returnMedia(
-		postType.VIDEO,
-		url,
-		getImage(data),
+	return returnMedia({
+		type: postType.VIDEO,
+		externalUrl: url,
+		imageLink: getImage(data),
 		needYtDl,
-		embedString,
-	);
+		embeddedUrl: embedString,
+	});
 }
 
 function getVideoMedia(data: RedditRawData) {
@@ -176,7 +189,7 @@ function getVideoMedia(data: RedditRawData) {
 		needYtDl: true,
 	});
 }
-
+// todo composition
 // eslint-disable-next-line max-statements
 export async function buildMedia(
 	data: RedditRawData,
@@ -249,16 +262,20 @@ export async function buildContent(saved: {
 	data: RedditRawData;
 }): Promise<SavedContent> {
 	if (saved.kind === "t1" || saved.data.is_self) {
-		return new SavedContent(saved.kind, saved.data, "", "", "", "", false);
+		return new SavedContent(saved.kind, saved.data, {
+			_externalUrl: "",
+			_imageLink: "",
+			_type: "",
+			_embeddedUrl: "",
+			_needYtDl: false,
+		});
 	}
 	const media = await buildMedia(saved.data);
-	return new SavedContent(
-		saved.kind,
-		saved.data,
-		media.externalUrl,
-		media.imageLink,
-		media.type,
-		media.embeddedUrl,
-		media.needYtDl,
-	);
+	return new SavedContent(saved.kind, saved.data, {
+		_externalUrl: media.externalUrl,
+		_imageLink: media.imageLink,
+		_type: media.type,
+		_embeddedUrl: media.embeddedUrl,
+		_needYtDl: media.needYtDl,
+	});
 }

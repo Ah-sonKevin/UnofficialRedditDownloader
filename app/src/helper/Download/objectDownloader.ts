@@ -29,7 +29,10 @@ function getName(text: string, extension: string): string {
 function getText(item: SavedContent): string {
 	const parser = new DOMParser();
 
-	const parsedContent = parser.parseFromString(item.htmlText, "text/html");
+	const parsedContent = parser.parseFromString(
+		item.htmlText ?? "",
+		"text/html",
+	); // tocheck
 	const stringContent = parsedContent.documentElement.textContent;
 
 	let res = "";
@@ -89,14 +92,21 @@ async function fetchData(
 		const fileChunks: Uint8Array[] = [];
 		let receivedData = 0;
 
-		let updateSpinner;
+		let updateSpinner: NodeJS.Timeout;
 		if (tmpSize) {
 			const totalSize = parseInt(tmpSize);
 			const sizeInfo = getSizeInfo(totalSize);
 			updateSpinner = setInterval(() => {
-				updateDownloadSpinner(downloadIndicator, receivedData, sizeInfo);
+				updateDownloadSpinner(downloadIndicator, receivedData, sizeInfo); // tocheck update
 			}, SPINNER_UPDATE_FREQUENCY);
 		}
+
+		const endDownload = () => {
+			downloadIndicator.close();
+			if (updateSpinner) {
+				clearInterval(updateSpinner);
+			}
+		};
 
 		const reader = x.body?.getReader();
 		if (!reader) {
@@ -113,7 +123,7 @@ async function fetchData(
 				reading = false;
 			} else {
 				if (!value) {
-					downloadIndicator.close();
+					endDownload();
 					throw new DownloadError(`Undefined Value Error`);
 				}
 				fileChunks.push(value);
@@ -121,17 +131,13 @@ async function fetchData(
 			}
 		}
 
-		downloadIndicator.close();
-		if (updateSpinner) {
-			clearInterval(updateSpinner);
-		}
+		endDownload();
 		return new Blob(fileChunks);
 	}
 	downloadIndicator.close();
 	throw new DownloadError(`Undefined Response Error`);
 }
 
-// eslint-disable-next-line max-statements
 async function downloadMedia(item: SavedContent) {
 	const downloadIndicator = ElLoading.service({
 		fullscreen: true,
@@ -264,7 +270,17 @@ async function getMediaArchive(items: SavedContent[]): Promise<JSZip> {
 	return new JSZip();
 }
 
-// eslint-disable-next-line max-statements
+function checkForPartialDownloadError(blob: Blob) {
+	void loadAsync(blob)
+		.then((el) => el.files["result.json"].async("string"))
+		.then((res) => {
+			const arrays = JSON.parse(res) as SuccessList;
+			if (arrays.fail.length > 0) {
+				throw new PartialDownloadError(arrays); // tocheck
+			}
+			return arrays;
+		});
+}
 async function batchDownloadMedia(items: SavedContent[]): Promise<Blob | null> {
 	const downloadIndicator = ElLoading.service({
 		fullscreen: true,
@@ -286,15 +302,7 @@ async function batchDownloadMedia(items: SavedContent[]): Promise<Blob | null> {
 		const x = await fetchBatchMediaInfo(urls, cancelController.signal);
 		const blob = await fetchData(x, downloadIndicator);
 		if (blob) {
-			void loadAsync(blob)
-				.then((el) => el.files["result.json"].async("string"))
-				.then((res) => {
-					const arrays = JSON.parse(res) as SuccessList;
-					if (arrays.fail.length > 0) {
-						throw new PartialDownloadError(arrays);
-					}
-					return arrays;
-				});
+			checkForPartialDownloadError(blob);
 			return blob;
 		}
 		throw new NetworkError(x.statusText);

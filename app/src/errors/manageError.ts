@@ -13,6 +13,8 @@ import { RestartError } from "./restartError";
 
 const MESSAGE_DURATION = 10000;
 
+// todo reformat
+
 function getMessage(msg: string, html = false): IMessageOptions {
 	return {
 		message: msg,
@@ -21,7 +23,58 @@ function getMessage(msg: string, html = false): IMessageOptions {
 		dangerouslyUseHTMLString: html,
 	};
 }
-// eslint-disable-next-line max-statements
+
+function reportPartialDownload(fail: string[]) {
+	let message = "";
+	let title = "";
+	message = "The following files couldn't be downloaded \n<ul>";
+	fail.forEach((el) => {
+		message += `<li>${el}</li>`;
+	});
+	message += "</ul>";
+	title = "Some files couldn't be downloaded";
+	void ElMessageBox({
+		message,
+		showClose: true,
+		dangerouslyUseHTMLString: true,
+		title,
+	});
+}
+
+function reportMultipleErrors(err: Error) {
+	const showPopup = () => {
+		if (err instanceof PartialDownloadError) {
+			// tocheck
+			reportPartialDownload(err.fail);
+		}
+	};
+	const htmlNode = `Some files couldn't be download  <button type="button" id='buttonNotif'">See which one</button>`;
+	const message = ElMessage(getMessage(htmlNode, true));
+	const button = document.getElementById("buttonNotif");
+	if (!button) {
+		throw new Error("PartialDownloadError button not found");
+	}
+	button.onclick = () => {
+		message.close();
+		showPopup();
+	};
+}
+
+function reportPartialDownloadError(err: PartialDownloadError) {
+	logger.info(PartialDownloadError);
+	if (err.success.length === 0) {
+		ElMessage(getMessage("The files couldn't be downloaded"));
+	} else if (err.fail.length > 0) {
+		if (err.fail.length === 1) {
+			ElMessage(
+				getMessage(`The file ${err.fail[0]} +  couldn't be downloaded`),
+			);
+		} else {
+			reportMultipleErrors(err);
+		}
+	}
+}
+
 export function managerErrors(err: RedditManagerError): void {
 	logger.error({
 		error: err,
@@ -34,46 +87,7 @@ export function managerErrors(err: RedditManagerError): void {
 		ElMessage({ message: err.popupMessage, showClose: true });
 	} else if (err instanceof NotifError) {
 		if (err instanceof PartialDownloadError) {
-			logger.info(PartialDownloadError);
-			if (err.success.length === 0) {
-				ElMessage(getMessage("The files couldn't be downloaded"));
-			} else if (err.fail.length > 0) {
-				if (err.fail.length === 1) {
-					ElMessage(
-						getMessage(`The file ${err.fail[0]} +  couldn't be downloaded`),
-					);
-				} else {
-					const showPopup = () => {
-						if (err instanceof PartialDownloadError) {
-							let message = "";
-							let title = "";
-							message = "The following files couldn't be downloaded \n<ul>";
-							err.fail.forEach((el) => {
-								message += `<li>${el}</li>`;
-							});
-							message += "</ul>";
-							title = "Some files couldn't be downloaded";
-							void ElMessageBox({
-								message,
-								showClose: true,
-								dangerouslyUseHTMLString: true,
-								title,
-							});
-						}
-					};
-					const htmlNode = `Some files couldn't be download  <button type="button" id='buttonNotif'">See which one</button>`;
-					const message = ElMessage(getMessage(htmlNode, true));
-					const button = document.getElementById("buttonNotif");
-					// eslint-disable-next-line max-depth
-					if (!button) {
-						throw new Error("PartialDownloadError button not found");
-					}
-					button.onclick = () => {
-						message.close();
-						showPopup();
-					};
-				}
-			}
+			reportPartialDownloadError(err);
 		} else if (err instanceof PartialRedditFetchError) {
 			notifyError(`Couldn't fetch the post :${err.name}`);
 		} else {

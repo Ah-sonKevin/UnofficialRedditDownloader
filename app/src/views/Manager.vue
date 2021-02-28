@@ -220,12 +220,11 @@ export default defineComponent({
 		}
 
 		function getActive() {
-			const filtered = filterItems(
-				items.value,
-				typeFilter.value,
-				categoryFilter.value,
-				subredditFilter.value,
-			);
+			const filtered = filterItems(items.value, {
+				typeFilter: typeFilter.value,
+				categoryFilter: categoryFilter.value,
+				subredditFilter: subredditFilter.value,
+			});
 			partiallyFilteredItems.value = filtered; // todo need better name
 			const filterInput = searchByText(filtered, searchInput.value);
 			const notHidden = hideDeleted(filterInput, showDeleted.value);
