@@ -47,4 +47,4 @@ describe("Home.vue", () => {
 		expect(mockPush).toHaveBeenCalledTimes(1);
 	});
 });
-// toremember need to await router.isReady ou flushPromise after router.push because rooting is asynchrone
+// toremember need to await router.isReady ou flushPromise after router.push because rooting is asynchronous

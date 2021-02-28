@@ -14,13 +14,13 @@
 <script lang="ts">
 import { defineComponent, computed, ComputedRef } from "vue";
 import { useRouter } from "vue-router";
-import { useTypedStore } from "@/store";
+import { getTypedStore } from "@/store";
 import { MutationsNames } from "@/store/authStore/authStoreMutationTypes";
 
 export default defineComponent({
 	name: "TheNavigation",
 	setup() {
-		const store = useTypedStore();
+		const store = getTypedStore();
 		const isConnected: ComputedRef<boolean> = computed(
 			() => store.getters.isConnected,
 		);

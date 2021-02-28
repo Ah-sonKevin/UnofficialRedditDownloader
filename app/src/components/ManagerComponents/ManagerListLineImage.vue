@@ -15,14 +15,18 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
-import SavedContent from "@/savedContent/savedContent";
+import {
+	isGallery,
+	isMedia,
+	SavedContentType,
+} from "@/savedContent/ISavedContent";
 
 export default defineComponent({
 	name: "ManagerLineListListImage",
 	props: {
 		item: {
 			required: true,
-			type: Object as PropType<SavedContent>,
+			type: Object as PropType<SavedContentType>,
 		},
 		isCollapse: {
 			required: true,
@@ -33,22 +37,22 @@ export default defineComponent({
 		const THUMBNAIL_SIZE = "140px";
 
 		function getImage(): string {
-			if (props.item.hasImage) {
-				return props.item.imageLink;
+			if (isMedia(props.item)) {
+				return props.item.getImageUrl();
 			}
 			return "https://static.thenounproject.com/png/1134418-200.png";
 		}
 
 		function getPreviewImage(): string[] {
-			if (props.item.isGallery) {
-				return props.item.galleryURLs;
+			if (isGallery(props.item)) {
+				return props.item.gallery.galleryURLs;
 			}
-			if (props.item.hasImage) {
+			if (isMedia(props.item)) {
 				return [getImage()];
 			}
 			return [];
 		}
-
+		// tocheck link is media ?
 		return {
 			getImage,
 			THUMBNAIL_SIZE,

@@ -7,7 +7,7 @@ import {
 	createRouter,
 	createWebHistory,
 	Router,
-	RouteRecordRaw
+	RouteRecordRaw,
 } from "vue-router";
 import { getTypedStore } from "../store/index";
 

@@ -6,7 +6,6 @@ import User from "@/User/User";
 import { render, waitFor } from "@testing-library/vue";
 import ElementPlus from "element-plus";
 import { Router } from "vue-router";
-import { CodeTruple } from "../../auth/authHelper";
 import { makeRouter } from "../../router/index";
 import {
 	generateTypedStore,
@@ -16,7 +15,7 @@ import {
 import NavTest from "./mockFetchData/NavTest.vue";
 
 jest.mock("@/auth/authHelper", () => ({
-	generateAccessToken: (query: CodeTruple) => Promise.resolve("TEST"),
+	generateAccessToken: () => Promise.resolve("TEST"),
 }));
 
 jest.mock("@/helper/dataManager", () => ({
@@ -65,7 +64,7 @@ describe("Router Test", () => {
 		router = makeRouter();
 	});
 
-	// todo cehck create fresh store/router  | initial state
+	// todo check create fresh store/router  | initial state
 
 	describe("Connection", () => {
 		test("Is Connected", async () => {
@@ -145,7 +144,7 @@ describe("Router Test", () => {
 
 		test("Not found", async () => {
 			renderComponent(generateTypedStore(), {
-				route: "sdfgfdsgdfg",
+				route: "invalidRoute",
 				routerRender: router,
 			});
 

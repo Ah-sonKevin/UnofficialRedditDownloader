@@ -8,8 +8,9 @@ export interface SuccessList {
 }
 
 export interface ItemInfo {
+	// todo or batchItem
 	url: string;
 	name: string;
 	needYtDl: boolean;
-	folder: string;
+	folder?: string;
 }

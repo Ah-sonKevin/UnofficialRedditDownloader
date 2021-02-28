@@ -22,7 +22,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, reactive, ref, Ref, UnwrapRef } from "vue";
+import { computed, defineComponent, reactive, ref, Ref } from "vue";
 
 import { BadLinkError } from "@/errors/restartError";
 import { RawItem } from "@/savedContent/rawItemInterface";

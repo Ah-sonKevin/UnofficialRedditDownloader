@@ -5,9 +5,6 @@
 <script lang="ts">
 import { defineComponent, inject } from "vue";
 import { useRouter } from "vue-router";
-import Home from "@/views/Home.vue";
-import Manager from "@/views/Manager.vue";
-import About from "@/views/About.vue";
 
 export default defineComponent({
 	name: "NavTest",

@@ -2,6 +2,7 @@ import { DataNotFoundError, NetworkError } from "@/errors/restartError";
 import { getRouter } from "@/router";
 import { getTypedStore } from "@/store";
 import "isomorphic-fetch";
+import { BatchItem, SoloItem } from "../../savedContent/serverInputInterface";
 import { MutationsNames } from "../../store/authStore/authStoreMutationTypes";
 import { Couple } from "./requestArgument";
 
@@ -121,15 +122,14 @@ export async function postOapi( // todo limit api rate
 }
 
 export function fetchMedia(
-	url: string,
-	needYtDl = false,
+	item: SoloItem,
 	signal: AbortSignal,
 ): Promise<Response> {
 	const authHeaders = new Headers();
 	authHeaders.append("Content-Type", "application/x-www-form-urlencoded");
 	const request = fetch("/api/downItem/", {
 		method: "POST",
-		body: `url=${url}&needYdl=${needYtDl}`,
+		body: `url=${item.url}&needYdl=${item.needYtDl}`,
 		headers: authHeaders,
 		signal,
 	});
@@ -137,7 +137,7 @@ export function fetchMedia(
 }
 
 export function fetchBatchMediaInfo(
-	urls: { url: string; name: string; needYtDl: boolean }[],
+	urls: BatchItem[],
 	signal: AbortSignal,
 ): Promise<Response> {
 	const authHeaders = new Headers();
@@ -148,18 +148,5 @@ export function fetchBatchMediaInfo(
 		body: jsonUrls,
 		headers: authHeaders,
 		signal,
-	});
-}
-
-export function fetchBatchMediaFile(
-	list: { path: string; name: string }[],
-): Promise<Response> {
-	const authHeaders = new Headers();
-	authHeaders.append("Content-Type", "application/json");
-	const jsonList = JSON.stringify(list);
-	return fetch("/api/downBatchList/", {
-		method: "POST",
-		body: jsonList,
-		headers: authHeaders,
 	});
 }

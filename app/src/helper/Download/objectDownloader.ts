@@ -2,10 +2,19 @@ import { postType } from "@/enum/postType";
 import { DownloadError, PartialDownloadError } from "@/errors/notifError";
 import { NetworkError, UnknowTypeError } from "@/errors/restartError";
 import { ItemInfo, SuccessList } from "@/savedContent/ItemInterface";
-import SavedContent from "@/savedContent/savedContent";
 import { ElLoading } from "element-plus";
 import { ILoadingInstance } from "element-plus/lib/el-loading/src/loading.type";
 import JSZip, { loadAsync } from "jszip";
+import {
+	ISavedTextPost,
+	isGallery,
+	isImage,
+	isLink,
+	isText,
+	isVideo,
+	SavedContentType,
+} from "../../savedContent/ISavedContent";
+import { BatchItem } from "../../savedContent/serverInputInterface";
 import { fetchBatchMediaInfo, fetchMedia } from "../fetchHelper/fetchHelper";
 import { notify } from "../notifierHelper";
 import { cleanString } from "../stringHelper";
@@ -26,13 +35,10 @@ export function cancelDownload(): void {
 function getName(text: string, extension: string): string {
 	return `${text}.${extension}`;
 }
-function getText(item: SavedContent): string {
+function getText(item: ISavedTextPost): string {
 	const parser = new DOMParser();
 
-	const parsedContent = parser.parseFromString(
-		item.htmlText ?? "",
-		"text/html",
-	); // tocheck
+	const parsedContent = parser.parseFromString(item.text.htmlText, "text/html"); // tocheck
 	const stringContent = parsedContent.documentElement.textContent;
 
 	let res = "";
@@ -51,7 +57,7 @@ function getText(item: SavedContent): string {
 	return res;
 }
 
-function downloadPageAsText(item: SavedContent): void {
+function downloadPageAsText(item: ISavedTextPost): void {
 	const res = getText(item);
 	downloadObject(new Blob([res]), getName(item.title, "html"));
 }
@@ -138,7 +144,7 @@ async function fetchData(
 	throw new DownloadError(`Undefined Response Error`);
 }
 
-async function downloadMedia(item: SavedContent) {
+async function downloadMedia(item: SavedContentType) {
 	const downloadIndicator = ElLoading.service({
 		fullscreen: true,
 		text: "Download Preparation",
@@ -148,13 +154,12 @@ async function downloadMedia(item: SavedContent) {
 
 	try {
 		const x = await fetchMedia(
-			itemInfo.url,
-			itemInfo.needYtDl,
+			{ url: itemInfo.url, needYtDl: itemInfo.needYtDl },
 			cancelController.signal,
 		);
 
 		const data = await fetchData(x, downloadIndicator);
-		const ext = itemInfo.ext ?? x.headers.get("MediaFormat") ?? "";
+		const ext: string = getExt(item) ?? x.headers.get("MediaFormat") ?? ""; // todo check server ??
 		downloadObject(data, `${itemInfo.name}.${ext}`);
 	} catch (err) {
 		if ((err as Error).name === "AbortError") {
@@ -176,56 +181,76 @@ export function downloadObject(object: Blob, nom: string): void {
 	URL.revokeObjectURL(img);
 }
 
-function getItemInfo(
-	item: SavedContent,
-): {
-	url: string;
-	name: string;
-	needYtDl: boolean;
-	folder: string;
-	ext: string;
-} {
+function getItemInfo(item: SavedContentType): BatchItem {
 	if (item.isGallery) {
 		throw Error("Need Batch Download");
 	}
-	if (
-		item.type === postType.COMMENT ||
-		item.type === postType.TEXT ||
-		item.type === postType.LINK
-	) {
+	if (isText(item) || isLink(item)) {
+		// todo why use text here ?
+
 		return {
-			url: item.externalUrl,
+			url: "item.externalUrl",
 			name: cleanString(item.title),
-			ext: "txt",
+			//	ext: "txt",
 			folder: "",
 			needYtDl: false,
 		};
 	}
-	return {
-		url: item.externalUrl,
-		name: cleanString(item.title),
-		ext: item.externalUrl.split(".").slice(-1)[0],
-		folder: "",
-		needYtDl: item.needYtDl,
-	};
+	// todo factorize
+	if (isImage(item) || isGallery(item)) {
+		return {
+			url: item.image.imageLink, // factorize : function getUrl
+			name: cleanString(item.title),
+			//	ext: "txt",
+			folder: "",
+			needYtDl: false,
+		};
+	}
+	if (isVideo(item)) {
+		return {
+			url: item.video.externalUrl,
+			name: cleanString(item.title),
+			//	ext: item.externalUrl.split(".").slice(-1)[0],
+			folder: "",
+			needYtDl: item.video.needYtDl,
+		};
+	}
+	return exhaustivenessCheck();
+}
+function exhaustivenessCheck(): never {
+	throw new Error();
+}
+function getExt(item: SavedContentType): string {
+	if (isText(item) || isLink(item)) {
+		// tocheck isLink
+		return "txt";
+	}
+	if (isVideo(item) || isImage(item) || isGallery(item)) {
+		// todo check type
+		return item.getMediaUrl().split(".").slice(-1)[0];
+	}
+	return exhaustivenessCheck();
 }
 
-function batchGetItemInfo(item: SavedContent): ItemInfo[] {
-	if (item.isGallery) {
-		return item.galleryURLs.map((el, index) => ({
+function batchGetItemInfo(item: SavedContentType): ItemInfo[] {
+	// todo rename
+	// todo tocheck type received on server after parser string / boolean
+	if (isGallery(item)) {
+		return item.gallery.galleryURLs.map((el, index) => ({
+			// tocheck other function for image ?
 			url: el,
 			name: getName(
 				`${item.title}_${String(index + 1)}`,
 				el.split(".").slice(-1)[0],
 			),
 			folder: cleanString(item.title),
-			needYtDl: item.needYtDl,
+			needYtDl: false,
 		}));
 	}
 	return [getItemInfo(item)];
 }
 
-export function download(items: SavedContent | SavedContent[]): void {
+export function download(items: SavedContentType | SavedContentType[]): void {
 	if (Array.isArray(items)) {
 		if (items.length === 1) {
 			void singleDownload(items[0]);
@@ -237,14 +262,16 @@ export function download(items: SavedContent | SavedContent[]): void {
 	}
 }
 
-export async function batchDownload(items: SavedContent[]): Promise<void> {
-	const medias: SavedContent[] = [];
-	const texts: SavedContent[] = [];
+export async function batchDownload(items: SavedContentType[]): Promise<void> {
+	const medias: SavedContentType[] = [];
+	const texts: ISavedTextPost[] = [];
 	items.forEach((item) => {
 		if (item.hasImage) {
 			medias.push(item);
-		} else {
+		} else if (isText(item)) {
 			texts.push(item);
+		} else {
+			throw new Error();
 		}
 	});
 	const textContents = texts.map((el) => ({
@@ -260,7 +287,7 @@ export async function batchDownload(items: SavedContent[]): Promise<void> {
 	downloadObject(new Blob([zip]), getName("archive", "zip"));
 }
 
-async function getMediaArchive(items: SavedContent[]): Promise<JSZip> {
+async function getMediaArchive(items: SavedContentType[]): Promise<JSZip> {
 	if (items.length > 0) {
 		const blob = await batchDownloadMedia(items);
 		if (blob) {
@@ -281,19 +308,16 @@ function checkForPartialDownloadError(blob: Blob) {
 			return arrays;
 		});
 }
-async function batchDownloadMedia(items: SavedContent[]): Promise<Blob | null> {
+async function batchDownloadMedia(
+	items: SavedContentType[],
+): Promise<Blob | null> {
 	const downloadIndicator = ElLoading.service({
 		fullscreen: true,
 		text: "Download Preparation",
 		target: "#topArea",
 	});
 
-	const urls: {
-		url: string;
-		name: string;
-		needYtDl: boolean;
-		folder: string;
-	}[] = [];
+	const urls: BatchItem[] = [];
 	items.forEach((el) => {
 		urls.push(...batchGetItemInfo(el));
 	});
@@ -316,14 +340,17 @@ async function batchDownloadMedia(items: SavedContent[]): Promise<Blob | null> {
 	}
 }
 
-export async function singleDownload(item: SavedContent): Promise<void> {
+export async function singleDownload(item: SavedContentType): Promise<void> {
 	const itemType: string = item.type;
 	if (item.isGallery) {
 		await batchDownload([item]);
 	} else if (
-		itemType === postType.TEXT ||
+		// tocheck link has text ?
+		isText(item) // ||
+		// tocheck isLink(item)
+		/*	itemType === postType.TEXT ||
 		itemType === postType.LINK ||
-		itemType === postType.COMMENT
+		itemType === postType.COMMENT */
 	) {
 		downloadPageAsText(item);
 	} else if (itemType === postType.IMAGE || itemType === postType.VIDEO) {

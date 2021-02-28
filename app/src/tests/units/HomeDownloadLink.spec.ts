@@ -54,7 +54,7 @@ describe("HomeDownloadLink", () => {
 
 	const DOWNLOAD_ERROR_TEXT =
 		"The Download fail, please check that this url correspond to a reddit post";
-	const STRURCTURE_ERROR_TEXT = "This url is invalid, please enter a valid url";
+	const STRUCTURE_ERROR_TEXT = "This url is invalid, please enter a valid url";
 	// todo doc throwSuggestions (experimental)
 	// todo mail fac
 	// todo add popup for download error / not testable in unit test
@@ -68,9 +68,9 @@ describe("HomeDownloadLink", () => {
 	// todo use better links
 	// todo use find for specific role
 	// todo remove abstraction
-	// todo checl change different error message
+	// todo check change different error message
 	// todo test aria message not send when update BAD to bad
-	// todo check chjangement error message
+	// todo check change error message
 	// todo add download error message
 	// toremember jest limited access component,
 	// toremember should not focus on implementation

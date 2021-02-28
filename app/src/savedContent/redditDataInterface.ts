@@ -30,6 +30,7 @@ export interface Oembed {
 }
 
 export interface RedditRawData {
+	id: string;
 	author: string;
 	body?: string;
 	body_html?: string;
