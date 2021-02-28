@@ -1,145 +1,158 @@
 {
-    "env": {
-        "browser": true,
-        "es2020": true
+	"env": {
+		"browser": true,
+		"es2020": true
 	},
-	"settings": {//<projectRoot>/node_modules/@vue/cli-service/webpack.config.js
+	"settings": {
+		//<projectRoot>/node_modules/@vue/cli-service/webpack.config.js
 		"import/resolver": {
-			"webpack":{
-				"config":"./node_modules/@vue/cli-service/webpack.config.js"}
+			"webpack": {
+				"config": "./node_modules/@vue/cli-service/webpack.config.js"
+			}
 		}
 	},
-    "extends": [
-        "eslint:recommended",
-        "plugin:vue/essential",
-        "plugin:vue/vue3-recommended",
-        "plugin:vue/vue3-strongly-recommended",
-        "plugin:@typescript-eslint/recommended",
-        "plugin:@typescript-eslint/recommended-requiring-type-checking",
-        "plugin:jest/recommended",
-        "plugin:jest/style",
-        //"plugin:security/recommended",
-        "plugin:regexp/recommended",
-        "plugin:promise/recommended",
-        "plugin:array-func/recommended",
-        "plugin:eslint-comments/recommended",
-        "airbnb-typescript/base",
+	"extends": [
+		"eslint:recommended",
+		"plugin:vue/essential",
+		"plugin:vue/vue3-recommended",
+		"plugin:vue/vue3-strongly-recommended",
+		"plugin:@typescript-eslint/recommended",
+		"plugin:@typescript-eslint/recommended-requiring-type-checking",
+		"plugin:jest/recommended",
+		"plugin:jest/style",
+		//"plugin:security/recommended",
+		"plugin:regexp/recommended",
+		"plugin:promise/recommended",
+		"plugin:array-func/recommended",
+		"plugin:eslint-comments/recommended",
+		"airbnb-typescript/base",
 		"plugin:jest-formatting/recommended",
 		"plugin:import/warnings",
 		"plugin:import/typescript",
 		"plugin:jest-dom/recommended",
 		"plugin:testing-library/recommended",
 		"plugin:testing-library/vue",
-        "prettier"
-    ],
+		"prettier"
+	],
 
-    "parser": "vue-eslint-parser",
-    "parserOptions": {        
-        "ecmaVersion": 2020,
-        "parser": "@typescript-eslint/parser",
-        "sourceType": "module",
-        "project":"tsconfig.json",
-        "extraFileExtensions": [".vue"],
-        "ecmaFeatures": {
-            "impliedStrict": true
-        }
-    },
-    "plugins": [        
-        "vue",
-        "@typescript-eslint",
-        "jest",
-       "jest-formatting",
-        "const-case",
-       // "xss",
-      //  "security",
+	"parser": "vue-eslint-parser",
+	"parserOptions": {
+		"ecmaVersion": 2020,
+		"parser": "@typescript-eslint/parser",
+		"sourceType": "module",
+		"project": "tsconfig.json",
+		"extraFileExtensions": [".vue"],
+		"ecmaFeatures": {
+			"impliedStrict": true
+		}
+	},
+	"plugins": [
+		"vue",
+		"@typescript-eslint",
+		"jest",
+		"jest-formatting",
+		"const-case",
+		// "xss",
+		//  "security",
 		"optimize-regex",
 		"promise",
 		"no-loops",
 		"jest-dom",
 		"testing-library",
 		"prettier"
-    ],
-    "rules": {
-      "vue/no-multiple-template-root": "off",
-        "no-magic-numbers": ["warn", {
-            "ignore": [-1, 0, 1, 401,200,404], // index & http error codes
-            "ignoreArrayIndexes": true,
-            "enforceConst": true,
-            "detectObjects": true
-            // "ignoreDefaultValues": true
-        }],
-			"vue/max-attributes-per-line":"off",
-			"vue/html-self-closing":"off",
-			"vue/singleline-html-element-content-newline":"off",        
-              "@typescript-eslint/restrict-template-expressions":["error",
-            {
-             "allowNumber": true,
-            "allowBoolean": true
-            }],
-            "quotes": "off",
-            "@typescript-eslint/quotes": "off",
-            "import/extensions":"off",
-            "prefer-destructuring":"off",
-            "no-unused-vars": "off",
-			"@typescript-eslint/no-unused-vars": ["warn"],
-			"no-param-reassign":"off",
-			"no-void":"off",
-			"promise/catch-or-return":["error",{"allowFinally":true}],
-            "const-case/uppercase": "error",
-          //  "xss/no-mixed-html":"error",
-            //"xss/no-location-href-assign":"error",
-            "optimize-regex/optimize-regex": "warn",
-            "no-loops/no-loops":"warn",
-            "no-use-before-define": "off",
-            "@typescript-eslint/no-use-before-define": "off",
-            "import/prefer-default-export":"off",
-            "prettier/prettier": ["error", {"singleQuote": false,"trailingComma": "all","useTabs": true}],
-            "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
-            "indent": "off",
-			"@typescript-eslint/indent": "off",
-			"vue/html-indent":"off",
-			"max-classes-per-file":"off",
-			"radix":["error","as-needed"],
-            "max-params": ["error", 3],
-			"comma-dangle": "off",
-			"@typescript-eslint/comma-dangle": "off",
-			"vue/html-closing-bracket-newline":"off",
-			"guard-for-in":"error",
-			"max-lines-per-function": ["error", 100],
-			"max-statements": ["error", 10],
-			"complexity": ["error", { "max": 20 }],
-			"max-nested-callbacks": ["error", 10],
-			"max-depth": ["error", 4],
-			"jest/expect-expect": [
-				"error",
-				{
-				  "assertFunctionNames": ["expect","^assert*"]
-				}
-			  ]
-    },
-    "overrides": [{
-        "files": ["**/enum/**"],
-        "rules": {
-            "no-magic-numbers": "off"
-        }
-    },{
-		"files":["*.vue"],
-		"rules":{
-			"max-lines-per-function": ["warn", 100],
-			"max-statements": ["warn",10, {"ignoreTopLevelFunctions": true }],
-			"complexity": ["warn", { "max": 20 }],
-			"max-nested-callbacks": ["warn", 10],
-			"max-depth": ["warn", 4]
-		}
-	}
-		,{
-			"files":["*.spec.ts"],
-			"rules":{
-				"max-lines-per-function": "off",
-				"max-statements": ["warn",10, {"ignoreTopLevelFunctions": true }],
+	],
+	"rules": {
+		"vue/no-multiple-template-root": "off",
+		"no-magic-numbers": [
+			"warn",
+			{
+				"ignore": [-1, 0, 1, 401, 200, 404], // index & http error codes
+				"ignoreArrayIndexes": true,
+				"enforceConst": true,
+				"detectObjects": true
+				// "ignoreDefaultValues": true
+			}
+		],
+		"vue/max-attributes-per-line": "off",
+		"vue/html-self-closing": "off",
+		"vue/singleline-html-element-content-newline": "off",
+		"@typescript-eslint/restrict-template-expressions": [
+			"error",
+			{
+				"allowNumber": true,
+				"allowBoolean": true
+			}
+		],
+		"quotes": "off",
+		"@typescript-eslint/quotes": "off",
+		"import/extensions": "off",
+		"prefer-destructuring": "off",
+		"no-unused-vars": "off",
+		"@typescript-eslint/no-unused-vars": ["warn"],
+		"no-param-reassign": "off",
+		"no-void": "off",
+		"promise/catch-or-return": ["error", { "allowFinally": true }],
+		"const-case/uppercase": "error",
+		//  "xss/no-mixed-html":"error",
+		//"xss/no-location-href-assign":"error",
+		"optimize-regex/optimize-regex": "warn",
+		"no-loops/no-loops": "warn",
+		"no-use-before-define": "off",
+		"@typescript-eslint/no-use-before-define": "off",
+		"import/prefer-default-export": "off",
+		"prettier/prettier": [
+			"error",
+			{ "singleQuote": false, "trailingComma": "all", "useTabs": true }
+		],
+		"no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
+		"indent": "off",
+		"@typescript-eslint/indent": "off",
+		"vue/html-indent": "off",
+		"max-classes-per-file": "off",
+		"radix": ["error", "as-needed"],
+		"max-params": ["error", 3],
+		"comma-dangle": "off",
+		"@typescript-eslint/comma-dangle": "off",
+		"vue/html-closing-bracket-newline": "off",
+		"guard-for-in": "error",
+		"max-lines-per-function": ["error", 100],
+		"max-statements": ["error", 15],
+		"complexity": ["error", { "max": 20 }],
+		"max-nested-callbacks": ["error", 10],
+		"max-depth": ["error", 4],
+		"jest/expect-expect": [
+			"error",
+			{
+				"assertFunctionNames": ["expect", "^assert*"]
+			}
+		]
+	},
+	"overrides": [
+		{
+			"files": ["**/enum/**"],
+			"rules": {
+				"no-magic-numbers": "off"
+			}
+		},
+		{
+			"files": ["*.vue"],
+			"rules": {
+				"max-lines-per-function": ["warn", 100],
+				"max-statements": ["warn", 15, { "ignoreTopLevelFunctions": true }],
 				"complexity": ["warn", { "max": 20 }],
 				"max-nested-callbacks": ["warn", 10],
 				"max-depth": ["warn", 4]
 			}
-	}]
+		},
+		{
+			"files": ["*.spec.ts"],
+			"rules": {
+				"max-lines-per-function": "off",
+				"max-statements": ["warn", 10, { "ignoreTopLevelFunctions": true }],
+				"complexity": ["warn", { "max": 20 }],
+				"max-nested-callbacks": ["warn", 10],
+				"max-depth": ["warn", 4]
+			}
+		}
+	]
 }
