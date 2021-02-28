@@ -22,6 +22,7 @@ export default class Zipper {
 	zipping = false;
 
 	constructor() {
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-call
 		this.archive = new Packer({
 			store: true,
 			zlib: { level: 0 },
