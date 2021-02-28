@@ -3,6 +3,13 @@ export interface IText {
 	htmlText: string;
 }
 
+export interface IComment {
+	text: string;
+	htmlText: string;
+	postAuthor: string;
+	postLink: string;
+}
+
 export interface IImage {
 	imageLink: string;
 }
@@ -21,8 +28,6 @@ export interface IVideo {
 export interface ILink {
 	externalUrl: string;
 	imageLink: string;
-	postAuthor: string;
-	postLink: string;
 }
 
 interface Media {
@@ -58,7 +63,13 @@ export type SavedContentType =
 	| ISavedImagePost
 	| ISavedVideoPost
 	| ISavedLinkPost
-	| ISavedGalleryPost;
+	| ISavedGalleryPost
+	| ISavedCommentPost;
+
+export interface ISavedCommentPost extends ISavedContentBase {
+	//	metadata: ISavedContent;
+	comment: IComment;
+}
 
 export interface ISavedTextPost extends ISavedContentBase {
 	//	metadata: ISavedContent;

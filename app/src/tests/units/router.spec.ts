@@ -29,7 +29,7 @@ jest.mock("@/helper/dataManager", () => ({
 
 let router: Router;
 // tocheck who really need store ?
-
+//todo put server in environment
 function renderComponent(
 	store: StoreTypeTemp,
 	{

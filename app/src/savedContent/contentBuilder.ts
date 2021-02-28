@@ -1,11 +1,13 @@
 import { postType } from "@/enum/postType";
 import { BadLinkError } from "@/errors/restartError";
+import { postOapi } from "@/helper/fetchHelper/fetchHelper";
+import { Couple } from "@/helper/fetchHelper/requestArgument";
 import {
+	ISavedCommentPost,
 	ISavedGalleryPost,
 	ISavedImagePost,
 	ISavedLinkPost,
 	ISavedTextPost,
-	ISavedVideoPost,
 	SavedContentType,
 } from "./ISavedContent";
 import { RedditRawData } from "./redditDataInterface";
@@ -35,13 +37,18 @@ async function isDownloadable(url: string): Promise<boolean> {
 	const authHeaders = new Headers();
 	authHeaders.append("Content-Type", "application/x-www-form-urlencoded");
 
-	const res = await fetch("/api/getHead/", {
+	/*	const res = await fetch("/api/getHead/", {
 		method: "POST",
 		body: `url=${cleanURL(url)}`,
 		headers: authHeaders,
-	});
-	if (res.ok) {
-		const txt = (await res.json()) as boolean;
+	}); */
+	const res = await postOapi("/api/getHead/", [
+		new Couple("url", cleanURL(url)),
+	]);
+
+	if (res) {
+		// todo to remove
+		const txt = res as boolean;
 		return txt;
 	}
 	return false;
@@ -118,10 +125,10 @@ function returnVideoMedia({
 }) {
 	const embedString = embed ?? getEmbed(data);
 	return buildVideoPost(data, {
-		externalUrl: url,
-		imageLink: getImage(data),
+		externalUrl: cleanURL(url),
+		imageLink: cleanURL(getImage(data)),
 		needYtDl,
-		embeddedUrl: embedString,
+		embeddedUrl: cleanURL(embedString),
 	});
 }
 
@@ -138,15 +145,15 @@ function buildVideoPost(
 		needYtDl: boolean;
 		embeddedUrl: string;
 	},
-): ISavedVideoPost {
+): SavedContentType {
 	const content = new SavedContent(data, postType.VIDEO);
 	return {
 		...content,
 		video: {
-			externalUrl,
+			externalUrl: cleanURL(externalUrl),
 			needYtDl,
-			imageLink,
-			embeddedUrl,
+			imageLink: cleanURL(imageLink),
+			embeddedUrl: cleanURL(embeddedUrl),
 		},
 		getMediaUrl: () => externalUrl,
 		getImageUrl: () => imageLink,
@@ -155,16 +162,18 @@ function buildVideoPost(
 function buildLinkPost(data: RedditRawData): ISavedLinkPost {
 	const content = new SavedContent(data, postType.LINK);
 	content.type = postType.LINK;
-	if (!data.url_overridden_by_dest || !data.link_author || !data.link_url) {
+	console.log(data.url_overridden_by_dest);
+	console.log(data.link_author);
+	console.log(data.link_url);
+
+	if (!data.url_overridden_by_dest) {
 		throw new Error();
 	}
 	return {
 		...content,
 		link: {
-			externalUrl: data.url_overridden_by_dest,
-			imageLink: getImage(data),
-			postAuthor: data.link_author,
-			postLink: data.link_url,
+			externalUrl: cleanURL(data.url_overridden_by_dest),
+			imageLink: cleanURL(getImage(data)),
 		},
 	};
 }
@@ -176,42 +185,61 @@ function buildImagePost(data: RedditRawData): ISavedImagePost {
 	}
 	return {
 		...content,
-		image: { imageLink: url },
-		getMediaUrl: () => url,
-		getImageUrl: () => url,
+		image: { imageLink: cleanURL(url) },
+		getMediaUrl: () => cleanURL(url),
+		getImageUrl: () => cleanURL(url),
 	};
 }
 function buildTextPost(kind: string, data: RedditRawData): ISavedTextPost {
 	// todo redo
-	const type = kind === "t1" ? postType.COMMENT : postType.TEXT; // tocheck other case (else if (data.is_self)
-	const content = new SavedContent(data, type);
-	if (!data.body || !data.body_html) {
+	const content = new SavedContent(data, postType.TEXT);
+	if (!data.selftext || !data.selftext_html) {
 		throw new Error();
 	}
 	return {
 		...content,
 		text: {
-			text: data.body,
-			htmlText: decodeHtml(data.body_html),
+			text: data.selftext,
+			htmlText: decodeHtml(data.selftext_html),
 		},
 	};
 }
+
+function buildCommentPost(data: RedditRawData): ISavedCommentPost {
+	// todo redo
+	const content = new SavedContent(data, postType.COMMENT);
+	if (!data.body || !data.body_html || !data.link_author || !data.link_url) {
+		throw new Error();
+	}
+	console.log("***COMMENT");
+	return {
+		...content,
+		comment: {
+			text: data.body,
+			htmlText: decodeHtml(data.body_html),
+			postAuthor: data.link_author,
+			postLink: cleanURL(data.link_url),
+		},
+	};
+}
+
+// todo remove intermediary
 function buildGalleryPost(data: RedditRawData): ISavedGalleryPost {
 	const content = new SavedContent(data, postType.IMAGE); // tocheck type
 	const galleryURLs: string[] = [];
 	if (data.media_metadata) {
 		// tocheck
 		Object.keys(data.media_metadata).forEach((el) => {
-			galleryURLs.push(`https://i.redd.it/${el}.jpg`);
+			galleryURLs.push(cleanURL(`https://i.redd.it/${el}.jpg`));
 		});
 	}
 
 	return {
 		...content,
 		gallery: { galleryURLs },
-		image: { imageLink: galleryURLs[0] },
-		getMediaUrl: () => galleryURLs[0],
-		getImageUrl: () => galleryURLs[0],
+		image: { imageLink: cleanURL(galleryURLs[0]) },
+		getMediaUrl: () => cleanURL(galleryURLs[0]),
+		getImageUrl: () => cleanURL(galleryURLs[0]),
 	};
 }
 
@@ -319,7 +347,13 @@ export async function buildContent(saved: {
 	kind: string;
 	data: RedditRawData;
 }): Promise<SavedContentType> {
-	if (saved.kind === "t1" || saved.data.is_self) {
+	console.log("BUILD CONTENT");
+	console.log(saved.kind);
+	if (saved.kind === "t1") {
+		console.log("BUild Comment");
+		return buildCommentPost(saved.data);
+	}
+	if (saved.data.is_self) {
 		return buildTextPost(saved.kind, saved.data);
 	}
 	return buildMedia(saved.data);

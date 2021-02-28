@@ -3,6 +3,7 @@
  */
 import { buildContent } from "@/savedContent/contentBuilder";
 import SavedContent from "@/savedContent/savedContent";
+import { ISavedImagePost } from "../../savedContent/ISavedContent";
 import comment from "./mockFetchData/soloItem/comment/comment.json";
 import gallery from "./mockFetchData/soloItem/gallery/gallery.json";
 import image from "./mockFetchData/soloItem/image/image.json";
@@ -10,7 +11,13 @@ import link from "./mockFetchData/soloItem/link/link.json";
 import text from "./mockFetchData/soloItem/text.json";
 import video from "./mockFetchData/soloItem/video/video.json";
 
+jest.mock("@/helper/fetchHelper/fetchHelper", () => ({
+	postOapi: () => "true",
+}));
+
 describe("BuildContent function", () => {
+	const BASE_URL = "www.reddit.com";
+
 	describe("Text", () => {
 		test("Text", async () => {
 			const content = await buildContent(text);
@@ -19,7 +26,8 @@ describe("BuildContent function", () => {
 				id: "k8e0io",
 				fullname: "t3_k8e0io",
 				subreddit: "gamedesign",
-				text: `[Extra Credits made a video on this back in 2012.](https://youtu.be/BRBcjsOt0_g) In it, Dan explained a multiplayer design concept by Riot Game's Tom Cadwell called "counter play."
+				text: {
+					text: `[Extra Credits made a video on this back in 2012.](https://youtu.be/BRBcjsOt0_g) In it, Dan explained a multiplayer design concept by Riot Game's Tom Cadwell called "counter play."
 
 &gt;On a basic level, it's the idea that in a multiplayer game, when designing an ability or mechanic, you can't only be thinking of about how to make that ability or mechanic interesting for the player who gets to use it. You also have to think about how it's interesting for the players who it gets used on. On a more rigorous level, it's the idea that a mechanic or ability in a multiplayer game should increase the number of meaningful choices available both to the player using it and a player it's being used on.
 
@@ -47,7 +55,7 @@ At it's most basic definition, counter play is to design offense to be fun for t
 
 By framing the design philosophy to include single-player, where everyone already understands it on a "no duh" level, it's easier to see how it applies equally to multiplayer. Being stuck on the 3-person team in a 1v3 Mario Party minigame would not be fun without wonderful, delicious counter play.`,
 
-				htmlText: `<!-- SC_OFF --><div class="md"><p><a href="https://youtu.be/BRBcjsOt0_g">Extra Credits made a video on this back in 2012.</a> In it, Dan explained a multiplayer design concept by Riot Game&#39;s Tom Cadwell called &quot;counter play.&quot;</p>
+					htmlText: `<!-- SC_OFF --><div class="md"><p><a href="https://youtu.be/BRBcjsOt0_g">Extra Credits made a video on this back in 2012.</a> In it, Dan explained a multiplayer design concept by Riot Game&#39;s Tom Cadwell called &quot;counter play.&quot;</p>
 
 <blockquote>
 <p>On a basic level, it&#39;s the idea that in a multiplayer game, when designing an ability or mechanic, you can&#39;t only be thinking of about how to make that ability or mechanic interesting for the player who gets to use it. You also have to think about how it&#39;s interesting for the players who it gets used on. On a more rigorous level, it&#39;s the idea that a mechanic or ability in a multiplayer game should increase the number of meaningful choices available both to the player using it and a player it&#39;s being used on.</p>
@@ -77,26 +85,21 @@ By framing the design philosophy to include single-player, where everyone alread
 
 <p>By framing the design philosophy to include single-player, where everyone already understands it on a &quot;no duh&quot; level, it&#39;s easier to see how it applies equally to multiplayer. Being stuck on the 3-person team in a 1v3 Mario Party minigame would not be fun without wonderful, delicious counter play.</p>
 </div><!-- SC_ON -->`,
+				},
 				title:
 					'Counter Play, "Receiving-End Design" —or— Why Sniper Rifles in Multiplayer Games Usually Suck',
 				isVideo: false,
 				type: "Text",
 				isLink: false,
 				isSelected: false,
-				kind: "t3",
-				needYtDl: false,
 				redditUrl:
 					"https://www.reddit.com/r/gamedesign/comments/k8e0io/counter_play_receivingend_design_or_why_sniper/",
-				imageLink: "",
 				isDeleted: false,
 				isGallery: false,
 				isText: true,
-				galleryURLs: [],
 				hasImage: false,
 				category: "",
 				creationDate: new Date(content.creationDate),
-				embeddedUrl: "",
-				externalUrl: "",
 			} as SavedContent);
 		});
 	});
@@ -114,23 +117,21 @@ By framing the design philosophy to include single-player, where everyone alread
 				isSelected: false,
 				title: "Clear lemon pie",
 				isVideo: false,
-				kind: "t1",
-				needYtDl: false,
-				redditUrl:
-					"https://www.reddit.com/r/interestingasfuck/comments/g9abr7/clear_lemon_pie/fot3ixm/",
-				imageLink: "",
-				isDeleted: false,
-				isGallery: false,
-				isText: true,
-				galleryURLs: [],
-				hasImage: false,
-				category: "",
-				postAuthor: "Unicornglitteryblood",
-				postLink: "https://i.redd.it/ck2300n8mfv41.jpg",
-				creationDate: new Date(content.creationDate),
-				embeddedUrl: "",
-				externalUrl: "",
-				text: `Since you say it doesn't exist I'm guessing you didn't find one?
+				comment: {
+					// tocheck remove new line
+					htmlText: `<div class="md"><p>Since you say it doesn&#39;t exist I&#39;m guessing you didn&#39;t find one?</p>
+
+<p>Here is one from a youtuber who tried to make a bunch of clear foods.</p>
+
+<p><a href="https://barrylewis.net/recipe/clear-lemon-meringue-pie/">https://barrylewis.net/recipe/clear-lemon-meringue-pie/</a></p>
+
+<p>And just because I found the videos interesting, a Playlist of clear foods:</p>
+
+<p><a href=\"https://www.youtube.com/playlist?list=PLfItiEY3o1msEiqMm3FukoGiFFcbAccdp">https://www.youtube.com/playlist?list=PLfItiEY3o1msEiqMm3FukoGiFFcbAccdp</a></p>
+</div>`,
+					postAuthor: "Unicornglitteryblood",
+					postLink: "https://i.redd.it/ck2300n8mfv41.jpg",
+					text: `Since you say it doesn't exist I'm guessing you didn't find one?
 
 Here is one from a youtuber who tried to make a bunch of clear foods.
 
@@ -139,16 +140,17 @@ https://barrylewis.net/recipe/clear-lemon-meringue-pie/
 And just because I found the videos interesting, a Playlist of clear foods:
 
 https://www.youtube.com/playlist?list=PLfItiEY3o1msEiqMm3FukoGiFFcbAccdp`,
-				htmlText: `<div class="md"><p>Since you say it doesn&#39;t exist I&#39;m guessing you didn&#39;t find one?</p>
+				},
 
-<p>Here is one from a youtuber who tried to make a bunch of clear foods.</p>
+				redditUrl:
+					"https://www.reddit.com/r/interestingasfuck/comments/g9abr7/clear_lemon_pie/fot3ixm/",
+				isDeleted: false,
+				isGallery: false,
+				isText: true,
+				hasImage: false,
+				category: "",
 
-<p><a href="https://barrylewis.net/recipe/clear-lemon-meringue-pie/">https://barrylewis.net/recipe/clear-lemon-meringue-pie/</a></p>
-
-<p>And just because I found the videos interesting, a Playlist of clear foods:</p>
-
-<p><a href="https://www.youtube.com/playlist?list=PLfItiEY3o1msEiqMm3FukoGiFFcbAccdp">https://www.youtube.com/playlist?list=PLfItiEY3o1msEiqMm3FukoGiFFcbAccdp</a></p>
-</div>`,
+				creationDate: new Date(content.creationDate),
 			} as SavedContent);
 		});
 	});
@@ -156,27 +158,26 @@ https://www.youtube.com/playlist?list=PLfItiEY3o1msEiqMm3FukoGiFFcbAccdp`,
 	describe("Link", () => {
 		test("Link", async () => {
 			const content = await buildContent(link); // todo
-			expect(content).toEqual({
+			expect(content).toMatchObject({
 				author: "flaming_bird",
 				category: "",
 				creationDate: new Date(content.creationDate),
-				embeddedUrl: "",
-				externalUrl:
-					"https://mendhekar.medium.com/why-i-still-lisp-and-you-should-too-18a2ae36bd8",
+				link: {
+					externalUrl:
+						"https://mendhekar.medium.com/why-i-still-lisp-and-you-should-too-18a2ae36bd8",
+					imageLink:
+						"https://external-preview.redd.it/t7QzIsW7WXX5Bd-7oFT3Jz_PysF-noKWekEFaafbbK0.jpg?auto=webp&s=a1466dd73008fba5c8551d46bada1a0ba9db95be",
+				},
 				fullname: "t3_l98aft",
-				galleryURLs: [],
 				hasImage: true,
 				id: "l98aft",
-				imageLink:
-					"https://external-preview.redd.it/t7QzIsW7WXX5Bd-7oFT3Jz_PysF-noKWekEFaafbbK0.jpg?auto=webp&s=a1466dd73008fba5c8551d46bada1a0ba9db95be",
 				isDeleted: false,
 				isGallery: false,
 				isLink: true,
 				isSelected: false,
 				isText: false,
 				isVideo: false,
-				kind: "t3",
-				needYtDl: false,
+
 				redditUrl:
 					"https://www.reddit.com/r/lisp/comments/l98aft/why_i_still_lisp_and_you_should_too/",
 				subreddit: "lisp",
@@ -189,7 +190,7 @@ https://www.youtube.com/playlist?list=PLfItiEY3o1msEiqMm3FukoGiFFcbAccdp`,
 	describe("Image", () => {
 		test("Image", async () => {
 			const content = await buildContent(image);
-			expect(content).toEqual({
+			expect(content).toMatchObject({
 				author: "NaomiScrafton",
 				id: "kt2slt",
 				fullname: "t3_kt2slt",
@@ -200,31 +201,29 @@ https://www.youtube.com/playlist?list=PLfItiEY3o1msEiqMm3FukoGiFFcbAccdp`,
 
 				type: "Image",
 
-				kind: "t3",
-				needYtDl: false,
-
 				redditUrl:
 					"https://www.reddit.com/r/graphic_design/comments/kt2slt/i_designed_a_support_bubble_valentines_day_card/",
-				imageLink: "https://i.redd.it/nxkfpkbm54a61.jpg",
 				isDeleted: false,
 				isGallery: false,
 				isLink: false,
 				isSelected: false,
 				isText: false,
-				galleryURLs: [],
 				hasImage: true,
 				category: "",
 				creationDate: new Date(content.creationDate),
-				embeddedUrl: "",
-				externalUrl: "https://i.redd.it/nxkfpkbm54a61.jpg",
-			} as SavedContent);
+				image: {
+					imageLink: "https://i.redd.it/nxkfpkbm54a61.jpg",
+				},
+				// getImageUrl: () => "https://i.redd.it/nxkfpkbm54a61.jpg",
+				// getMediaUrl: () => "https://i.redd.it/nxkfpkbm54a61.jpg",
+			} as ISavedImagePost);
 		});
 	});
 
 	describe("Gallery", () => {
 		test("Gallery", async () => {
 			const content = await buildContent(gallery);
-			expect(content).toEqual({
+			expect(content).toMatchObject({
 				author: "renderisland",
 				id: "jzyih0",
 				fullname: "t3_jzyih0",
@@ -233,24 +232,26 @@ https://www.youtube.com/playlist?list=PLfItiEY3o1msEiqMm3FukoGiFFcbAccdp`,
 				isVideo: false,
 				isGallery: true,
 				type: "Image", // change type to enum
-				kind: "t3",
-				needYtDl: false,
 				redditUrl:
 					"https://www.reddit.com/r/Unity3D/comments/jzyih0/ancient_fantasy_village/",
-				imageLink: "https://i.redd.it/ywy9xkuxc4161.jpg",
+				image: {
+					imageLink: "https://i.redd.it/ywy9xkuxc4161.jpg",
+				},
 				isDeleted: false,
 				isLink: false,
 				isSelected: false,
 				isText: false,
-				galleryURLs: [
-					"https://i.redd.it/ywy9xkuxc4161.jpg",
-					"https://i.redd.it/e581qnuxc4161.jpg",
-				],
+				gallery: {
+					galleryURLs: [
+						"https://i.redd.it/ywy9xkuxc4161.jpg",
+						"https://i.redd.it/e581qnuxc4161.jpg",
+					],
+				},
+				//		getImageUrl: () => "https://i.redd.it/ywy9xkuxc4161.jpg",
+				//		getMediaUrl: () => "https://i.redd.it/ywy9xkuxc4161.jpg",
 				hasImage: true,
 				category: "",
 				creationDate: new Date(content.creationDate),
-				embeddedUrl: "",
-				externalUrl: "",
 			} as SavedContent);
 		});
 	});
@@ -258,8 +259,11 @@ https://www.youtube.com/playlist?list=PLfItiEY3o1msEiqMm3FukoGiFFcbAccdp`,
 	describe("Video", () => {
 		test("Video", async () => {
 			const content = await buildContent(video);
-			expect(content).toEqual({
+			expect(content).toMatchObject({
 				author: "rvizzz",
+				//	getImageUrl: () => "https://v.redd.it/pp2u78wtohz51",
+				//	getMediaUrl: () =>
+				//		"https://external-preview.redd.it/a4nKpG1GNFA_mFnQXgzsRKyrh4vpHbCvuOZ4X5FCblM.png?format=pjpg&auto=webp&s=d24dd49f78ecdac7103d03d3e4096539f1c34a93",
 				id: "juw3ud",
 				fullname: "t3_juw3ud",
 				subreddit: "compsci",
@@ -269,20 +273,21 @@ https://www.youtube.com/playlist?list=PLfItiEY3o1msEiqMm3FukoGiFFcbAccdp`,
 				type: "Video",
 				category: "",
 				creationDate: new Date(content.creationDate),
-				embeddedUrl:
-					"https://v.redd.it/pp2u78wtohz51/DASH_1080.mp4?source=fallback",
-				externalUrl: "https://v.redd.it/pp2u78wtohz51",
-				galleryURLs: [],
+				video: {
+					embeddedUrl:
+						"https://v.redd.it/pp2u78wtohz51/DASH_1080.mp4?source=fallback",
+					externalUrl: "https://v.redd.it/pp2u78wtohz51",
+					needYtDl: true,
+					imageLink:
+						"https://external-preview.redd.it/a4nKpG1GNFA_mFnQXgzsRKyrh4vpHbCvuOZ4X5FCblM.png?format=pjpg&auto=webp&s=d24dd49f78ecdac7103d03d3e4096539f1c34a93",
+				},
 				hasImage: true,
-				imageLink:
-					"https://external-preview.redd.it/a4nKpG1GNFA_mFnQXgzsRKyrh4vpHbCvuOZ4X5FCblM.png?format=pjpg&auto=webp&s=d24dd49f78ecdac7103d03d3e4096539f1c34a93",
 				isDeleted: false,
 				isGallery: false,
 				isLink: false,
 				isSelected: false,
 				isText: false,
-				kind: "t3",
-				needYtDl: true,
+
 				redditUrl:
 					"https://www.reddit.com/r/compsci/comments/juw3ud/a_comparison_between_a_few_subdivision_algorithms/",
 			} as SavedContent);
