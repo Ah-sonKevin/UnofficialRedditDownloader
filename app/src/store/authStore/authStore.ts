@@ -1,8 +1,9 @@
-import { CommitOptions, Module, Store as VuexStore } from "vuex";
+import { Module } from "vuex";
 import { StoreState } from "../StoreState";
 import { mutations, MutationsTypes } from "./authStoreMutationTypes";
 import { Getters, GettersType } from "./getter";
 import { AuthState, AuthStoreState } from "./state";
+import { StoreType } from "./StoreType";
 
 export const AuthModule: Module<AuthStoreState, StoreState> = {
 	state: AuthState,
@@ -11,20 +12,8 @@ export const AuthModule: Module<AuthStoreState, StoreState> = {
 	actions: {},
 };
 
-export type AuthStoreType<S = AuthStoreState> = Omit<
-	VuexStore<S>,
-	"getters" | "commit"
-> & {
-	commit<
-		K extends keyof MutationsTypes,
-		P extends Parameters<MutationsTypes[K]>[1]
-	>(
-		key: K,
-		payload: P,
-		options?: CommitOptions,
-	): ReturnType<MutationsTypes[K]>;
-} & {
-	getters: {
-		[K in keyof GettersType]: ReturnType<GettersType[K]>;
-	};
-};
+export type AuthStoreType<S = AuthStoreState> = StoreType<
+	S,
+	MutationsTypes,
+	GettersType
+>;
