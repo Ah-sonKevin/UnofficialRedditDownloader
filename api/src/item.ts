@@ -79,7 +79,7 @@ export async function getAllInfo(item: RedditItem): Promise<ItemInfo> {
 			return {
 				url: item.url,
 				size,
-				name: item.nameFile,
+				name: item.name,
 				folder: item.folder,
 				needYoutubeDl: item.needYtdl,
 				ext: item.url.split(".").slice(-1)[0],
@@ -115,7 +115,7 @@ export async function getAllInfo(item: RedditItem): Promise<ItemInfo> {
 						video: { url: infoVideo.url, ext: infoVideo.ext },
 						audio: { url: infoAudio.url, ext: infoAudio.ext },
 						size: sizeAudio + sizeVideo,
-						name: `${item.nameFile.split(".")[0]}`,
+						name: `${item.name.split(".")[0]}`,
 						ext: infoVideo.ext,
 						folder: item.folder,
 						needYoutubeDl: item.needYtdl,
