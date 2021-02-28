@@ -1,4 +1,5 @@
 declare module "zip-stream" {
+	// tocheck merge d.tss
 	export = ZipStream;
 }
 //  why '=' ?
