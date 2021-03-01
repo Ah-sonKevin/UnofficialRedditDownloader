@@ -107,20 +107,18 @@ export async function getAllInfo(item: RedditItem): Promise<ItemInfo> {
 			const infoVideo = await getInfoFormat(item.url, mediaFormat.videoStream);
 			const infoAudio = await getInfoFormat(item.url, mediaFormat.audioStream);
 			const sizeVideo = await getSize(infoVideo.url);
-			if (sizeVideo) {
-				const sizeAudio = await getSize(infoAudio.url);
-				if (sizeAudio) {
-					return {
-						isOneFile: false,
-						video: { url: infoVideo.url, ext: infoVideo.ext },
-						audio: { url: infoAudio.url, ext: infoAudio.ext },
-						size: sizeAudio + sizeVideo,
-						name: `${item.name.split(".")[0]}`,
-						ext: infoVideo.ext,
-						folder: item.folder,
-						needYoutubeDl: item.needYtdl,
-					};
-				}
+			const sizeAudio = await getSize(infoAudio.url);
+			if (sizeVideo && sizeAudio) {
+				return {
+					isOneFile: false,
+					video: { url: infoVideo.url, ext: infoVideo.ext },
+					audio: { url: infoAudio.url, ext: infoAudio.ext },
+					size: sizeAudio + sizeVideo,
+					name: `${item.name.split(".")[0]}`,
+					ext: infoVideo.ext,
+					folder: item.folder,
+					needYoutubeDl: item.needYtdl,
+				};
 			}
 			throw new Error();
 		});
