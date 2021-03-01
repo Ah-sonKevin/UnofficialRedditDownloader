@@ -162,9 +162,6 @@ function buildVideoPost(
 function buildLinkPost(data: RedditRawData): ISavedLinkPost {
 	const content = new SavedContent(data, postType.LINK);
 	content.type = postType.LINK;
-	console.log(data.url_overridden_by_dest);
-	console.log(data.link_author);
-	console.log(data.link_url);
 
 	if (!data.url_overridden_by_dest) {
 		throw new Error();
@@ -211,7 +208,6 @@ function buildCommentPost(data: RedditRawData): ISavedCommentPost {
 	if (!data.body || !data.body_html || !data.link_author || !data.link_url) {
 		throw new Error();
 	}
-	console.log("***COMMENT");
 	return {
 		...content,
 		comment: {
@@ -347,10 +343,7 @@ export async function buildContent(saved: {
 	kind: string;
 	data: RedditRawData;
 }): Promise<SavedContentType> {
-	console.log("BUILD CONTENT");
-	console.log(saved.kind);
 	if (saved.kind === "t1") {
-		console.log("BUild Comment");
 		return buildCommentPost(saved.data);
 	}
 	if (saved.data.is_self) {
