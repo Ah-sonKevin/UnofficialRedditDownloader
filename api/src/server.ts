@@ -30,11 +30,14 @@ const TEXT_SIZE = 30; // tocheck needed ? only one ?
 app.post("/api/getHead/", (req, res, next) => {
 	if (!isSIngleHeadBody(req.body)) {
 		next(new Error("Invalid Input Body"));
-		throw new Error(); // tocheck avoid
+
+		//	throw new Error(); // tocheck avoid
+		// tocheck what happen azfter error / crash ?
+	} else {
+		getDownloadInfo(req.body.url)
+			.then(() => res.send(true))
+			.catch(() => res.send(false));
 	}
-	getDownloadInfo(req.body.url)
-		.then(() => res.send(true))
-		.catch(() => res.send(false));
 });
 // tocheck type guard before .json ?
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
