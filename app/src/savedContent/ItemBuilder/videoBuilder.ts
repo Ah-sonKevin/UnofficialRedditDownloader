@@ -29,7 +29,7 @@ export async function isDownloadable(url: string): Promise<boolean> {
 	return false;
 }
 
-export function cleanFallback(url: string) {
+export function cleanFallback(url: string): string {
 	return url.split("/").slice(0, -1).join("/");
 }
 
@@ -54,7 +54,7 @@ export function returnVideoMedia({
 	data: RedditRawData;
 	needYtDl?: boolean;
 	embed?: string;
-}) {
+}): SavedContentType {
 	const embedString = embed ?? getEmbed(data);
 	return buildVideoPost(data, {
 		externalUrl: cleanURL(url),
@@ -91,8 +91,8 @@ export function buildVideoPost(
 		getImageUrl: () => imageLink,
 	};
 }
-
-export function getVideoMedia(data: RedditRawData) {
+// tocheck precise interface SavedContentType
+export function getVideoMedia(data: RedditRawData): SavedContentType {
 	if (data.domain === "youtube.com" || data.domain === "youtu.be") {
 		return returnVideoMedia({
 			url: data.url_overridden_by_dest ?? "", // tocheck
