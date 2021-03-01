@@ -3,15 +3,15 @@
 import compression from "compression";
 import cors from "cors";
 import express, { Request, Response } from "express";
+import { downloadAllItems, getAllFilesInfo } from "./batchDownloader";
 import { downloader } from "./downloader";
-import { HeadInput, SoloItem } from "./interface/head";
-import { RedditItem } from "./interface/Item";
+import { isMultipleBody, isSIngleHeadBody, SoloItem } from "./interface/IInput";
 import { ItemInfo } from "./interface/itemInfo";
 import { getAllInfo, getDownloadInfo } from "./item";
 import { clientLogger, serverLogger } from "./logger";
 import Zipper from "./zipper";
 
-export { }; // todo needed for module with its own scope
+export {}; // todo needed for module with its own scope
 require("body-parser");
 require("express-zip");
 
@@ -23,34 +23,23 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 const TEXT_SIZE = 30; // tocheck needed ? only one ?
-
-function isSIngleHeadBody(item: unknown): item is HeadInput {
-	return (item as { url: string }).url !== undefined;
-}
-
+// todo check input
 app.post("/api/getHead/", (req, res, next) => {
 	if (!isSIngleHeadBody(req.body)) {
-		// todo check input
 		next(new Error("Invalid Input Body"));
-		return;
+		throw new Error(); // tocheck avoid
 	}
-	const url = req.body.url;
-	getDownloadInfo(url)
+	getDownloadInfo(req.body.url)
 		.then(() => res.send(true))
 		.catch(() => res.send(false));
 });
 // tocheck type guard before .json ?
-
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 app.post("/api/downItem/", async (req, res, next) => {
-	const body = req.body as SoloItem; // tocheck ?? type guard ?
-	const item: SoloItem = {
-		url: body.url,
-		needYdl: body.needYdl,
-	};
-	// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+	const item = req.body as SoloItem; // tocheck ?? type guard ?
+	// todo send boolean instead of string (json)
 	const listPart = item.url.split("/");
-	const path = `${listPart.slice(-1)[0].substr(0, TEXT_SIZE)}`;
+	const path = `${listPart.slice(-1)[0].substr(0, TEXT_SIZE)}`; // todo send name directly
 	const needYtdl = item.needYdl ? (JSON.parse(item.needYdl) as boolean) : false;
 
 	const info = await getAllInfo({
@@ -64,7 +53,6 @@ app.post("/api/downItem/", async (req, res, next) => {
 	downloader(info)
 		.then((response: NodeJS.ReadableStream) =>
 			response
-				.resume()
 				.pipe(res)
 				.on("error", (err: Error) => {
 					next(err);
@@ -80,95 +68,42 @@ app.post("/api/downItem/", async (req, res, next) => {
 });
 
 // todo nested or own file or seprate function
-function isMultipleBody(item: unknown): item is RedditItem[] {
-	// batchItem or RedditItem
-	const tmpArray = item as {
-		needYtDl: string;
-		folder?: string;
-		name: string;
-		url: string;
-	}[];
-	const tmp = tmpArray[0];
-	return (
-		tmp &&
-		tmp.name !== undefined &&
-		tmp.needYtDl !== undefined &&
-		tmp.url !== undefined
-	);
-}
+// tocheck names properties
+// todo add folder name to nameFIle /folderName/name
 
 // eslint-disable-next-line max-statements
 app.post("/api/downBatchInfo/", (req, res, next) => {
 	const archive = new Zipper();
 	archive
 		.getArchive()
-		.resume()
 		.on("finish", () => {
 			res.end();
 		})
 		.on("error", (err: Error) => next(err))
 		.pipe(res);
-	const prepPromiseArray: Promise<void>[] = [];
-	const prepArray: ItemInfo[] = [];
-	// tocheck names properties
+	// tocheck structure
 	if (!isMultipleBody(req.body)) {
-		// tocheck structure
 		next(new Error("Invalid Input Body"));
 		return;
 	}
 	const list = req.body;
+	const prepArray: ItemInfo[] = [];
+	const prepPromiseArray: Promise<ItemInfo>[] = getAllFilesInfo(
+		// check promsie resolve value
+		list,
+		archive,
+		prepArray,
+	);
 
-	list.forEach((item) => {
-		// todo add folder name to nameFIle
-
-		async function getAllInfoPrep(): Promise<void> {
-			try {
-				const elInfo = await getAllInfo(item);
-				prepArray.push(elInfo);
-				return void 0;
-			} catch (e) {
-				archive.addDownloadFail(item, "Couldn't get Info");
-				if (e instanceof Error) {
-					// tocheck what can e be
-					throw e;
-				} else {
-					throw new Error(e);
-				}
-			}
-		}
-		// todo check element-plus grid (design)
-		prepPromiseArray.push(getAllInfoPrep());
-	});
-
-	function downloadItem(element: ItemInfo): Promise<void> {
-		return new Promise(
-			(resolve, reject) =>
-				// eslint-disable-next-line promise/no-nesting
-				void downloader(element)
-					.then((stream) =>
-						archive.addStream({
-							stream,
-							nameFile: element.name,
-							resolve,
-							reject,
-						}),
-					)
-					.catch((err: Error) => {
-						archive.addDownloadFail(element, "Couldn't download the file");
-						reject(err);
-					}),
-		);
-	}
-
-	Promise.allSettled(prepPromiseArray)
+	Promise.allSettled(prepPromiseArray) // tocheck get array with all answer / replace prep array
 		.then(() => {
 			const totalSize = prepArray.reduce((acc, val) => acc + val.size, 0);
 			res.setHeader("MediaSize", totalSize);
-			const promiseArray: Promise<void>[] = [];
-			prepArray.forEach((element) => {
-				promiseArray.push(downloadItem(element));
-			});
-			// eslint-disable-next-line promise/no-nesting
+
+			const promiseArray: Promise<void>[] = downloadAllItems(
+				prepArray,
+				archive,
+			);
 			return Promise.allSettled(promiseArray);
 		}) // tocheck
 		.then(
@@ -176,7 +111,6 @@ app.post("/api/downBatchInfo/", (req, res, next) => {
 		)
 		.catch((err) => {
 			// eslint-disable-next-line promise/no-callback-in-promise
-			serverLogger.error(err);
 			next(err);
 		});
 });

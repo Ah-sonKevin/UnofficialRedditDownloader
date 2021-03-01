@@ -122,25 +122,17 @@ export async function youtubeDlDownload(
 							);
 						}
 					});
-
-					Stream.pipeline(
-						respAudio.body,
-						createWriteStream(audioNameFile),
-						(err) => {
-							if (err) {
-								throw err;
-							} else {
-								audioStreamDone = true;
-								if (videoStreamDone && audioStreamDone) {
-									streamMerge(
-										{ videoExt, videoNameFile, audioNameFile },
-										resolve,
-										reject,
-									);
-								}
-							}
-						},
-					);
+					// todo check google dns
+					downloadChannel(respAudio.body, audioNameFile, () => {
+						audioStreamDone = true;
+						if (videoStreamDone && audioStreamDone) {
+							streamMerge(
+								{ videoExt, videoNameFile, audioNameFile },
+								resolve,
+								reject,
+							);
+						}
+					});
 				});
 			}
 			throw new Error();
