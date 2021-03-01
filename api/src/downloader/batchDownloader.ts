@@ -1,8 +1,8 @@
 import { downloader } from "./downloader";
-import { RedditItem } from "./interface/Item";
-import { ItemInfo } from "./interface/itemInfo";
-import { getAllInfo } from "./item";
-import Zipper from "./zipper";
+import { RedditItem } from "../interface/Item";
+import { ItemInfo } from "../interface/itemInfo";
+import { getAllInfo } from "../item";
+import Zipper from "../zipper";
 
 export function getAllFilesInfo( // todo check promise resolve
 	listItem: RedditItem[],

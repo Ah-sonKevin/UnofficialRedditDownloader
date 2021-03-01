@@ -1,4 +1,4 @@
-import { RedditItem } from './Item';
+import { RedditItem } from "./Item";
 
 export interface HeadInput {
 	url: string;

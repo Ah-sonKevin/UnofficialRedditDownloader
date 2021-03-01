@@ -21,7 +21,7 @@ function oneParameterYoutubeGetInfoFormat(
 		],
 		{},
 		callback,
-	) as void;
+	);
 }
 
 function oneParameterYoutubeGetInfo(
@@ -29,7 +29,7 @@ function oneParameterYoutubeGetInfo(
 	callback: (err: Error, info: youtubeDl.Info) => void,
 ): void {
 	// eslint-disable-next-line @typescript-eslint/no-unsafe-call
-	return youtubeDl.getInfo(url, callback) as void;
+	return youtubeDl.getInfo(url, callback);
 }
 
 export const getDownloadInfoFormat = util.promisify(

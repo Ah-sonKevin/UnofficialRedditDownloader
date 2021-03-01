@@ -3,15 +3,18 @@
 import compression from "compression";
 import cors from "cors";
 import express, { Request, Response } from "express";
-import { downloadAllItems, getAllFilesInfo } from "./batchDownloader";
-import { downloader } from "./downloader";
+import {
+  downloadAllItems,
+  getAllFilesInfo
+} from "./downloader/batchDownloader";
+import { downloader } from "./downloader/downloader";
 import { isMultipleBody, isSIngleHeadBody, SoloItem } from "./interface/IInput";
 import { ItemInfo } from "./interface/itemInfo";
 import { getAllInfo, getDownloadInfo } from "./item";
 import { clientLogger, serverLogger } from "./logger";
 import Zipper from "./zipper";
 
-export {}; // todo needed for module with its own scope
+export { }; // todo needed for module with its own scope
 require("body-parser");
 require("express-zip");
 
