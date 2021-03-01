@@ -1,7 +1,7 @@
 /**
  * @jest-environment jsdom
  */
-import { buildContent } from "@/savedContent/contentBuilder";
+import { buildContent } from "@/savedContent/ItemBuilder/contentBuilder";
 import SavedContent from "@/savedContent/savedContent";
 import { ISavedImagePost } from "../../savedContent/ISavedContent";
 import comment from "./mockFetchData/soloItem/comment/comment.json";
