@@ -31,17 +31,15 @@ const webExtensionsList = [
 ];
 const imageExtensionList = ["jpg", "jpeg", "png", "gif"];
 const videoExtensionList = ["mp4", "gifv"];
-
+// tocheck getEmbed
 // eslint-disable-next-line max-statements
 export async function buildMedia(
 	data: RedditRawData,
 ): Promise<SavedContentType> {
 	const postHint = data.post_hint;
-	let urlExtension = "";
-
-	if (data.url_overridden_by_dest) {
-		urlExtension = getExtension(data.url_overridden_by_dest);
-	}
+	const urlExtension = data.url_overridden_by_dest
+		? getExtension(data.url_overridden_by_dest)
+		: "";
 
 	if (
 		postHint === "link" ||
@@ -66,14 +64,10 @@ export async function buildMedia(
 		return getVideoMedia(data);
 	}
 	if (
-		videoExtensionList.some((el) => urlExtension === el) ||
-		data?.media?.oembed?.type === "video"
+		data.url_overridden_by_dest &&
+		(videoExtensionList.some((el) => urlExtension === el) ||
+			data?.media?.oembed?.type === "video")
 	) {
-		// tocheck
-		if (!data.url_overridden_by_dest) {
-			throw new Error();
-		}
-		// tocheck getEmbed
 		return returnVideoMedia({ url: data.url_overridden_by_dest, data }); // tocheck
 	}
 	const fallback = // todo check embed of those url
@@ -87,13 +81,15 @@ export async function buildMedia(
 			embed: fallback,
 		});
 	}
-	const isDown = await isDownloadable(data.url_overridden_by_dest ?? ""); // tocheck
-	if (isDown) {
-		return returnVideoMedia({
-			url: data.url_overridden_by_dest ?? "", // tocheck
-			data,
-			needYtDl: true,
-		});
+	if (data.url_overridden_by_dest) {
+		const isDown = await isDownloadable(data.url_overridden_by_dest); // tocheck
+		if (isDown) {
+			return returnVideoMedia({
+				url: data.url_overridden_by_dest, // tocheck
+				data,
+				needYtDl: true,
+			});
+		}
 	}
 	return buildLinkPost(data);
 }
