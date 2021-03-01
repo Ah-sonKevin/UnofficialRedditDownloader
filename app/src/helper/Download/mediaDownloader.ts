@@ -97,6 +97,7 @@ export async function fetchData(
 	downloadIndicator: ILoadingInstance,
 ): Promise<Blob> {
 	if (x.ok) {
+		// todo add setup spinneer
 		const tmpSize = x.headers.get("MediaSize");
 		downloadIndicator.setText("Downloading ...");
 		const fileChunks: Uint8Array[] = [];

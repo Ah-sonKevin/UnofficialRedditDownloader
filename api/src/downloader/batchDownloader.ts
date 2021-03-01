@@ -1,8 +1,8 @@
-import { downloader } from "./downloader";
 import { RedditItem } from "../interface/Item";
 import { ItemInfo } from "../interface/itemInfo";
 import { getAllInfo } from "../item";
 import Zipper from "../zipper";
+import { downloader } from "./downloader";
 
 export function getAllFilesInfo( // todo check promise resolve
 	listItem: RedditItem[],
@@ -20,8 +20,7 @@ export function getAllFilesInfo( // todo check promise resolve
 			} catch (e) {
 				archive.addDownloadFail(item, "Couldn't get Info");
 				if (e instanceof Error) {
-					// tocheck what can e be
-					throw e;
+					throw e; // only one needed, throw without eeror , output ?
 				} else {
 					throw new Error(e);
 				}
