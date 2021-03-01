@@ -93,45 +93,37 @@ export async function multiChannelDownload(
 
 	let videoStreamDone = false;
 	let audioStreamDone = false;
+
 	const respVideo = await fetch(multiItemInfo.video.url);
-	if (respVideo.ok) {
-		const respAudio = await fetch(multiItemInfo.audio.url);
-		if (respAudio.ok) {
-			return new Promise((resolve, reject) => {
-				downloadChannel(respVideo.body, videoNameFile, () => {
-					videoStreamDone = true;
-					if (videoStreamDone && audioStreamDone) {
-						streamMerge(
-							{
-								itemInfo: multiItemInfo,
-								videoExt,
-								videoNameFile,
-								audioNameFile,
-							},
-							resolve,
-							reject,
-						);
-					}
-				});
-				// todo check google dns
-				downloadChannel(respAudio.body, audioNameFile, () => {
-					audioStreamDone = true;
-					if (videoStreamDone && audioStreamDone) {
-						streamMerge(
-							{
-								itemInfo: multiItemInfo,
-								videoExt,
-								videoNameFile,
-								audioNameFile,
-							},
-							resolve,
-							reject,
-						);
-					}
-				});
-			});
-		}
+	const respAudio = await fetch(multiItemInfo.audio.url);
+	if (!respVideo.ok || !respAudio.ok) {
 		throw new Error();
 	}
-	throw new Error();
+	return new Promise((resolve, reject) => {
+		const merge = () =>
+			streamMerge(
+				{
+					itemInfo: multiItemInfo,
+					videoExt,
+					videoNameFile,
+					audioNameFile,
+				},
+				resolve,
+				reject,
+			);
+
+		downloadChannel(respVideo.body, videoNameFile, () => {
+			videoStreamDone = true;
+			if (videoStreamDone && audioStreamDone) {
+				merge();
+			}
+		});
+		// todo check google dns
+		downloadChannel(respAudio.body, audioNameFile, () => {
+			audioStreamDone = true;
+			if (videoStreamDone && audioStreamDone) {
+				merge();
+			}
+		});
+	});
 }
