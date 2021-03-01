@@ -26,10 +26,10 @@ import { computed, defineComponent, reactive, ref, Ref } from "vue";
 
 import { BadLinkError } from "@/errors/restartError";
 import { RawItem } from "@/savedContent/rawItemInterface";
-import { buildContent } from "@/savedContent/contentBuilder";
 import { download } from "@/helper/Download/objectDownloader";
 import { DownloadError } from "@/errors/notifError";
 import { notifyError } from "@/helper/notifierHelper";
+import { buildContent } from "@/savedContent/ItemBuilder/contentBuilder";
 
 export default defineComponent({
 	name: "HomeDownloadLink",
@@ -123,7 +123,7 @@ export default defineComponent({
 				kind: content.kind,
 				data: content.data,
 			});
-			download(item);
+			void download(item);
 		}
 
 		function downloadError(err: unknown) {
