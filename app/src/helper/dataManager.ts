@@ -1,5 +1,5 @@
 import { NetworkError } from "@/errors/restartError";
-import { buildContent } from "@/savedContent/contentBuilder";
+import { buildContent } from "@/savedContent/ItemBuilder/contentBuilder";
 import SavedContent from "@/savedContent/savedContent";
 import User from "@/User/User";
 import { PartialRedditFetchError } from "../errors/notifError";
