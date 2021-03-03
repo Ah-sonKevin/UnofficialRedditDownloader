@@ -1,5 +1,5 @@
 import { managerErrors } from "@/errors/manageError";
-import "@/info/secret/redditAppsIDs"; // tocheck
+import "@/info/secret/redditAppsIDs"; // later token security inspector
 import { generateTypedStore } from "@/store";
 import App from "@/views/App.vue";
 import ElementPlus from "element-plus";
@@ -9,7 +9,6 @@ import { RedditManagerError } from "./errors/error";
 import { makeRouter } from "./router";
 
 const app = createApp(App);
-// app.use(store).use(router).use(ElementPlus).mount("#app"); //tocheck
 
 app.use(generateTypedStore()).use(makeRouter()).use(ElementPlus).mount("#app");
 
