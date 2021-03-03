@@ -57,7 +57,7 @@ export async function refreshAccessToken(): Promise<void> {
 			store.commit(MutationsNames.SET_TOKEN, res.access_token);
 		} else {
 			store.commit(MutationsNames.RESET_TOKEN, undefined);
-			void getRouter().push({ name: "Home" }); // tocheck
+			void getRouter().push({ name: "Home" }); // totest
 		}
 	} else {
 		throw new DataNotFoundError("Refresh Token Not Found ");
@@ -72,7 +72,6 @@ export async function fetchOapi(
 		method: "GET",
 		headers: getOauthHeader(),
 	};
-	// const request = new Request();
 	const response = await fetch(`${OAUTH_API}${endpoint}`, init);
 	if (!response.ok) {
 		if (response.status === 401 && !retry) {
