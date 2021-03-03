@@ -52,26 +52,23 @@ describe("HomeDownloadLink", () => {
 		if (!nock.isActive()) nock.activate();
 	});
 
-	const DOWNLOAD_ERROR_TEXT =
-		"The Download fail, please check that this url correspond to a reddit post";
-	const STRUCTURE_ERROR_TEXT = "This url is invalid, please enter a valid url";
-	// todo doc throwSuggestions (experimental)
-	// todo mail fac
-	// todo add popup for download error / not testable in unit test
-	// todo tooltip or <abbr>
-	// todo <aside> ?
-	// todo hide token global variable (encrypt ?) (web inspector)
-	// todo move nock
-	// todo chant wait for end function
-	// todo not change when just change value
-	// todo change again when new input
-	// todo use better links
-	// todo use find for specific role
-	// todo remove abstraction
-	// todo check change different error message
-	// todo test aria message not send when update BAD to bad
-	// todo check change error message
-	// todo add download error message
+	// toTest doc throwSuggestions (experimental)
+	// toTest mail fac
+	// toTest add popup for download error / not testable in unit test
+	// toTest tooltip or <abbr>
+	// toTest <aside> ?
+	// toTest hide token global variable (encrypt ?) (web inspector)
+	// toTest move nock
+	// toTest chant wait for end function
+	// toTest not change when just change value
+	// toTest change again when new input
+	// toTest use better links
+	// toTest use find for specific role
+	// toTest remove abstraction
+	// toTest check change different error message
+	// toTest test aria message not send when update BAD to bad
+	// toTest check change error message
+	// toTest add download error message
 	// toremember jest limited access component,
 	// toremember should not focus on implementation
 	// tocheck check exception
