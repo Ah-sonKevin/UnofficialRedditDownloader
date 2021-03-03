@@ -1,7 +1,7 @@
 declare module "zip-stream" {
-	// tocheck merge d.tss
+	// later merge d.tss
 	export = ZipStream;
 }
 //  why '=' ?
 
-// why can't use same file both declare ?
+// later why can't use same file both declare ?

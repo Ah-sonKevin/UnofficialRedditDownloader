@@ -10,6 +10,6 @@ declare class ZipStream extends Stream.Transform {
 		stream: NodeJS.ReadableStream,
 		{ name }: { name: string },
 		callback: (err: Error) => void,
-	): void; // tocheck
+	): void;
 	resume(): ZipStream;
 }
