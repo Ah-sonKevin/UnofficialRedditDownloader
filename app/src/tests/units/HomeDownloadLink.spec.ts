@@ -15,10 +15,10 @@ jest.mock("@/helper/Download/objectDownloader");
 
 describe("HomeDownloadLink", () => {
 	const BASE_URL = "www.reddit.com";
-	const EXTENSION = "/r/URL"; // todo rename
-	const badlyStructuredUrl = `red.com${EXTENSION}`;
-	const wellStructuredUrl = BASE_URL + EXTENSION;
-	const wellStructuredUrlWithExtension = `${EXTENSION}.json`;
+	const TEST_URL = "/r/URL";
+	const badlyStructuredUrl = `red.com${TEST_URL}`;
+	const wellStructuredUrl = BASE_URL + TEST_URL;
+	const wellStructuredUrlWithExtension = `${TEST_URL}.json`;
 
 	const VALID_URL = "/r/VALID_URL";
 	const INVALID_URL = "/r/INVALID_URL";
@@ -27,14 +27,9 @@ describe("HomeDownloadLink", () => {
 	const fullValidUrl = BASE_URL + VALID_URL;
 	const fullInvalidUrl = BASE_URL + INVALID_URL;
 
-	beforeEach(() => {
-		render(HomeDownloadLink, {
-			global: {
-				plugins: [ElementPlus],
-			},
-		});
-
-		mocked(Downloader.download).mockClear();
+	const DOWNLOAD_ERROR_TEXT =
+		"The Download fail, please check that this url correspond to a reddit post";
+	const STRUCTURE_ERROR_TEXT = "This url is invalid, please enter a valid url";
 
 	beforeAll(() => {
 		nock(`https://${BASE_URL}`)
@@ -84,11 +79,11 @@ describe("HomeDownloadLink", () => {
 	// toremember jest limited access component,
 	// toremember should not focus on implementation
 	// tocheck check exception
-	// tocheck error to check on git/stack
+
 
 	function updateInput(url: string) {
 		const input = screen.getByRole("textbox");
-		userEvent.type(input, url); // tocheck
+		userEvent.type(input, url);
 	}
 	function submitForm() {
 		userEvent.click(screen.getByRole("button", { name: "Download" }));
