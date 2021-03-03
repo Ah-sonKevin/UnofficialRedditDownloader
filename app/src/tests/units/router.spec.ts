@@ -29,7 +29,7 @@ jest.mock("@/helper/dataManager", () => ({
 
 let router: Router;
 // tocheck who really need store ?
-//todo put server in environment
+// todo put server in environment
 function renderComponent(
 	store: StoreTypeTemp,
 	{
@@ -42,12 +42,8 @@ function renderComponent(
 		query?: unknown;
 	},
 ) {
-	let queryTmp; // tocheck
-	if (query) {
-		queryTmp = query;
-	} else {
-		queryTmp = {};
-	}
+	const queryTmp = query ?? {};
+
 	return render(NavTest, {
 		global: {
 			plugins: [ElementPlus, routerRender, store],
@@ -64,7 +60,7 @@ describe("Router Test", () => {
 		router = makeRouter();
 	});
 
-	// todo check create fresh store/router  | initial state
+	// tocheck check create fresh store/router  | initial state
 
 	describe("Connection", () => {
 		test("Is Connected", async () => {
