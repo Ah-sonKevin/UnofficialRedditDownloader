@@ -4,7 +4,7 @@ import { ISavedTextPost } from "@/savedContent/ISavedContent";
 export function getText(item: ISavedTextPost): string {
 	const parser = new DOMParser();
 
-	const parsedContent = parser.parseFromString(item.text.htmlText, "text/html"); // tocheck
+	const parsedContent = parser.parseFromString(item.text.htmlText, "text/html");
 	const stringContent = parsedContent.documentElement.textContent;
 
 	let res = "";

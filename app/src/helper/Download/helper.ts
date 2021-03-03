@@ -4,11 +4,11 @@ import {
 	isLink,
 	isText,
 	isVideo,
-	SavedContentType,
+	SavedContentType
 } from "@/savedContent/ISavedContent";
 import { ILoadingInstance } from "element-plus/lib/el-loading/src/loading.type";
 
-export const cancelController = new AbortController(); // tocheck
+export const cancelController = new AbortController();
 const suffixList = ["B", "KiB", "MiB", "GiB"];
 const SIZE_RATIO = 1024;
 const SIZE_DECIMAL_PRECISION = 2;
@@ -46,7 +46,6 @@ export function getExt(item: SavedContentType): string {
 		return "txt";
 	}
 	if (isVideo(item) || isImage(item) || isGallery(item)) {
-		// todo check type
 		return item.getMediaUrl().split(".").slice(-1)[0];
 	}
 	return exhaustivenessCheck();

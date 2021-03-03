@@ -1,7 +1,7 @@
 import { PartialDownloadError } from "@/errors/notifError";
 import { NetworkError } from "@/errors/restartError";
 import { isGallery, SavedContentType } from "@/savedContent/ISavedContent";
-import { ItemInfo, SuccessList } from "@/savedContent/ItemInterface";
+import { SuccessList } from "@/savedContent/ItemInterface";
 import { BatchItem } from "@/savedContent/serverInputInterface";
 import { ElLoading } from "element-plus";
 import JSZip, { loadAsync } from "jszip";
@@ -11,12 +11,10 @@ import { cleanString } from "../stringHelper";
 import { cancelController, getName } from "./helper";
 import { fetchData, getItemInfo } from "./mediaDownloader";
 
-function batchGetItemInfo(item: SavedContentType): ItemInfo[] {
-	// todo rename
-	// todo tocheck type received on server after parser string / boolean
+function batchGetItemInfo(item: SavedContentType): BatchItem[] {
+	// tocheck : redo / separate gallery ? /rename
 	if (isGallery(item)) {
 		return item.gallery.galleryURLs.map((el, index) => ({
-			// tocheck other function for image ?
 			url: el,
 			name: getName(
 				`${item.title}_${String(index + 1)}`,
@@ -79,7 +77,7 @@ function checkForPartialDownloadError(blob: Blob) {
 		.then((res) => {
 			const arrays = JSON.parse(res) as SuccessList;
 			if (arrays.fail.length > 0) {
-				throw new PartialDownloadError(arrays); // tocheck
+				throw new PartialDownloadError(arrays); // todo check affichage error
 			}
 			return arrays;
 		});

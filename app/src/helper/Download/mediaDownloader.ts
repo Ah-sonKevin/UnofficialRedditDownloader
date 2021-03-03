@@ -91,13 +91,14 @@ export async function downloadMedia(
 	}
 }
 
+// todo remove type from savedContent
 // eslint-disable-next-line max-statements
 export async function fetchData(
 	x: Response,
 	downloadIndicator: ILoadingInstance,
 ): Promise<Blob> {
 	if (x.ok) {
-		// todo add setup spinneer
+		// todo add setup spinneer function / need to undersand setInterval argument
 		const tmpSize = x.headers.get("MediaSize");
 		downloadIndicator.setText("Downloading ...");
 		const fileChunks: Uint8Array[] = [];
@@ -108,7 +109,7 @@ export async function fetchData(
 			const totalSize = parseInt(tmpSize);
 			const sizeInfo = getSizeInfo(totalSize);
 			updateSpinner = setInterval(() => {
-				updateDownloadSpinner(downloadIndicator, receivedData, sizeInfo); // tocheck update
+				updateDownloadSpinner(downloadIndicator, receivedData, sizeInfo); 
 			}, SPINNER_UPDATE_FREQUENCY);
 		}
 

@@ -13,10 +13,10 @@ import { downloadPageAsText, getText } from "./textDownloader";
 export function cancelDownload(): void {
 	cancelController.abort();
 }
-// todo test hover
-// todo test notif
-// todo test download a part
-// todo test throw error
+// totest test hover
+// totest test notif
+// totest test download a part
+// totest test throw error
 
 // eslint-disable-next-line max-statements
 
