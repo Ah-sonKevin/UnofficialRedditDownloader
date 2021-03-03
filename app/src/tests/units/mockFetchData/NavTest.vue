@@ -10,11 +10,8 @@ export default defineComponent({
 	name: "NavTest",
 
 	setup() {
-		const routeTmp: string | undefined = inject("route");
-		let route: string;
-		if (routeTmp) {
-			route = routeTmp; // tocheck
-		} else {
+		const route: string | undefined = inject("route");
+		if (!route) {
 			throw new Error("Test is missing route");
 		}
 
