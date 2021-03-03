@@ -12,9 +12,8 @@ export type StoreTypeTemp = AuthStoreType<Pick<StoreState, "auth">> &
 export const storeKey: InjectionKey<Store<StoreState>> = Symbol("InjectionKey");
 const pathsArray = ["auth", "user"];
 // todo keep alive manager
-export const makeStore = () =>
+const makeStore = () =>
 	createStore<StoreState>({
-		// tocheck remove export
 		modules: {
 			user: userModule,
 			auth: AuthModule,
