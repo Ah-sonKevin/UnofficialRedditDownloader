@@ -41,8 +41,6 @@ export interface ISavedContentBase {
 	id: string;
 	fullname: string;
 	author: string;
-	postAuthor: string;
-	postLink: string;
 	subreddit: string;
 	creationDate: Date;
 	category: string;
