@@ -5,8 +5,7 @@ import SavedContent from "../savedContent";
 import { cleanURL, getImage } from "./helper";
 
 export function buildLinkPost(data: RedditRawData): ISavedLinkPost {
-	const content = new SavedContent(data, postType.LINK);
-	content.type = postType.LINK;
+	const content = new SavedContent(data);
 
 	if (!data.url_overridden_by_dest) {
 		throw new Error();

@@ -41,21 +41,13 @@ export interface ISavedContentBase {
 	id: string;
 	fullname: string;
 	author: string;
-	postAuthor?: string;
-	postLink?: string;
+	postAuthor: string;
+	postLink: string;
 	subreddit: string;
 	creationDate: Date;
 	category: string;
 	title: string;
 	redditUrl: string;
-	type: string;
-
-	// tocheck really needed ?
-	hasImage: boolean; // tocheck needed, understand cas:boolean
-	isVideo: boolean;
-	isText: boolean;
-	isLink: boolean;
-	isGallery: boolean;
 }
 
 export type SavedContentType =
@@ -122,7 +114,16 @@ export function isText(item: ISavedContentBase): item is ISavedTextPost {
 	return content.text !== undefined;
 }
 
-export function isMedia(item: any): item is Media {
+export function isComment(item: ISavedContentBase): item is ISavedCommentPost {
+	const comment = item as ISavedCommentPost;
+	return comment.comment !== undefined;
+}
+
+export function hasMedia(item: ISavedContentBase): item is Media {
 	// tocheck type any
-	return isImage(item) || isGallery(item) || isVideo(item);
+	return isImage(item) || isGallery(item) || isVideo(item) || isLink(item);
+}
+
+export function hasText(item: ISavedContentBase) {
+	return isText(item) || isComment(item);
 }

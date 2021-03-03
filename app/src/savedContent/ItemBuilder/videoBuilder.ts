@@ -11,12 +11,6 @@ import { cleanURL, getImage } from "./helper";
 export async function isDownloadable(url: string): Promise<boolean> {
 	const authHeaders = new Headers();
 	authHeaders.append("Content-Type", "application/x-www-form-urlencoded");
-	// tocheck
-	/*	const res = await fetch("/api/getHead/", {
-		method: "POST",
-		body: `url=${cleanURL(url)}`,
-		headers: authHeaders,
-	}); */
 	const res = await postOapi("/api/getHead/", [
 		new Couple("url", cleanURL(url)),
 	]);
@@ -78,7 +72,7 @@ export function buildVideoPost(
 		embeddedUrl: string;
 	},
 ): SavedContentType {
-	const content = new SavedContent(data, postType.VIDEO);
+	const content = new SavedContent(data);
 	return {
 		...content,
 		video: {
@@ -93,9 +87,12 @@ export function buildVideoPost(
 }
 // tocheck precise interface SavedContentType
 export function getVideoMedia(data: RedditRawData): SavedContentType {
-	if (data.domain === "youtube.com" || data.domain === "youtu.be") {
+	if (
+		(data.domain === "youtube.com" || data.domain === "youtu.be") &&
+		data.url_overridden_by_dest
+	) {
 		return returnVideoMedia({
-			url: data.url_overridden_by_dest ?? "", // tocheck
+			url: data.url_overridden_by_dest,
 			data,
 			needYtDl: true,
 		});
@@ -109,19 +106,17 @@ export function getVideoMedia(data: RedditRawData): SavedContentType {
 		});
 	}
 	if (data?.media?.oembed?.thumbnail_url) {
-		let embed = "";
-		if (data?.media?.oembed?.html) {
-			embed = data?.media?.oembed?.html; // todo check embed
-		}
-
 		return returnVideoMedia({
 			url: data.media.oembed.thumbnail_url,
 			data,
-			embed,
+			embed: data?.media?.oembed?.html ?? "",
 		});
 	}
+	if (!data.url_overridden_by_dest) {
+		throw new Error("INVALID POST: MISSING URL");
+	}
 	return returnVideoMedia({
-		url: data.url_overridden_by_dest ?? "", // tocheck
+		url: data.url_overridden_by_dest, // tocheck type
 		data,
 		needYtDl: true,
 	});

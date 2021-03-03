@@ -5,7 +5,7 @@ import SavedContent from "../savedContent";
 import { cleanURL, clearText, decodeHtml } from "./helper";
 
 export function buildCommentPost(data: RedditRawData): ISavedCommentPost {
-	const content = new SavedContent(data, postType.COMMENT);
+	const content = new SavedContent(data);
 	if (!data.body || !data.body_html || !data.link_author || !data.link_url) {
 		throw new Error();
 	}

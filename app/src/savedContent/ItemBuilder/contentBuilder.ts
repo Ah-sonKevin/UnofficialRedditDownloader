@@ -13,8 +13,6 @@ import {
 	returnVideoMedia,
 } from "./videoBuilder";
 
-// todo remove all SavedContent type replace with interface
-// todo remove intermediary
 const webExtensionsList = [
 	"html",
 	"org",
@@ -43,7 +41,7 @@ export async function buildMedia(
 
 	if (
 		postHint === "link" ||
-		webExtensionsList.some((el) => urlExtension === el) // tocheck union
+		webExtensionsList.some((el) => urlExtension === el)
 	) {
 		const parentList = data.crosspost_parent_list;
 		if (parentList && parentList[0]) {
@@ -52,10 +50,10 @@ export async function buildMedia(
 		return buildLinkPost(data);
 	}
 	if (
-		postHint === "image" ||
+		postHint === "image" || // tocheck posthint for galleries
 		imageExtensionList.some((el) => urlExtension === el)
 	) {
-		return buildImagePost(data); // tocheck
+		return buildImagePost(data);
 	}
 	if (data.is_gallery === true) {
 		return buildGalleryPost(data);
@@ -68,7 +66,7 @@ export async function buildMedia(
 		(videoExtensionList.some((el) => urlExtension === el) ||
 			data?.media?.oembed?.type === "video")
 	) {
-		return returnVideoMedia({ url: data.url_overridden_by_dest, data }); // tocheck
+		return returnVideoMedia({ url: data.url_overridden_by_dest, data }); // tocheck  type undefined
 	}
 	const fallback = // todo check embed of those url
 		data.preview?.reddit_video_preview?.fallback_url ??
@@ -82,10 +80,10 @@ export async function buildMedia(
 		});
 	}
 	if (data.url_overridden_by_dest) {
-		const isDown = await isDownloadable(data.url_overridden_by_dest); // tocheck
+		const isDown = await isDownloadable(data.url_overridden_by_dest);
 		if (isDown) {
 			return returnVideoMedia({
-				url: data.url_overridden_by_dest, // tocheck
+				url: data.url_overridden_by_dest,
 				data,
 				needYtDl: true,
 			});
@@ -93,7 +91,7 @@ export async function buildMedia(
 	}
 	return buildLinkPost(data);
 }
-// todo to refactor
+
 export async function buildContent(saved: {
 	kind: string;
 	data: RedditRawData;
