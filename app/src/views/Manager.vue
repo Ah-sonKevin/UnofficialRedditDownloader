@@ -33,7 +33,7 @@
 						@showSelectedDialog="showSelectedDialog"
 					/>
 					<ManagerSearch
-						:filtered-items="partiallyFilteredItems"
+						:filtered-items="sideFilteredItem"
 						:search-input="searchInput"
 						@updateInput="updateInput"
 					/>
@@ -62,8 +62,6 @@
 							@download="download($event)"
 						>
 						</ManagerList>
-
-						//tocheck maybe move download
 					</template>
 				</el-skeleton>
 			</el-main>
@@ -187,7 +185,7 @@ export default defineComponent({
 		}
 
 		let selectedItem: SavedContent[] = [];
-		const partiallyFilteredItems: Ref<SavedContent[]> = ref([]);
+		const sideFilteredItem: Ref<SavedContent[]> = ref([]);
 		const filteredItems: Ref<SavedContent[]> = ref([]);
 
 		const items: Ref<SavedContent[]> = ref([]);
@@ -225,7 +223,7 @@ export default defineComponent({
 				categoryFilter: categoryFilter.value,
 				subredditFilter: subredditFilter.value,
 			});
-			partiallyFilteredItems.value = filtered; // todo need better name
+			sideFilteredItem.value = filtered;
 			const filterInput = searchByText(filtered, searchInput.value);
 			const notHidden = hideDeleted(filterInput, showDeleted.value);
 			filteredItems.value = notHidden;
@@ -249,7 +247,6 @@ export default defineComponent({
 				.then((fetchedItems) => {
 					items.value = fetchedItems;
 					subredditList.value = setSubredditList(fetchedItems);
-					loading.value = false; // tocheck move in finally ?
 					return items;
 				})
 				.then(() => {
@@ -263,9 +260,11 @@ export default defineComponent({
 					return categoriesList;
 				})
 				.catch((err) => {
+					// todo error screen / redirect
 					throw err;
 				})
 				.finally(() => {
+					loading.value = false;
 					loadingSpinner.close();
 				});
 		});
@@ -327,7 +326,7 @@ export default defineComponent({
 			selectAll,
 			searchInput,
 			updateInput,
-			partiallyFilteredItems,
+			sideFilteredItem,
 
 			showSelectedDialog,
 			changeShowSelectedDialog,
