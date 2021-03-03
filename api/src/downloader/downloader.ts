@@ -7,21 +7,18 @@ import {
 } from "../interface/itemInfo";
 import { multiChannelDownload } from "./youtubeDl";
 
-export {}; // todo needed for module with its own scope
 require("express-zip");
 
 export async function download(
 	item: OneChannelItemInfo,
 ): Promise<NodeJS.ReadableStream> {
-	// tocheck type
 	const res = await fetch(item.url);
 	if (res.ok) {
 		return res.body;
 	}
-	throw new Error(); // todo
+	throw new Error("Download failed"); // detail create custom error instead of empty error
 }
 
-// eslint-disable-next-line max-lines-per-function
 export async function youtubeDlDownload(
 	itemInfo: ItemInfo,
 ): Promise<NodeJS.ReadableStream> {
@@ -33,7 +30,6 @@ export async function youtubeDlDownload(
 	}
 	throw new Error("Invalid item info");
 }
-// todo replace throw with next (auto logServer in next)
 export function downloader(itemInfo: ItemInfo): Promise<NodeJS.ReadableStream> {
 	if (itemInfo.needYoutubeDl) {
 		return youtubeDlDownload(itemInfo);
