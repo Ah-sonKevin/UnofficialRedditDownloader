@@ -30,7 +30,8 @@ export default defineComponent({
 			type: Boolean,
 		},
 	},
-	emits: ["unsave", "selectAll", "unselectAll", "showSelectedDialog"], // tocheck why
+	emits: ["unsave", "selectAll", "unselectAll", "showSelectedDialog"]
+	//toremember emits allow, to see all event, overload native ones, and add validator to arguments
 	setup(props) {
 		const context = useContext();
 
@@ -76,7 +77,9 @@ export default defineComponent({
 
 		function getSelectedURLs() {
 			const urls = props.selectedItem.map((el) => el.redditUrl);
-			downloadObject(new Blob(urls), "redditUrls.txt"); // tocheck
+			downloadObject(new Blob(urls), "redditUrls.txt"); // totest
+
+			//totest unit test compare blobls ?
 		}
 
 		function changeCategory() {}
