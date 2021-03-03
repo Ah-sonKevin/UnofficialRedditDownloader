@@ -11,9 +11,7 @@ import {
 } from "./notifError";
 import { RestartError } from "./restartError";
 
-const MESSAGE_DURATION = 10000;
-
-// todo reformat
+const MESSAGE_DURATION = 5000;
 
 function getMessage(msg: string, html = false): IMessageOptions {
 	return {
@@ -24,7 +22,7 @@ function getMessage(msg: string, html = false): IMessageOptions {
 	};
 }
 
-function reportPartialDownload(fail: string[]) {
+function partialDownloadErrorMessage(fail: string[]) {
 	let message = "";
 	let title = "";
 	message = "The following files couldn't be downloaded \n<ul>";
@@ -41,11 +39,10 @@ function reportPartialDownload(fail: string[]) {
 	});
 }
 
-function reportMultipleErrors(err: Error) {
+function partialDownloadErrorPopup(err: Error) {
 	const showPopup = () => {
 		if (err instanceof PartialDownloadError) {
-			// tocheck
-			reportPartialDownload(err.fail);
+			partialDownloadErrorMessage(err.fail);
 		}
 	};
 	const htmlNode = `Some files couldn't be download  <button type="button" id='buttonNotif'">See which one</button>`;
@@ -60,7 +57,7 @@ function reportMultipleErrors(err: Error) {
 	};
 }
 
-function reportPartialDownloadError(err: PartialDownloadError) {
+function partialDownloadErrorSelectionMessage(err: PartialDownloadError) {
 	logger.info(PartialDownloadError);
 	if (err.success.length === 0) {
 		ElMessage(getMessage("The files couldn't be downloaded"));
@@ -70,7 +67,7 @@ function reportPartialDownloadError(err: PartialDownloadError) {
 				getMessage(`The file ${err.fail[0]} +  couldn't be downloaded`),
 			);
 		} else {
-			reportMultipleErrors(err);
+			partialDownloadErrorPopup(err);
 		}
 	}
 }
@@ -87,7 +84,7 @@ export function managerErrors(err: RedditManagerError): void {
 		ElMessage({ message: err.popupMessage, showClose: true });
 	} else if (err instanceof NotifError) {
 		if (err instanceof PartialDownloadError) {
-			reportPartialDownloadError(err);
+			partialDownloadErrorSelectionMessage(err);
 		} else if (err instanceof PartialRedditFetchError) {
 			notifyError(`Couldn't fetch the post :${err.name}`);
 		} else {
