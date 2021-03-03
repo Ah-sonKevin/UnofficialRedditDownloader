@@ -1,4 +1,3 @@
-// todo reduce
 interface RedditVideo {
 	fallback_url: string;
 }
@@ -38,7 +37,7 @@ export interface RedditRawData {
 	content_categories?: string | null;
 	created_utc: number;
 	crosspost_parent_list?: RedditRawData[];
-	domain?: string; // tocheck
+	domain?: string;
 	is_reddit_media_domain?: boolean;
 	is_self?: boolean | null;
 	is_video?: boolean;
