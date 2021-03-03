@@ -36,7 +36,8 @@ describe("HomeDownloadLink", () => {
 
 		mocked(Downloader.download).mockClear();
 
-		nock(`https://${BASE_URL}`) // todo move
+	beforeAll(() => {
+		nock(`https://${BASE_URL}`)
 			.get(validUrlWithExtension)
 			.reply(200, item)
 			.get(validUrlWithExtension)
@@ -46,6 +47,17 @@ describe("HomeDownloadLink", () => {
 			.get(invalidUrlWithExtension)
 			.reply(404)
 			.persist();
+	});
+
+	beforeEach(() => {
+		render(HomeDownloadLink, {
+			global: {
+				plugins: [ElementPlus],
+			},
+		});
+		mocked(Downloader.download).mockClear();
+		nock.restore();
+		nock.activate();
 	});
 
 	afterEach(() => {
