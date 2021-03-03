@@ -92,7 +92,6 @@ By framing the design philosophy to include single-player, where everyone alread
 				title: "Clear lemon pie",
 				isVideo: false,
 				comment: {
-					// tocheck remove new line
 					htmlText: `<div class="md"><p>Since you say it doesn&#39;t exist I&#39;m guessing you didn&#39;t find one?</p>
 <p>Here is one from a youtuber who tried to make a bunch of clear foods.</p>
 <p><a href="https://barrylewis.net/recipe/clear-lemon-meringue-pie/">https://barrylewis.net/recipe/clear-lemon-meringue-pie/</a></p>
@@ -161,27 +160,16 @@ https://www.youtube.com/playlist?list=PLfItiEY3o1msEiqMm3FukoGiFFcbAccdp`,
 				id: "kt2slt",
 				fullname: "t3_kt2slt",
 				subreddit: "graphic_design",
-
 				title: "I designed a support bubble Valentine’s Day card",
-				isVideo: false,
-
-				type: "Image",
-
 				redditUrl:
 					"https://www.reddit.com/r/graphic_design/comments/kt2slt/i_designed_a_support_bubble_valentines_day_card/",
 				isDeleted: false,
-				isGallery: false,
-				isLink: false,
 				isSelected: false,
-				isText: false,
-				hasImage: true,
 				category: "",
 				creationDate: new Date(content.creationDate),
 				image: {
 					imageLink: "https://i.redd.it/nxkfpkbm54a61.jpg",
-				},
-				// getImageUrl: () => "https://i.redd.it/nxkfpkbm54a61.jpg",
-				// getMediaUrl: () => "https://i.redd.it/nxkfpkbm54a61.jpg",
+				}
 			} as ISavedImagePost);
 		});
 	});
