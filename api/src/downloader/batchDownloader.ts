@@ -4,7 +4,7 @@ import { getAllInfo } from "../item";
 import Zipper from "../zipper";
 import { downloader } from "./downloader";
 
-export function getAllFilesInfo( // todo check promise resolve
+export function getAllFilesInfo(
 	listItem: RedditItem[],
 	archive: Zipper,
 	prepArray: ItemInfo[],
@@ -19,14 +19,10 @@ export function getAllFilesInfo( // todo check promise resolve
 				return elInfo;
 			} catch (e) {
 				archive.addDownloadFail(item, "Couldn't get Info");
-				if (e instanceof Error) {
-					throw e; // only one needed, throw without eeror , output ?
-				} else {
-					throw new Error(e);
-				}
+				throw e;
 			}
 		}
-		// todo check element-plus grid (design)
+		// toremember check element-plus grid (design)
 		prepPromiseArray.push(getAllInfoPrep());
 	});
 	return prepPromiseArray;
