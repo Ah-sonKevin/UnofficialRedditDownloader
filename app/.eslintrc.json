@@ -32,6 +32,7 @@
 		"plugin:jest-dom/recommended",
 		"plugin:testing-library/recommended",
 		"plugin:testing-library/vue",
+		"plugin:vuejs-accessibility/recommended",
 		"prettier"
 	],
 
@@ -59,6 +60,7 @@
 		"no-loops",
 		"jest-dom",
 		"testing-library",
+		"vuejs-accessibility",
 		"prettier"
 	],
 	"rules": {

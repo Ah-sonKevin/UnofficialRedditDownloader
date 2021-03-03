@@ -122,6 +122,7 @@
 		"eslint-plugin-security": "^1.4.0",
 		"eslint-plugin-testing-library": "^3.10.1",
 		"eslint-plugin-vue": "^7.5.0",
+		"eslint-plugin-vuejs-accessibility": "^0.6.1",
 		"eslint-plugin-xss": "^0.1.10",
 		"file-loader": "^6.2.0",
 		"flush-promises": "^1.0.2",
