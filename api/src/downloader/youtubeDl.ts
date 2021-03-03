@@ -47,7 +47,7 @@ export function streamMerge(
 			const stream: Stream.Readable = createReadStream(nameFile)
 				.on("error", () => {
 					unlink(nameFile, () => {});
-					reject(new Error()); // todo check empty error
+					reject(new Error("Can't load stream"));
 					stream.destroy();
 				})
 				.on("close", () => {
@@ -60,7 +60,7 @@ export function streamMerge(
 		});
 }
 
-function downloadChannel( // tocheck promisify ?
+function downloadChannel(
 	mediaStream: NodeJS.ReadableStream,
 	mediaName: string,
 	callback: () => void,
@@ -118,7 +118,7 @@ export async function multiChannelDownload(
 				merge();
 			}
 		});
-		// todo check google dns
+		// toremember check google dns
 		downloadChannel(respAudio.body, audioNameFile, () => {
 			audioStreamDone = true;
 			if (videoStreamDone && audioStreamDone) {
