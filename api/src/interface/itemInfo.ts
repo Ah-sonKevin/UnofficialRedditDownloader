@@ -26,7 +26,7 @@ export interface MultiChannelItemInfo {
 }
 
 export function isOneChannel(item: ItemInfo): item is OneChannelItemInfo {
-	// todo test guards
+	// toTest test guards
 	const one = item as OneChannelItemInfo;
 	return one.url !== undefined;
 }
