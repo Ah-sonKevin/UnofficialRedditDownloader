@@ -1,10 +1,12 @@
 /**
  * @jest-environment jsdom
  */
+import { OAUTH_API } from '@/helper/fetchHelper/fetchHelper';
 import { StoreTypeTemp } from "@/store";
 import Manager from "@/views/Manager.vue";
 import { render } from "@testing-library/vue";
 import ElementPlus from "element-plus";
+import nock from 'nock/types';
 
 const LOADING_TIMEOUT = 1000;
 const renderManager = (store: StoreTypeTemp) =>
@@ -14,12 +16,12 @@ const renderManager = (store: StoreTypeTemp) =>
 		},
 	});
 
-test("tmp", () => expect(true).toBeTruthy());
-// todo nock doc Memory issues with Jest
-/*
+
 describe("Home.vue", () => {
 	beforeEach(async () => {
-		jest.resetAllMocks(); // todo mock getItem
+		jest.resetAllMocks(); // totest mock getItem
+		nock.restore()
+		nock.activate()
 	});
 
 	beforeAll(() => {
@@ -31,6 +33,8 @@ describe("Home.vue", () => {
 			.persist();
 	});
 
+	test("tmp", () => expect(true).toBeTruthy());
+	/*
 	test("Input text", async () => {
 		expect(true).toBeTruthy();
 	});
@@ -75,7 +79,7 @@ describe("Selection", () => {
 });
 
 describe("Filter", () => {
-	// todo test for each
+	// totest test for each
 	test("One filter", async () => {});
 
 	test("Undo filter", async () => {});
@@ -88,7 +92,7 @@ describe("Filter", () => {
 });
 
 describe("Sorter", () => {
-	// todo test for each
+	// totest test for each
 	test("One filter", async () => {});
 
 	test("Undo filter", async () => {});
@@ -100,4 +104,4 @@ describe("Sorter", () => {
 	test("Unsave selected", async () => {});
 });
 */
-// todo test error popup
+// totest test error popup
