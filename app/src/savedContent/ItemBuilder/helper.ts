@@ -43,3 +43,9 @@ export function getExtension(url: string): string {
 	}
 	return urlExtension;
 }
+
+export function clearText(text: string): string {
+	return text.replace(/\n\n/g, "\n");
+}
+
+// tocheck need helper ?
