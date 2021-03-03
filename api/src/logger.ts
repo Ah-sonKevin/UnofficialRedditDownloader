@@ -1,7 +1,4 @@
-// todo needed for module with its own scope
 import winston from "winston";
-
-export {};
 
 export const serverLogger = winston.createLogger({
 	format: winston.format.combine(

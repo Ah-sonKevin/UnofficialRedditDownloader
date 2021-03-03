@@ -1,7 +1,7 @@
 import Stream from "stream";
 import Packer from "zip-stream";
 import { ZipStream } from "../zipStream";
-import { clientLogger, serverLogger } from "./logger"; // todo needed for module with its own scope
+import { clientLogger, serverLogger } from "./logger"; 
 
 export {};
 

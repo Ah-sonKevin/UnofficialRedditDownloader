@@ -14,7 +14,6 @@ import { getAllInfo, getDownloadInfo } from "./item";
 import { clientLogger, serverLogger } from "./logger";
 import Zipper from "./zipper";
 
-export {}; // todo needed for module with its own scope
 require("body-parser");
 require("express-zip");
 
@@ -25,27 +24,23 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const TEXT_SIZE = 30; // tocheck needed ? only one ?
-// todo check input
+const TEXT_SIZE = 30; // tocheck needed  or send name before
 app.post("/api/getHead/", (req, res, next) => {
 	if (!isSIngleHeadBody(req.body)) {
 		next(new Error("Invalid Input Body"));
-
-		//	throw new Error(); // tocheck avoid
-		// tocheck what happen azfter error / crash ?
+		// detail what happen after error / crash ?
 	} else {
 		getDownloadInfo(req.body.url)
 			.then(() => res.send(true))
 			.catch(() => res.send(false));
 	}
 });
-// tocheck type guard before .json ?
+// tocheck async express function
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 app.post("/api/downItem/", async (req, res, next) => {
 	const item = req.body as SoloItem; // tocheck ?? type guard ?
-	// todo send boolean instead of string (json)
 	const listPart = item.url.split("/");
-	const path = `${listPart.slice(-1)[0].substr(0, TEXT_SIZE)}`; // todo send name directly
+	const path = `${listPart.slice(-1)[0].substr(0, TEXT_SIZE)}`;
 	const needYtdl = item.needYdl ? (JSON.parse(item.needYdl) as boolean) : false;
 
 	const info = await getAllInfo({
@@ -73,8 +68,6 @@ app.post("/api/downItem/", async (req, res, next) => {
 		});
 });
 
-// todo nested or own file or seprate function
-// tocheck names properties
 // todo add folder name to nameFIle /folderName/name
 
 // eslint-disable-next-line max-statements
@@ -87,7 +80,6 @@ app.post("/api/downBatchInfo/", (req, res, next) => {
 		})
 		.on("error", (err: Error) => next(err))
 		.pipe(res);
-	// tocheck structure
 	if (!isMultipleBody(req.body)) {
 		next(new Error("Invalid Input Body"));
 		return;
@@ -95,14 +87,15 @@ app.post("/api/downBatchInfo/", (req, res, next) => {
 	const list = req.body;
 	const prepArray: ItemInfo[] = [];
 	const prepPromiseArray: Promise<ItemInfo>[] = getAllFilesInfo(
-		// check promsie resolve value
 		list,
 		archive,
 		prepArray,
 	);
 
-	Promise.allSettled(prepPromiseArray) // tocheck get array with all answer / replace prep array
-		.then(() => {
+	Promise.allSettled(prepPromiseArray)
+		.then((x) => {
+			const y = x[0];
+			console.log(y); // tocheck value
 			const totalSize = prepArray.reduce((acc, val) => acc + val.size, 0);
 			res.setHeader("MediaSize", totalSize);
 
@@ -111,22 +104,19 @@ app.post("/api/downBatchInfo/", (req, res, next) => {
 				archive,
 			);
 			return Promise.allSettled(promiseArray);
-		}) // tocheck
-		.then(
-			() => archive.endArchive(), // tocheck
-		)
+		})
+		.then(() => archive.endArchive())
 		.catch((err) => {
 			// eslint-disable-next-line promise/no-callback-in-promise
 			next(err);
 		});
 });
-
+// tocheck try/catch function to send in next function
 app.post("/api/logError/", (req) => {
 	clientLogger.error(req.body);
 });
 
 app.use((err: string, req: Request, res: Response) => {
-	// tocheck type //test
 	if (req.xhr) {
 		serverLogger.error(err);
 		res.status(400).send(new Error(err));

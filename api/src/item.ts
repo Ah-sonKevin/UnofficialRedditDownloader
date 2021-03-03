@@ -38,8 +38,6 @@ export const getDownloadInfoFormat = util.promisify(
 
 export const getDownloadInfo = util.promisify(oneParameterYoutubeGetInfo);
 
-export {}; // todo needed for module with its own scope
-
 function isInfo(item: YoutubeDlInfo | youtubeDl.Info): item is YoutubeDlInfo {
 	return (item as YoutubeDlInfo).url !== undefined;
 }
@@ -47,7 +45,7 @@ export async function getInfoFormat(
 	url: string,
 	format: string,
 ): Promise<YoutubeDlInfo> {
-	const info = await getDownloadInfoFormat({ format, url }); // tocheck
+	const info = await getDownloadInfoFormat({ format, url }); // toremember type from @types are incomplete
 	if (isInfo(info)) {
 		return info;
 	}
@@ -72,7 +70,6 @@ export function getSize(url: string): Promise<number> {
  * @param {string} folder
  */
 export async function getAllInfo(item: RedditItem): Promise<ItemInfo> {
-	// tocheck does not need info interface for item without need to youtubeDl or specific interface N
 	if (!item.needYtdl) {
 		const size = await getSize(item.url);
 		if (size) {
@@ -87,16 +84,16 @@ export async function getAllInfo(item: RedditItem): Promise<ItemInfo> {
 		}
 		throw new Error();
 	}
-	return getInfoFormat(item.url, mediaFormat.allInOne) // tocheck need interface & mediaFormat ?
+	return getInfoFormat(item.url, mediaFormat.allInOne)
 		.then(async (info) => {
-			const size = await getSize(info.url); // tocheck that url exist
-			// todo check info.size
+			const size = await getSize(info.url);
+			// TocheckOnRun check info.size
 			if (size) {
 				return {
 					url: item.url,
 					size,
 					name: `${info.filename.split(".")[0]}`,
-					ext: info.ext, // tocheck  ext exist ?
+					ext: info.ext,
 					folder: item.folder,
 					needYoutubeDl: item.needYtdl,
 				};
@@ -123,3 +120,5 @@ export async function getAllInfo(item: RedditItem): Promise<ItemInfo> {
 			throw new Error();
 		});
 }
+
+// toremember export {};  needed for module with its own scope
