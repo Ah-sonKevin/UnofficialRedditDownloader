@@ -45,7 +45,7 @@ export default defineComponent({
 			reason: ValidityType;
 		} = reactive({
 			isValid: true,
-			reason: null, // tocheck need type null
+			reason: null,
 		});
 
 		const getErrorMessage = computed(() => {
@@ -57,7 +57,8 @@ export default defineComponent({
 				case null:
 					return "";
 				default:
-					throw new Error(); // todo change type error & add error handler
+					// tocheck switch exhaustiveness
+					throw new Error(); 
 			}
 		});
 
@@ -104,7 +105,6 @@ export default defineComponent({
 		}
 
 		function isValidRedditPost(posts: RawItem[]): boolean {
-			// tocheck type, not sure RawItem, can't instanceof
 			if (Array.isArray(posts) && posts.length > 0) {
 				const content = posts[0].data.children[0];
 				const kind = content.kind;
@@ -131,7 +131,6 @@ export default defineComponent({
 				if (err instanceof DownloadError) {
 					setInvalid("downloadError");
 				} else if (err instanceof BadLinkError) {
-					// todo structure error ?
 					setInvalid("downloadError");
 				} else {
 					throw err;
@@ -155,7 +154,6 @@ export default defineComponent({
 					}
 					await downloadPost(json);
 					// tocheck when to throw ? add error handler ? add popup ?
-					// why can"t cast error
 				} catch (err) {
 					downloadError(err);
 				}
