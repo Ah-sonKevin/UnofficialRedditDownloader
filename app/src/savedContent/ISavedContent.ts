@@ -117,11 +117,14 @@ export function isComment(item: ISavedContentBase): item is ISavedCommentPost {
 	return comment.comment !== undefined;
 }
 
-export function hasMedia(item: ISavedContentBase): item is Media {
-	// tocheck type any
-	return isImage(item) || isGallery(item) || isVideo(item) || isLink(item);
+export function hasMedia<T extends ISavedContentBase>(
+	item: T,
+): item is T & Media {
+	return isImage(item) || isGallery(item) || isVideo(item);
 }
 
-export function hasText(item: ISavedContentBase) {
-	return isText(item) || isComment(item);
+export function hasText(
+	item: ISavedContentBase,
+): item is ISavedCommentPost | ISavedLinkPost | ISavedLinkPost {
+	return isText(item) || isComment(item) || isLink(item);
 }

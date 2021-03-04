@@ -1,8 +1,12 @@
-import { postType } from "@/enum/postType";
-import { UnknowTypeError } from "@/errors/restartError";
 import {
+	hasMedia,
+	hasText,
 	ISavedTextPost,
+	isComment,
+	isGallery,
+	isImage,
 	isText,
+	isVideo,
 	SavedContentType,
 } from "../../savedContent/ISavedContent";
 import { getMediaArchive } from "./batchDownload";
@@ -53,9 +57,9 @@ async function batchDownload(
 	const medias: SavedContentType[] = [];
 	const texts: ISavedTextPost[] = [];
 	items.forEach((item) => {
-		if (item.hasImage) {
+		if (hasMedia(item)) {
 			medias.push(item);
-		} else if (isText(item)) {
+		} else if (hasText(item)) {
 			texts.push(item);
 		} else {
 			throw new Error();
@@ -77,24 +81,16 @@ async function batchDownload(
 async function singleDownload(
 	item: SavedContentType,
 ): Promise<{ blob: Blob; name: string }> {
-	const itemType: string = item.type;
-	if (item.isGallery) {
+	if (isGallery(item)) {
 		return batchDownload([item]);
 	}
-	if (
-		// tocheck link has text ?
-		isText(item) // ||
-		// tocheck isLink(item)
-		/*	itemType === postType.TEXT ||
-		itemType === postType.LINK ||
-		itemType === postType.COMMENT */
-	) {
+	if (isText(item) || isComment(item)) {
 		return {
 			blob: downloadPageAsText(item),
 			name: getName(item.title, "html"),
 		};
 	}
-	if (itemType === postType.IMAGE || itemType === postType.VIDEO) {
+	if (isImage(item) || isVideo(item)) {
 		return downloadMedia(item);
 	}
 	throw new UnknowTypeError(`Unknow type ${itemType}  ${item.title}`);

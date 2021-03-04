@@ -21,7 +21,11 @@ export async function recGetItems(
 	if (!res.ok) {
 		throw new NetworkError(res.statusText);
 	}
-	const result: RawItem = (await res.json()) as RawItem;
+	const result: unknown = await res.json();
+	if (!isRawItem(result)) {
+		throw new Error("Invalid Result");
+	}
+
 	result.data.children.forEach((el: RawItemUnit) => {
 		buildContent(el)
 			.then((item) => items.push(item))

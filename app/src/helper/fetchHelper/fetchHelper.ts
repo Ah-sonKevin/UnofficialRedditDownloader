@@ -45,6 +45,11 @@ function getOauthHeader(): Headers {
 	return authHeaders;
 }
 
+function isAccessToken(item: unknown): item is { access_token: string } {
+	const tmp = item as { access_token: string };
+	return tmp.access_token !== undefined;
+}
+
 export async function refreshAccessToken(): Promise<void> {
 	const store = getTypedStore();
 	const refreshToken = store.getters.refreshToken;
@@ -53,7 +58,10 @@ export async function refreshAccessToken(): Promise<void> {
 		const tokenBody = `grant_type=refresh_token&refresh_token=${refreshToken}`;
 		const result = await postRedditAPI("/api/v1/access_token", tokenBody);
 		if (result.ok) {
-			const res = (await result.json()) as { access_token: string };
+			const res: unknown = await result.json();
+			if (!isAccessToken(res)) {
+				throw new Error("Invalid received type");
+			}
 			store.commit(MutationsNames.SET_TOKEN, res.access_token);
 		} else {
 			store.commit(MutationsNames.RESET_TOKEN, undefined);

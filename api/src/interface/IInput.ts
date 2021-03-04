@@ -8,23 +8,22 @@ export interface SoloItem {
 	url: string;
 	needYdl: string;
 }
-export function isSIngleHeadBody(item: unknown): item is HeadInput {
+export function isRedditItem(item: unknown): item is RedditItem {
+	const tmp = item as RedditItem;
+	return (
+		tmp.name !== undefined &&
+		tmp.needYtdl !== undefined &&
+		tmp.url !== undefined
+	);
+}
+
+export function isHeadItemBody(item: unknown): item is HeadInput {
 	return (item as { url: string }).url !== undefined;
 }
 
-export function isMultipleBody(item: unknown): item is RedditItem[] {
+export function isMultipleItemsBody(item: unknown): item is RedditItem[] {
 	// batchItem or RedditItem
-	const tmpArray = item as {
-		needYtDl: string;
-		folder?: string;
-		name: string;
-		url: string;
-	}[];
+	const tmpArray = item as RedditItem[];
 	const tmp = tmpArray[0];
-	return (
-		tmp &&
-		tmp.name !== undefined &&
-		tmp.needYtDl !== undefined &&
-		tmp.url !== undefined
-	);
+	return tmp && isRedditItem(tmp);
 }

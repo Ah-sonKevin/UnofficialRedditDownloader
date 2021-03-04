@@ -17,7 +17,7 @@ export class CodeTruple {
 		this.error = _error;
 	}
 }
-// todo secret type
+
 export function resetToken(): void {
 	const store = getTypedStore();
 	postOapi("/api/v1/revoke_token", [
@@ -36,6 +36,18 @@ export function resetToken(): void {
 		});
 }
 
+function isToken(
+	item: unknown,
+): item is {
+	access_token: string;
+	refresh_token: string;
+} {
+	const tmp = item as {
+		access_token: string;
+		refresh_token: string;
+	};
+	return tmp.access_token !== undefined && tmp.refresh_token !== undefined;
+}
 export async function generateAccessToken(received: CodeTruple): Promise<void> {
 	const store = getTypedStore();
 	if (
@@ -55,10 +67,10 @@ export async function generateAccessToken(received: CodeTruple): Promise<void> {
 		tokenBody,
 	);
 	if (result.ok) {
-		const res = (await result.json()) as {
-			access_token: string;
-			refresh_token: string;
-		};
+		const res: unknown = await result.json();
+		if (!isToken(res)) {
+			throw new AuthError("Token not received");
+		}
 
 		store.commit(MutationsNames.SET_TOKEN, res.access_token);
 		store.commit(MutationsNames.SET_REFRESH_TOKEN, res.refresh_token);

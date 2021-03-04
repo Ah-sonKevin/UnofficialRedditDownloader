@@ -25,7 +25,7 @@
 import { computed, defineComponent, reactive, ref, Ref } from "vue";
 
 import { BadLinkError } from "@/errors/restartError";
-import { RawItem } from "@/savedContent/rawItemInterface";
+import { isRawItemArray, RawItem } from "@/savedContent/rawItemInterface";
 import { download } from "@/helper/Download/objectDownloader";
 import { DownloadError } from "@/errors/notifError";
 import { notifyError } from "@/helper/notifierHelper";
@@ -148,8 +148,9 @@ export default defineComponent({
 					if (!el.ok) {
 						throw new BadLinkError(`-- Couldn't access link  ${url}`);
 					}
-					const json = (await el.json()) as RawItem[];
-					if (!isValidRedditPost(json)) {
+					const json: unknown = await el.json();
+
+					if (!isRawItemArray(json) || !isValidRedditPost(json)) {
 						throw new DownloadError(`INVALID POST ${url}`);
 					}
 					await downloadPost(json);

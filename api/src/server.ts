@@ -8,7 +8,11 @@ import {
 	getAllFilesInfo,
 } from "./downloader/batchDownloader";
 import { downloader } from "./downloader/downloader";
-import { isMultipleBody, isSIngleHeadBody, SoloItem } from "./interface/IInput";
+import {
+	isHeadItemBody,
+	isMultipleItemsBody,
+	isRedditItem,
+} from "./interface/IInput";
 import { ItemInfo } from "./interface/itemInfo";
 import { getAllInfo, getDownloadInfo } from "./item";
 import { clientLogger, serverLogger } from "./logger";
@@ -24,11 +28,9 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const TEXT_SIZE = 30; // tocheck needed  or send name before
 app.post("/api/getHead/", (req, res, next) => {
-	if (!isSIngleHeadBody(req.body)) {
+	if (!isHeadItemBody(req.body)) {
 		next(new Error("Invalid Input Body"));
-		// detail what happen after error / crash ?
 	} else {
 		getDownloadInfo(req.body.url)
 			.then(() => res.send(true))
@@ -38,10 +40,8 @@ app.post("/api/getHead/", (req, res, next) => {
 // tocheck async express function
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 app.post("/api/downItem/", async (req, res, next) => {
-	const item = req.body as SoloItem; // tocheck ?? type guard ?
-	const listPart = item.url.split("/");
-	const path = `${listPart.slice(-1)[0].substr(0, TEXT_SIZE)}`;
-	const needYtdl = item.needYdl ? (JSON.parse(item.needYdl) as boolean) : false;
+		if (!isRedditItem(req.body)) {
+			throw new Error("Invalid Input");
 
 	const info = await getAllInfo({
 		url: item.url,
@@ -80,7 +80,7 @@ app.post("/api/downBatchInfo/", (req, res, next) => {
 		})
 		.on("error", (err: Error) => next(err))
 		.pipe(res);
-	if (!isMultipleBody(req.body)) {
+	if (!isMultipleItemsBody(req.body)) {
 		next(new Error("Invalid Input Body"));
 		return;
 	}
