@@ -13,7 +13,6 @@ import ElementPlus from "element-plus";
 
 const mockPush = jest.fn();
 function renderHome(isConnected: boolean) {
-	// todo mock router & store
 	const mockRouter = makeRouter();
 	mockRouter.push = mockPush;
 
@@ -46,5 +45,9 @@ describe("Home.vue", () => {
 		expect(mockPush).toHaveBeenCalledWith({ name: "Manager" });
 		expect(mockPush).toHaveBeenCalledTimes(1);
 	});
+
+	test("Hover info", () => {
+		// screen.getByRole
+	});
 });
-// toremember need to await router.isReady ou flushPromise after router.push because rooting is asynchronous
+// Need to await router.isReady ou flushPromise after router.push because rooting is asynchronous

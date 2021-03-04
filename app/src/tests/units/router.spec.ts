@@ -28,8 +28,6 @@ jest.mock("@/helper/dataManager", () => ({
 }));
 
 let router: Router;
-// tocheck who really need store ?
-// todo put server in environment
 function renderComponent(
 	store: StoreTypeTemp,
 	{
@@ -59,8 +57,6 @@ describe("Router Test", () => {
 	beforeEach(() => {
 		router = makeRouter();
 	});
-
-	// tocheck check create fresh store/router  | initial state
 
 	describe("Connection", () => {
 		test("Is Connected", async () => {

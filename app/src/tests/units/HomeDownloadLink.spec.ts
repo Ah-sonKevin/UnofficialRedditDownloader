@@ -55,31 +55,10 @@ describe("HomeDownloadLink", () => {
 		nock.activate();
 	});
 
-	afterEach(() => {
-		if (!nock.isActive()) nock.activate();
-	});
+	// later mail fac
+	// detail add popup for download error / not testable in unit test ?
 
-	// toTest doc throwSuggestions (experimental)
-	// toTest mail fac
-	// toTest add popup for download error / not testable in unit test
-	// toTest tooltip or <abbr>
-	// toTest <aside> ?
-	// toTest hide token global variable (encrypt ?) (web inspector)
-	// toTest move nock
-	// toTest chant wait for end function
-	// toTest not change when just change value
-	// toTest change again when new input
-	// toTest use better links
-	// toTest use find for specific role
-	// toTest remove abstraction
-	// toTest check change different error message
-	// toTest test aria message not send when update BAD to bad
-	// toTest check change error message
-	// toTest add download error message
-	// toremember jest limited access component,
-	// toremember should not focus on implementation
-	// tocheck check exception
-
+	// totest test notif
 
 	function updateInput(url: string) {
 		const input = screen.getByRole("textbox");
@@ -159,6 +138,35 @@ describe("HomeDownloadLink", () => {
 	});
 
 	describe("Update url", () => {
+		describe("Not change on type", () => {
+			test("Good to bad", async () => {
+				const input = screen.getByRole("textbox");
+				const submitButton = screen.getByRole("button", { name: "Download" });
+				userEvent.type(input, wellStructuredUrl);
+				userEvent.click(submitButton);
+				const errorMessage = screen.getByRole("alert", { hidden: true });
+				await waitFor(() =>
+					expect(mocked(Downloader.download)).toHaveBeenCalledTimes(1),
+				);
+				await waitFor(() => expect(errorMessage).not.toBeVisible());
+				userEvent.clear(input);
+				userEvent.type(input, badlyStructuredUrl);
+				expect(errorMessage).not.toBeVisible();
+			});
+
+			test("Bad to good", async () => {
+				const input = screen.getByRole("textbox");
+				const submitButton = screen.getByRole("button", { name: "Download" });
+				userEvent.type(input, badlyStructuredUrl);
+				userEvent.click(submitButton);
+				const errorMessage = await screen.findByRole("alert");
+				await waitFor(() => expect(errorMessage).toBeVisible()); // tocheckonrun await ?
+				userEvent.clear(input);
+				userEvent.type(input, wellStructuredUrl);
+				expect(errorMessage).toBeVisible();
+			});
+		});
+
 		test("Badly formed url To Well formed", async () => {
 			const input = screen.getByRole("textbox");
 			const submitButton = screen.getByRole("button", { name: "Download" });
@@ -189,9 +197,30 @@ describe("HomeDownloadLink", () => {
 			const errorMessage2 = await screen.findByRole("alert");
 			await waitFor(() => expect(errorMessage2).toBeVisible());
 		});
+
+
+		test("Error to another type error", async () => {
+			const input = screen.getByRole("textbox");
+			const submitButton = screen.getByRole("button", { name: "Download" });
+			userEvent.type(input, badlyStructuredUrl);
+			userEvent.click(submitButton);
+			const errorMessage = await screen.findByRole("alert", {
+				name: STRUCTURE_ERROR_TEXT,
+			});
+			await waitFor(() => expect(errorMessage).toBeVisible());
+			userEvent.clear(input);
+			userEvent.type(input, fullValidUrl);
+			userEvent.click(submitButton);
+			const errorMessage2 = await screen.findByRole("alert", {
+				name: DOWNLOAD_ERROR_TEXT,
+			});
+			await waitFor(() => expect(errorMessage2).toBeVisible());
+			await waitFor(() =>
+				expect(mocked(Downloader.download)).toHaveBeenCalledTimes(1),
+			);
+		});
 	});
 
-	// toremember : calm down, put things on paper, draw, pause, don't acharne
 	describe("url validity", () => {
 		test("Valid url", async () => {
 			mocked(Downloader.download).mockClear();
@@ -217,4 +246,6 @@ describe("HomeDownloadLink", () => {
 			expect(mocked(Downloader.download)).toHaveBeenCalledTimes(0);
 		});
 	});
+
+	describe("Download Error", () => {});
 });

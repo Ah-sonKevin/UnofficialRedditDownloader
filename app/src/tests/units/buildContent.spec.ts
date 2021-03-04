@@ -18,6 +18,21 @@ jest.mock("@/helper/fetchHelper/fetchHelper", () => ({
 describe("BuildContent function", () => {
 	const BASE_URL = "www.reddit.com";
 
+	test("Clean name", () => {
+		const TITLE = "a?b*.d";
+		const tmp = new SavedContent({
+			id: "",
+			author: "",
+			title: TITLE,
+			permalink: "",
+			name: "",
+			subreddit: "",
+			created_utc: 0,
+		});
+		expect(tmp.title).not.toEqual(TITLE);
+		expect(tmp.title).toEqual("a_b_d");
+	});
+
 	describe("Text", () => {
 		test("Text", async () => {
 			const content = await buildContent(text);
@@ -169,7 +184,7 @@ https://www.youtube.com/playlist?list=PLfItiEY3o1msEiqMm3FukoGiFFcbAccdp`,
 				creationDate: new Date(content.creationDate),
 				image: {
 					imageLink: "https://i.redd.it/nxkfpkbm54a61.jpg",
-				}
+				},
 			} as ISavedImagePost);
 		});
 	});
