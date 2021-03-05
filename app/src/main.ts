@@ -1,5 +1,5 @@
 import { managerErrors } from "@/errors/manageError";
-import "@/info/secret/redditAppsIDs"; // later token security inspector
+import "@/info/secret/redditAppsIDs";
 import { generateTypedStore } from "@/store";
 import App from "@/views/App.vue";
 import * as dotenv from "dotenv";

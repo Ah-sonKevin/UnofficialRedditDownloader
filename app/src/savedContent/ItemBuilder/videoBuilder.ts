@@ -1,6 +1,5 @@
 // change video interface to add IImage
 
-import { postType } from "@/enum/postType";
 import { postOapi } from "@/helper/fetchHelper/fetchHelper";
 import { Couple } from "@/helper/fetchHelper/requestArgument";
 import { SavedContentType } from "../ISavedContent";
@@ -16,7 +15,6 @@ export async function isDownloadable(url: string): Promise<boolean> {
 	]);
 
 	if (res) {
-		// todo to remove
 		const txt = res as boolean;
 		return txt;
 	}
@@ -38,7 +36,6 @@ export function getEmbed(data: RedditRawData): string {
 }
 
 export function returnVideoMedia({
-	// todo remove intermediary
 	url,
 	data,
 	needYtDl = false,
@@ -116,7 +113,7 @@ export function getVideoMedia(data: RedditRawData): SavedContentType {
 		throw new Error("INVALID POST: MISSING URL");
 	}
 	return returnVideoMedia({
-		url: data.url_overridden_by_dest, // tocheck type
+		url: data.url_overridden_by_dest,
 		data,
 		needYtDl: true,
 	});
