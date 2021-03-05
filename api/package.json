@@ -8,8 +8,7 @@
     },
     "scripts": {
         "start": "node server.bundle.js",
-        "build": "webpack",
-        "dev": "nodemon ./server.js localhost 3080"
+        "build": "webpack"
     },
     "dependencies": {
         "axios": "^0.21.1",
