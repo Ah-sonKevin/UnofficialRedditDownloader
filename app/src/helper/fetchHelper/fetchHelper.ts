@@ -65,7 +65,7 @@ export async function refreshAccessToken(): Promise<void> {
 			store.commit(MutationsNames.SET_TOKEN, res.access_token);
 		} else {
 			store.commit(MutationsNames.RESET_TOKEN, undefined);
-			void getRouter().push({ name: "Home" }); // totest
+			void getRouter().push({ name: "Home" });
 		}
 	} else {
 		throw new DataNotFoundError("Refresh Token Not Found ");

@@ -18,12 +18,7 @@ import { downloadPageAsText, getText } from "./textDownloader";
 export function cancelDownload(): void {
 	cancelController.abort();
 }
-// totest test hover
-// totest test notif
-// totest test download a part
-// totest test throw error
 
-// eslint-disable-next-line max-statements
 
 export function downloadObject(object: Blob, nom: string): void {
 	const img = URL.createObjectURL(object);
@@ -94,5 +89,5 @@ async function singleDownload(
 	if (isImage(item) || isVideo(item)) {
 		return downloadMedia(item);
 	}
-	throw new UnknowTypeError(`Unknow type ${itemType}  ${item.title}`);
+	return exhaustivenessCheck(item);
 }
