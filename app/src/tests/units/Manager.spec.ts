@@ -166,7 +166,6 @@ describe("Filed", () => {
 
 	describe("Elements", () => {
 		test("Unsave", async () => {
-			// later test content collapse
 			const line = screen.getAllByAltText(LINE_ELEMENT)[0];
 			expect(line).toHaveStyle({ opacity: 1 });
 			const button = screen.getByRole("button", { name: "unsave" });

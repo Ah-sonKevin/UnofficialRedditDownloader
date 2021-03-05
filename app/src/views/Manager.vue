@@ -289,7 +289,7 @@ export default defineComponent({
 			}
 		}
 
-		// later accessibility
+		// tocheckonrun accessibility
 		// later manage tablet/phone/4k
 
 		return {

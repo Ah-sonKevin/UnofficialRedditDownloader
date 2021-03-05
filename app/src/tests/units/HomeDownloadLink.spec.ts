@@ -198,7 +198,6 @@ describe("HomeDownloadLink", () => {
 			await waitFor(() => expect(errorMessage2).toBeVisible());
 		});
 
-
 		test("Error to another type error", async () => {
 			const input = screen.getByRole("textbox");
 			const submitButton = screen.getByRole("button", { name: "Download" });
