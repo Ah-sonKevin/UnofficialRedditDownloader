@@ -63,8 +63,6 @@ app.post("/api/downItem/", async (req, res, next) => {
 	}
 });
 
-// todo add folder name to nameFIle /folderName/name
-
 // eslint-disable-next-line max-statements
 app.post("/api/downBatchInfo/", (req, res, next) => {
 	const archive = new Zipper();
@@ -90,7 +88,7 @@ app.post("/api/downBatchInfo/", (req, res, next) => {
 	Promise.allSettled(prepPromiseArray)
 		.then((x) => {
 			const y = x[0];
-			console.log(y); // tocheck value
+			console.log(y); // tocheckonrun value
 			const totalSize = prepArray.reduce((acc, val) => acc + val.size, 0);
 			res.setHeader("MediaSize", totalSize);
 
@@ -106,7 +104,7 @@ app.post("/api/downBatchInfo/", (req, res, next) => {
 			next(err);
 		});
 });
-// tocheck try/catch function to send in next function
+
 app.post("/api/logError/", (req) => {
 	clientLogger.error(req.body);
 });
