@@ -1,7 +1,7 @@
 import Stream from "stream";
 import Packer from "zip-stream";
-import { ZipStream } from "../zipStream";
-import { clientLogger, serverLogger } from "./logger"; 
+import { ZipStream } from "./interface/zipstream";
+import { clientLogger, serverLogger } from "./logger";
 
 export {};
 
@@ -26,7 +26,7 @@ export default class Zipper {
 		this.archive = new Packer({
 			store: true,
 			zlib: { level: 0 },
-		}) as ZipStream;
+		});
 		this.archive.pause();
 	}
 
