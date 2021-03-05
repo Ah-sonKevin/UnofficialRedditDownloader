@@ -1,3 +1,6 @@
 import "@testing-library/jest-dom";
+import { configure } from "@testing-library/vue";
 
-beforeEach(() => {});
+configure({
+	throwSuggestions: true,
+});
