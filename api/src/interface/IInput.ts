@@ -4,9 +4,10 @@ export interface HeadInput {
 	url: string;
 }
 
-export interface SoloItem {
+export interface RedditItem {
 	url: string;
-	needYdl: string;
+	needYtdl: boolean;
+	name: string;
 }
 export function isRedditItem(item: unknown): item is RedditItem {
 	const tmp = item as RedditItem;

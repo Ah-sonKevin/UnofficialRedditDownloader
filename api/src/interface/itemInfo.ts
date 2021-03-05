@@ -4,7 +4,6 @@ export interface OneChannelItemInfo {
 	url: string;
 	size: number;
 	name: string;
-	folder?: string;
 	ext: string;
 	needYoutubeDl: boolean;
 }
@@ -12,7 +11,6 @@ export interface OneChannelItemInfo {
 export interface MultiChannelItemInfo {
 	size: number;
 	name: string;
-	folder?: string;
 	needYoutubeDl: boolean;
 	ext: string;
 	video: {

@@ -77,7 +77,6 @@ export async function getAllInfo(item: RedditItem): Promise<ItemInfo> {
 				url: item.url,
 				size,
 				name: item.name,
-				folder: item.folder,
 				needYoutubeDl: item.needYtdl,
 				ext: item.url.split(".").slice(-1)[0],
 			};
@@ -94,7 +93,6 @@ export async function getAllInfo(item: RedditItem): Promise<ItemInfo> {
 					size,
 					name: `${info.filename.split(".")[0]}`,
 					ext: info.ext,
-					folder: item.folder,
 					needYoutubeDl: item.needYtdl,
 				};
 			}
@@ -113,7 +111,6 @@ export async function getAllInfo(item: RedditItem): Promise<ItemInfo> {
 					size: sizeAudio + sizeVideo,
 					name: `${item.name.split(".")[0]}`,
 					ext: infoVideo.ext,
-					folder: item.folder,
 					needYoutubeDl: item.needYtdl,
 				};
 			}
