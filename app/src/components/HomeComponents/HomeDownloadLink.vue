@@ -38,6 +38,7 @@ import { download } from "@/helper/Download/objectDownloader";
 import { DownloadError } from "@/errors/notifError";
 import { notifyError } from "@/helper/notifierHelper";
 import { buildContent } from "@/savedContent/ItemBuilder/contentBuilder";
+import { exhaustivenessCheck } from "@/helper/exhaustivenessChecker";
 
 export default defineComponent({
 	name: "HomeDownloadLink",

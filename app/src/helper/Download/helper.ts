@@ -48,7 +48,7 @@ export function getExt(item: SavedContentType): string {
 	if (isVideo(item) || isImage(item) || isGallery(item)) {
 		return item.getMediaUrl().split(".").slice(-1)[0];
 	}
-	return exhaustivenessCheck();
+	return exhaustivenessCheck(item);
 }
 
 export function updateDownloadSpinner(

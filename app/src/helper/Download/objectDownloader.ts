@@ -9,6 +9,7 @@ import {
 	isVideo,
 	SavedContentType,
 } from "../../savedContent/ISavedContent";
+import { exhaustivenessCheck } from "../exhaustivenessChecker";
 import { getMediaArchive } from "./batchDownload";
 import { cancelController, getName } from "./helper";
 import { downloadMedia } from "./mediaDownloader";
@@ -62,7 +63,7 @@ async function batchDownload(
 		} else if (hasText(item)) {
 			texts.push(item);
 		} else {
-			throw new Error();
+			exhaustivenessCheck(item);
 		}
 	});
 	const textContents = texts.map((el) => ({
