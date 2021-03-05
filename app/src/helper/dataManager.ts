@@ -1,9 +1,9 @@
 import { NetworkError } from "@/errors/restartError";
+import { SavedContentType } from "@/savedContent/ISavedContent";
 import { buildContent } from "@/savedContent/ItemBuilder/contentBuilder";
-import SavedContent from "@/savedContent/savedContent";
 import User from "@/User/User";
 import { PartialRedditFetchError } from "../errors/notifError";
-import { RawItem, RawItemUnit } from "../savedContent/rawItemInterface";
+import { isRawItem, RawItemUnit } from "../savedContent/rawItemInterface";
 import { fetchOapi, postOapi } from "./fetchHelper/fetchHelper";
 import { Couple } from "./fetchHelper/requestArgument";
 import { logger } from "./logger";
@@ -11,8 +11,8 @@ import { logger } from "./logger";
 export async function recGetItems(
 	username: string,
 	after = "",
-	items: SavedContent[] = [],
-): Promise<SavedContent[]> {
+	items: SavedContentType[] = [],
+): Promise<SavedContentType[]> {
 	let afterParam = "";
 	if (after) {
 		afterParam = `&after=${after}`;
@@ -55,9 +55,9 @@ export async function fetchUser(): Promise<User> {
 	throw new NetworkError(userRes.statusText);
 }
 
-export function setSubredditList(items: SavedContent[]): string[] {
+export function setSubredditList(items: SavedContentType[]): string[] {
 	const listSub: string[] = [];
-	items.forEach((post: SavedContent) => {
+	items.forEach((post: SavedContentType) => {
 		if (!listSub.includes(post.subreddit)) {
 			listSub.push(post.subreddit);
 		}
@@ -76,23 +76,23 @@ export async function fetchCategories(): Promise<string[]> {
 	return [];
 }
 
-export function unsave(toDelete: SavedContent): void {
+export function unsave(toDelete: SavedContentType): void {
 	toDelete.isDeleted = true;
 	void postOapi("/api/unsave", [new Couple("id", toDelete.fullname)]);
 }
 
-export function unsaveArray(toDelete: SavedContent[]): void {
+export function unsaveArray(toDelete: SavedContentType[]): void {
 	toDelete.forEach((el) => {
 		unsave(el);
 	});
 }
 
-export function save(toDelete: SavedContent): void {
+export function save(toDelete: SavedContentType): void {
 	toDelete.isDeleted = false;
 	void postOapi("/api/save", [new Couple("id", toDelete.fullname)]);
 }
 
-export function saveArray(toDelete: SavedContent[]): void {
+export function saveArray(toDelete: SavedContentType[]): void {
 	toDelete.forEach((el) => {
 		save(el);
 	});

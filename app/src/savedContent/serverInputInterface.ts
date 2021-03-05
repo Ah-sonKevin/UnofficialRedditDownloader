@@ -1,11 +1,5 @@
-export interface BatchItem {
-	needYtDl: boolean;
-	folder?: string;
+export interface RedditItem {
+	url: string;
+	needYtdl: boolean;
 	name: string;
-	url: string;
-}
-
-export interface SoloItem {
-	needYtDl: boolean;
-	url: string;
 }

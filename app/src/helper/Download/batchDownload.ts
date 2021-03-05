@@ -2,7 +2,7 @@ import { PartialDownloadError } from "@/errors/notifError";
 import { NetworkError } from "@/errors/restartError";
 import { isGallery, SavedContentType } from "@/savedContent/ISavedContent";
 import { SuccessList } from "@/savedContent/ItemInterface";
-import { BatchItem } from "@/savedContent/serverInputInterface";
+import { RedditItem } from "@/savedContent/serverInputInterface";
 import { ElLoading } from "element-plus";
 import JSZip, { loadAsync } from "jszip";
 import { fetchBatchMediaInfo } from "../fetchHelper/fetchHelper";
@@ -11,16 +11,15 @@ import { cleanString } from "../stringHelper";
 import { cancelController, getName } from "./helper";
 import { fetchData, getItemInfo } from "./mediaDownloader";
 
-function batchGetItemInfo(item: SavedContentType): BatchItem[] {
-	// tocheck : redo / separate gallery ? /rename
+function batchGetItemInfo(item: SavedContentType): RedditItem[] {
 	if (isGallery(item)) {
+		const title = cleanString(item.title);
 		return item.gallery.galleryURLs.map((el, index) => ({
 			url: el,
-			name: getName(
-				`${item.title}_${String(index + 1)}`,
+			name: `${title}/${getName(
+				`${title}_${String(index + 1)}`,
 				el.split(".").slice(-1)[0],
-			),
-			folder: cleanString(item.title),
+			)}`,
 			needYtDl: false,
 		}));
 	}
@@ -48,7 +47,7 @@ export async function batchDownloadMedia(
 		target: "#topArea",
 	});
 
-	const urls: BatchItem[] = [];
+	const urls: RedditItem[] = [];
 	items.forEach((el) => {
 		urls.push(...batchGetItemInfo(el));
 	});
@@ -77,7 +76,7 @@ function checkForPartialDownloadError(blob: Blob) {
 		.then((res) => {
 			const arrays = JSON.parse(res) as SuccessList;
 			if (arrays.fail.length > 0) {
-				throw new PartialDownloadError(arrays); // todo check affichage error
+				throw new PartialDownloadError(arrays); // tocheckonrun check display error
 			}
 			return arrays;
 		});

@@ -2,7 +2,7 @@ import { DataNotFoundError, NetworkError } from "@/errors/restartError";
 import { getRouter } from "@/router";
 import { getTypedStore } from "@/store";
 import "isomorphic-fetch";
-import { BatchItem, SoloItem } from "../../savedContent/serverInputInterface";
+import { RedditItem } from "../../savedContent/serverInputInterface";
 import { MutationsNames } from "../../store/authStore/authStoreMutationTypes";
 import { Couple } from "./requestArgument";
 
@@ -129,14 +129,14 @@ export async function postOapi(
 }
 
 export function fetchMedia(
-	item: SoloItem,
+	item: RedditItem,
 	signal: AbortSignal,
 ): Promise<Response> {
 	const authHeaders = new Headers();
 	authHeaders.append("Content-Type", "application/x-www-form-urlencoded");
 	const request = fetch("/api/downItem/", {
 		method: "POST",
-		body: `url=${item.url}&needYdl=${item.needYtDl}`,
+		body: `url=${item.url}&needYdl=${item.needYtdl}`,
 		headers: authHeaders,
 		signal,
 	});
@@ -144,7 +144,7 @@ export function fetchMedia(
 }
 
 export function fetchBatchMediaInfo(
-	urls: BatchItem[],
+	urls: RedditItem[],
 	signal: AbortSignal,
 ): Promise<Response> {
 	const authHeaders = new Headers();

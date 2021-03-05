@@ -1,7 +1,7 @@
-import SavedContent from "@/savedContent/savedContent";
+import { SavedContentType } from "@/savedContent/ISavedContent";
 
 export function filterItems(
-	items: SavedContent[],
+	items: SavedContentType[],
 	{
 		typeFilter,
 		categoryFilter,
@@ -11,7 +11,7 @@ export function filterItems(
 		categoryFilter: string[];
 		subredditFilter: string[];
 	},
-): SavedContent[] {
+): SavedContentType[] {
 	if (
 		typeFilter.length === 0 &&
 		categoryFilter.length === 0 &&
@@ -32,17 +32,17 @@ export function filterItems(
 	return res;
 }
 export function searchByText(
-	items: SavedContent[],
+	items: SavedContentType[],
 	searchInput: string,
-): SavedContent[] {
+): SavedContentType[] {
 	return items.filter((item) =>
 		item.title.toLowerCase().includes(searchInput.toLowerCase()),
 	);
 }
 export function hideDeleted(
-	items: SavedContent[],
+	items: SavedContentType[],
 	showDeleted: boolean,
-): SavedContent[] {
+): SavedContentType[] {
 	let res = [];
 	if (showDeleted) {
 		res = items;

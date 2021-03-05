@@ -1,18 +1,15 @@
 import { DownloadError } from "@/errors/notifError";
 import {
-	isGallery,
-	isImage,
-	isLink,
-	isText,
+	ISavedVideoPost,
 	isVideo,
 	SavedContentType,
 } from "@/savedContent/ISavedContent";
-import { BatchItem } from "@/savedContent/serverInputInterface";
+import { RedditItem } from "@/savedContent/serverInputInterface";
 import { ElLoading } from "element-plus";
 import { ILoadingInstance } from "element-plus/lib/el-loading/src/loading.type";
+import { ISavedImagePost } from "../../savedContent/ISavedContent";
 import { fetchMedia } from "../fetchHelper/fetchHelper";
 import { notify } from "../notifierHelper";
-import { cleanString } from "../stringHelper";
 import {
 	cancelController,
 	exhaustivenessCheck,
