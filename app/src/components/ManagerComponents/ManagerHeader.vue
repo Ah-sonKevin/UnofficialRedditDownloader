@@ -13,22 +13,31 @@
 			active-text="ShowDeleted"
 			inactive-text="Hide Deleted"
 		/>
-		<label>Item per pages: </label>
-		<el-select
-			v-model="itemPerPageComp"
-			popper-append-to-body
-			class="itemPerPages"
-		>
-			<el-option
-				v-for="i in activesElementListNumberElement"
-				:key="i"
-				:value="i"
-			/>
-		</el-select>
-		<label>Order: </label>
-		<el-select v-model="selectedSorterComp" popper-append-to-body>
-			<el-option v-for="i in sorterList" :key="i" :value="i" />
-		</el-select>
+		<label for="itemPerPagesSelect">
+			<el-select
+				id="itemPerPagesSelect"
+				v-model="itemPerPageComp"
+				popper-append-to-body
+				class="itemPerPages"
+			>
+				<el-option
+					v-for="i in activesElementListNumberElement"
+					:key="i"
+					:value="i"
+				/>
+			</el-select>
+			Item per pages:
+		</label>
+		<label for="selectedSorterComp"
+			>Order:
+			<el-select
+				id="selectedSorterComp"
+				v-model="selectedSorterComp"
+				popper-append-to-body
+			>
+				<el-option v-for="i in sorterList" :key="i" :value="i" />
+			</el-select>
+		</label>
 	</el-header>
 </template>
 
