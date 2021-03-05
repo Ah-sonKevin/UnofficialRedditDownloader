@@ -91,8 +91,8 @@ export async function fetchOapi(
 		return response;
 	}
 }
-
-export async function postOapi( // todo limit api rate
+// todo handle limit 60/call api / s
+export async function postOapi(
 	endpoint: string,
 	args: Couple[],
 	retry = false,

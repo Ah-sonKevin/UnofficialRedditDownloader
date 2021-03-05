@@ -37,7 +37,7 @@ app.post("/api/getHead/", (req, res, next) => {
 			.catch(() => res.send(false));
 	}
 });
-// tocheck async express function
+
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 app.post("/api/downItem/", async (req, res, next) => {
 		if (!isRedditItem(req.body)) {

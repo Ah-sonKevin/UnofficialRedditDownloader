@@ -1,6 +1,7 @@
 <template>
 	<el-container class="pageContainer">
 		<el-aside>
+			//tocheckonrun use aside balise ?
 			<ManagerSideMenu
 				class="TheSideMenu"
 				:is-gold="isGold"

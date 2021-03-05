@@ -68,7 +68,8 @@ export async function buildMedia(
 	) {
 		return returnVideoMedia({ url: data.url_overridden_by_dest, data }); // tocheck  type undefined
 	}
-	const fallback = // todo check embed of those url
+	// tocheck embed url needed or just normal url and <video>
+	const fallback =
 		data.preview?.reddit_video_preview?.fallback_url ??
 		data?.media?.reddit_video?.fallback_url;
 	if (fallback) {

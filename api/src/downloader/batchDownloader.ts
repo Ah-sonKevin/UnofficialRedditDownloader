@@ -22,8 +22,7 @@ export function getAllFilesInfo(
 				throw e;
 			}
 		}
-		// toremember check element-plus grid (design)
-		prepPromiseArray.push(getAllInfoPrep());
+			prepPromiseArray.push(getAllInfoPrep());
 	});
 	return prepPromiseArray;
 }

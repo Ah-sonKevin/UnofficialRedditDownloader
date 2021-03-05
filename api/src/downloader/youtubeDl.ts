@@ -118,7 +118,7 @@ export async function multiChannelDownload(
 				merge();
 			}
 		});
-		// toremember check google dns
+	
 		downloadChannel(respAudio.body, audioNameFile, () => {
 			audioStreamDone = true;
 			if (videoStreamDone && audioStreamDone) {

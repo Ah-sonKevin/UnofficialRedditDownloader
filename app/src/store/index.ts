@@ -11,7 +11,7 @@ export type StoreTypeTemp = AuthStoreType<Pick<StoreState, "auth">> &
 
 export const storeKey: InjectionKey<Store<StoreState>> = Symbol("InjectionKey");
 const pathsArray = ["auth", "user"];
-// todo keep alive manager
+// later keep alive manager or vuex
 const makeStore = () =>
 	createStore<StoreState>({
 		modules: {
