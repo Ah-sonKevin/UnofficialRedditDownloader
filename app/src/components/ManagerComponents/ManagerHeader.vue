@@ -7,7 +7,7 @@
 	</p>
 
 	<el-header height="auto">
-		<!--//todo custom v-model-->
+		<!--//detail custom v-model-->
 		<el-switch
 			v-model="showDeletedComp"
 			active-text="ShowDeleted"

@@ -52,7 +52,6 @@ export default defineComponent({
 			}
 			return [];
 		}
-		// tocheck link is media ?
 		return {
 			getImage,
 			THUMBNAIL_SIZE,

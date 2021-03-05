@@ -15,7 +15,6 @@
 				<ManagerListLineImage :item="item"></ManagerListLineImage>
 			</el-aside>
 		</transition>
-		//todo change names manager components
 		<el-container class="mainContainer">
 			<el-main>
 				<h2 class="titleArea">{{ item.title }}</h2>
@@ -211,7 +210,6 @@ ul li {
 .checkbox .el-checkbox {
 	margin: none;
 }
-//todo move checktoken outsifde of manager
 .imageArea.thumbnail,
 .videoArea.thumbnail {
 	border: 1px solid white;

@@ -13,6 +13,7 @@
 <script lang="ts">
 import { PropType, defineComponent, computed } from "vue";
 import SavedContent from "@/savedContent/savedContent";
+import { SavedContentType } from "@/savedContent/ISavedContent";
 
 export default defineComponent({
 	name: "ManagerShowSelectedItemsDialog",
@@ -33,7 +34,7 @@ export default defineComponent({
 			set: () => context.emit("changeShowSelectedDialog"),
 		});
 
-		function unselect(item: SavedContent) {
+		function unselect(item: SavedContentType) {
 			context.emit("unselect", item);
 		}
 

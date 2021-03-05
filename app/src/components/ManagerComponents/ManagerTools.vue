@@ -17,6 +17,7 @@ import { useContext, defineComponent, PropType } from "vue";
 import { ElMessage } from "element-plus";
 import SavedContent from "@/savedContent/savedContent";
 import { download, downloadObject } from "@/helper/Download/objectDownloader";
+import { SavedContentType } from "@/savedContent/ISavedContent";
 
 export default defineComponent({
 	name: "ManagerTools",
@@ -30,8 +31,8 @@ export default defineComponent({
 			type: Boolean,
 		},
 	},
-	emits: ["unsave", "selectAll", "unselectAll", "showSelectedDialog"]
-	//toremember emits allow, to see all event, overload native ones, and add validator to arguments
+	emits: ["unsave", "selectAll", "unselectAll", "showSelectedDialog"],
+
 	setup(props) {
 		const context = useContext();
 
@@ -52,13 +53,13 @@ export default defineComponent({
 			context.emit("unsave");
 		}
 		function applyFunctionToArray(
-			array: SavedContent[],
-			func: (el: SavedContent) => void,
+			array: SavedContentType[],
+			func: (el: SavedContentType) => void,
 		): void {
 			array.forEach((el) => func(el));
 		}
 
-		function applyToSelected(func: (el: SavedContent) => void) {
+		function applyToSelected(func: (el: SavedContentType) => void) {
 			if (props.selectedItem.length === 0) {
 				ElMessage.error("Selection is empty");
 				return;
@@ -77,9 +78,7 @@ export default defineComponent({
 
 		function getSelectedURLs() {
 			const urls = props.selectedItem.map((el) => el.redditUrl);
-			downloadObject(new Blob(urls), "redditUrls.txt"); // totest
-
-			//totest unit test compare blobls ?
+			downloadObject(new Blob(urls), "redditUrls.txt"); // tocheckonrun
 		}
 
 		function changeCategory() {}

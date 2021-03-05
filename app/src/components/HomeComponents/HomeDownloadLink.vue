@@ -65,8 +65,7 @@ export default defineComponent({
 				case null:
 					return "";
 				default:
-					// tocheck switch exhaustiveness
-					throw new Error(); 
+					return exhaustivenessCheck(validity.reason);
 			}
 		});
 
@@ -128,8 +127,6 @@ export default defineComponent({
 			return false;
 		}
 
-		// toremember can't convert async PromiseReject error to 'normal' error
-
 		async function downloadPost(json: RawItem[]) {
 			const content = json[0].data.children[0];
 			const item = await buildContent({
@@ -152,6 +149,7 @@ export default defineComponent({
 				throw err;
 			}
 		}
+
 		async function downloadItem() {
 			checkValidity();
 			if (validity.isValid) {
@@ -173,7 +171,6 @@ export default defineComponent({
 				}
 			}
 		}
-		// todo animate error
 		return {
 			checkValidity,
 			downloadItem,

@@ -19,6 +19,7 @@ import {
 	useContext,
 } from "vue";
 import SavedContent from "@/savedContent/savedContent";
+import { SavedContentType } from "@/savedContent/ISavedContent";
 
 export default defineComponent({
 	name: "ManagerSearch",
@@ -42,7 +43,7 @@ export default defineComponent({
 
 		const listTitle: ComputedRef<string[]> = computed(() => {
 			const array = new Set<string>();
-			props.filteredItems.forEach((el: SavedContent) => {
+			props.filteredItems.forEach((el: SavedContentType) => {
 				array.add(el.title);
 			});
 			return Array.from(array).sort((el1, el2) => el1.localeCompare(el2));
