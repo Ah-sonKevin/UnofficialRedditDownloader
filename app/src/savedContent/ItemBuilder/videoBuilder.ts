@@ -2,7 +2,7 @@
 
 import { postOapi } from "@/helper/fetchHelper/fetchHelper";
 import { Couple } from "@/helper/fetchHelper/requestArgument";
-import { SavedContentType } from "../ISavedContent";
+import { ISavedVideoPost } from "../ISavedContent";
 import { RedditRawData } from "../redditDataInterface";
 import SavedContent from "../savedContent";
 import { cleanURL, getImage } from "./helper";
@@ -45,7 +45,7 @@ export function returnVideoMedia({
 	data: RedditRawData;
 	needYtDl?: boolean;
 	embed?: string;
-}): SavedContentType {
+}): ISavedVideoPost {
 	const embedString = embed ?? getEmbed(data);
 	return buildVideoPost(data, {
 		externalUrl: cleanURL(url),
@@ -68,7 +68,7 @@ export function buildVideoPost(
 		needYtDl: boolean;
 		embeddedUrl: string;
 	},
-): SavedContentType {
+): ISavedVideoPost {
 	const content = new SavedContent(data);
 	return {
 		...content,
@@ -82,8 +82,8 @@ export function buildVideoPost(
 		getImageUrl: () => imageLink,
 	};
 }
-// tocheck precise interface SavedContentType
-export function getVideoMedia(data: RedditRawData): SavedContentType {
+
+export function getVideoMedia(data: RedditRawData): ISavedVideoPost {
 	if (
 		(data.domain === "youtube.com" || data.domain === "youtu.be") &&
 		data.url_overridden_by_dest

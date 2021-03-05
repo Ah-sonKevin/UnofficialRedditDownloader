@@ -8,7 +8,7 @@ export function buildTextPost(
 	kind: string,
 	data: RedditRawData,
 ): ISavedTextPost {
-	const content = new SavedContent(data, postType.TEXT);
+	const content = new SavedContent(data);
 	if (!data.selftext || !data.selftext_html) {
 		throw new Error();
 	}

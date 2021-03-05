@@ -29,7 +29,7 @@ const webExtensionsList = [
 ];
 const imageExtensionList = ["jpg", "jpeg", "png", "gif"];
 const videoExtensionList = ["mp4", "gifv"];
-// tocheck getEmbed
+
 // eslint-disable-next-line max-statements
 export async function buildMedia(
 	data: RedditRawData,
@@ -49,14 +49,14 @@ export async function buildMedia(
 		}
 		return buildLinkPost(data);
 	}
+	if (data.is_gallery === true) {
+		return buildGalleryPost(data);
+	}
 	if (
-		postHint === "image" || // tocheck posthint for galleries
+		postHint === "image" ||
 		imageExtensionList.some((el) => urlExtension === el)
 	) {
 		return buildImagePost(data);
-	}
-	if (data.is_gallery === true) {
-		return buildGalleryPost(data);
 	}
 	if (postHint === "rich:video" || postHint === "hosted:video") {
 		return getVideoMedia(data);
@@ -66,7 +66,7 @@ export async function buildMedia(
 		(videoExtensionList.some((el) => urlExtension === el) ||
 			data?.media?.oembed?.type === "video")
 	) {
-		return returnVideoMedia({ url: data.url_overridden_by_dest, data }); // tocheck  type undefined
+		return returnVideoMedia({ url: data.url_overridden_by_dest, data });
 	}
 	// tocheck embed url needed or just normal url and <video>
 	const fallback =

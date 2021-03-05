@@ -19,7 +19,7 @@ export function cleanURL(url: string): string {
 	}
 	return res;
 }
-// tocheck remove '??' and '""' (empty)
+
 export function getImage(data: RedditRawData): string {
 	const previewImage = data?.preview?.images;
 	if (previewImage) {
@@ -34,7 +34,7 @@ export function getImage(data: RedditRawData): string {
 	}
 	return "";
 }
-// tocheck structure, need helper ?
+//  need helper ?
 
 export function getExtension(url: string): string {
 	const urlExtension = url.split(".").slice(-1)[0];
@@ -48,4 +48,4 @@ export function clearText(text: string): string {
 	return text.replace(/\n\n/g, "\n");
 }
 
-// tocheck need helper ?
+
