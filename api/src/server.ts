@@ -2,7 +2,7 @@
 /* eslint-disable max-lines-per-function */
 import compression from "compression";
 import cors from "cors";
-import express, { Request, Response } from "express";
+import express, { NextFunction, Request, Response } from "express";
 import {
 	downloadAllItems,
 	getAllFilesInfo,
@@ -40,8 +40,10 @@ app.post("/api/getHead/", (req, res, next) => {
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 app.post("/api/downItem/", async (req, res, next) => {
+	try {
 		if (!isRedditItem(req.body)) {
 			throw new Error("Invalid Input");
+		}
 
 		const info = await getAllInfo(req.body);
 		res.setHeader("MediaSize", info.size);
@@ -109,7 +111,8 @@ app.post("/api/logError/", (req) => {
 	clientLogger.error(req.body);
 });
 
-app.use((err: string, req: Request, res: Response) => {
+// eslint-disable-next-line max-params
+app.use((err: string, req: Request, res: Response, next: NextFunction) => {
 	if (req.xhr) {
 		serverLogger.error(err);
 		res.status(400).send(new Error(err));
