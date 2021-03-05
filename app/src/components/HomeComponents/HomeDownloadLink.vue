@@ -47,6 +47,7 @@ export default defineComponent({
 	setup() {
 		const urlInput = ref("");
 		const formElement: Ref<HTMLFormElement | null> = ref(null);
+		const errorMessageField: Ref<HTMLElement | null> = ref(null);
 
 		type ValidityType = "downloadError" | "structureError" | null;
 		const validity: {
@@ -156,7 +157,7 @@ export default defineComponent({
 			if (validity.isValid) {
 				try {
 					const url = getRedditUrl(urlInput.value);
-					const el = await fetch(`${url}.json`); // tocheck invalid value
+					const el = await fetch(`${url}.json`);
 					if (!el.ok) {
 						throw new BadLinkError(`-- Couldn't access link  ${url}`);
 					}
