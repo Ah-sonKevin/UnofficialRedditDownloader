@@ -30,7 +30,7 @@ export interface ILink {
 	imageLink: string;
 }
 
-interface Media {
+export interface Media {
 	getMediaUrl: () => string;
 	getImageUrl: () => string;
 }
