@@ -1,20 +1,28 @@
 <template>
 	<form id="inputForm" ref="formElement">
-		<label for="inputText">Enter a post's URL</label>
-		<el-input
-			id="inputText"
-			v-model="urlInput"
-			placeholder="http://reddit.com/r/..."
-			required
-			pattern="^((((http(s)?:\/\/)?www\.)?reddit\.com)?\/r\/(\w|\/)+)$"
+		<label for="inputText">
+			<el-input
+				id="inputText"
+				v-model="urlInput"
+				name="inputText"
+				placeholder="http://reddit.com/r/..."
+				required
+				pattern="^((((http(s)?:\/\/)?www\.)?reddit\.com)?\/r\/(\w|\/)+)$"
+			>
+				<template #append>
+					<el-button id="formButton" type="primary" @click="downloadItem">
+						Download
+					</el-button>
+				</template>
+			</el-input>
+			Enter a post's URL
+		</label>
+		<p
+			v-show="!validity.isValid"
+			id="errorMessage"
+			ref="errorMessageField"
+			role="alert"
 		>
-			<template #append>
-				<el-button id="formButton" type="primary" @click="downloadItem">
-					Download
-				</el-button>
-			</template>
-		</el-input>
-		<p v-show="!validity.isValid" id="errorMessage" role="alert">
 			{{ getErrorMessage }}
 		</p>
 		<input id="button" type="submit" />
