@@ -73,6 +73,11 @@ export default defineComponent({
 		function setInvalid(type: ValidityType) {
 			validity.isValid = false;
 			validity.reason = type;
+			errorMessageField.value?.classList.add("formShake"); // tocheckonrun
+			setTimeout(
+				() => errorMessageField.value?.classList.remove("formShake"),
+				600,
+			);
 		}
 
 		function setValid() {
@@ -192,5 +197,27 @@ input:invalid {
 
 #errorMessage {
 	color: red;
+}
+
+.formShake {
+	animation: shake 0.2s;
+	animation-iteration-count: 3;
+}
+@keyframes shake {
+	0% {
+		transform: translateX(0px);
+	}
+	25% {
+		transform: translateX((3px));
+	}
+	50% {
+		transform: translateX((0px));
+	}
+	75% {
+		transform: translateX((-3px));
+	}
+	100% {
+		transform: translateX((0px));
+	}
 }
 </style>
