@@ -43,29 +43,22 @@ app.post("/api/downItem/", async (req, res, next) => {
 		if (!isRedditItem(req.body)) {
 			throw new Error("Invalid Input");
 
-	const info = await getAllInfo({
-		url: item.url,
-		needYtdl,
-		name: path,
-	});
-	res.setHeader("MediaSize", info.size);
-	res.setHeader("MediaFormat", info.ext);
+		const info = await getAllInfo(req.body);
+		res.setHeader("MediaSize", info.size);
+		res.setHeader("MediaFormat", info.ext);
 
-	downloader(info)
-		.then((response: NodeJS.ReadableStream) =>
-			response
-				.pipe(res)
-				.on("error", (err: Error) => {
-					next(err);
-				})
-				.on("close", () => {
-					res.end();
-				}),
-		)
-		.catch((err: Error) => {
-			// eslint-disable-next-line promise/no-callback-in-promise
-			next(err);
-		});
+		const response: NodeJS.ReadableStream = await downloader(info);
+		response
+			.pipe(res)
+			.on("error", (err: Error) => {
+				next(err);
+			})
+			.on("close", () => {
+				res.end();
+			});
+	} catch (err) {
+		next(err);
+	}
 });
 
 // todo add folder name to nameFIle /folderName/name
