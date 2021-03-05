@@ -52,7 +52,6 @@
 						<ManagerListLineSkeleton />
 					</template>
 					<template #default>
-						//tocheck 3 last events //tocheck download
 						<ManagerList
 							:items="getActive()"
 							:is-gold="isGold"
@@ -79,7 +78,6 @@
 			</el-footer>
 		</el-container>
 	</el-container>
-	//todo check these function argument object
 	<ManagerShowSelectedItemsDialog
 		:show-selected-dialog="showSelectedDialog"
 		:selected-item="selectedItem"
@@ -126,8 +124,10 @@ import {
 } from "@/helper/filterHelper";
 import { download, cancelDownload } from "@/helper/Download/objectDownloader";
 import { postOapi } from "@/helper/fetchHelper/fetchHelper";
+import { SavedContentType } from "@/savedContent/ISavedContent";
 import { getSortedContent } from "../helper/sorter";
 
+// tocheck global or local error
 export default defineComponent({
 	name: "Manager",
 	components: {
@@ -175,7 +175,7 @@ export default defineComponent({
 			item,
 			category,
 		}: {
-			item: SavedContent;
+			item: SavedContentType;
 			category: string;
 		}) {
 			item.category = category;
@@ -185,11 +185,11 @@ export default defineComponent({
 			showSelectedDialog.value = !showSelectedDialog.value;
 		}
 
-		let selectedItem: SavedContent[] = [];
-		const sideFilteredItem: Ref<SavedContent[]> = ref([]);
-		const filteredItems: Ref<SavedContent[]> = ref([]);
+		let selectedItem: SavedContentType[] = [];
+		const sideFilteredItem: Ref<SavedContentType[]> = ref([]);
+		const filteredItems: Ref<SavedContentType[]> = ref([]);
 
-		const items: Ref<SavedContent[]> = ref([]);
+		const items: Ref<SavedContentType[]> = ref([]);
 		const numberItems: ComputedRef<number> = computed(() => items.value.length);
 
 		const subredditList: Ref<string[]> = ref([]);
@@ -203,7 +203,7 @@ export default defineComponent({
 			selectedItem = [];
 		}
 
-		function getPageElement(itemsList: SavedContent[]) {
+		function getPageElement(itemsList: SavedContentType[]) {
 			const res = itemsList.slice(
 				(page.value - 1) * itemPerPage.value,
 				page.value * itemPerPage.value,
@@ -261,7 +261,6 @@ export default defineComponent({
 					return categoriesList;
 				})
 				.catch((err) => {
-					// todo error screen / redirect
 					throw err;
 				})
 				.finally(() => {
@@ -274,7 +273,13 @@ export default defineComponent({
 			void postOapi("/api/saved_categories", []);
 		}
 
-		function select({ item, value }: { item: SavedContent; value: boolean }) {
+		function select({
+			item,
+			value,
+		}: {
+			item: SavedContentType;
+			value: boolean;
+		}) {
 			item.isSelected = value;
 			if (value) {
 				selectedItem.push(item);
