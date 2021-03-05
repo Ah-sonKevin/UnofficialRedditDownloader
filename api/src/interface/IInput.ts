@@ -1,5 +1,3 @@
-import { RedditItem } from "./Item";
-
 export interface HeadInput {
 	url: string;
 }

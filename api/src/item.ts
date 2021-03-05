@@ -2,7 +2,7 @@ import fetch from "node-fetch";
 import util from "util";
 import youtubeDl from "youtube-dl";
 import mediaFormat from "./enum/mediaFormat";
-import { RedditItem } from "./interface/Item";
+import { RedditItem } from "./interface/IInput";
 import { ItemInfo } from "./interface/itemInfo";
 import { YoutubeDlInfo } from "./interface/youtubeDlInfo";
 
@@ -45,7 +45,7 @@ export async function getInfoFormat(
 	url: string,
 	format: string,
 ): Promise<YoutubeDlInfo> {
-	const info = await getDownloadInfoFormat({ format, url }); // toremember type from @types are incomplete
+	const info = await getDownloadInfoFormat({ format, url }); // type from @types are incomplete
 	if (isInfo(info)) {
 		return info;
 	}
@@ -63,12 +63,6 @@ export function getSize(url: string): Promise<number> {
 	});
 }
 
-/**
- * @param {string} url
- * @param {boolean} needYoutubeDl
- * @param {string} name
- * @param {string} folder
- */
 export async function getAllInfo(item: RedditItem): Promise<ItemInfo> {
 	if (!item.needYtdl) {
 		const size = await getSize(item.url);
@@ -117,5 +111,3 @@ export async function getAllInfo(item: RedditItem): Promise<ItemInfo> {
 			throw new Error();
 		});
 }
-
-// toremember export {};  needed for module with its own scope
