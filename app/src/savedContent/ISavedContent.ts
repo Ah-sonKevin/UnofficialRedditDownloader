@@ -1,3 +1,5 @@
+import { PostType } from "../enum/postType";
+
 export interface IText {
 	text: string;
 	htmlText: string;
@@ -35,6 +37,11 @@ export interface Media {
 	getImageUrl: () => string;
 }
 
+export interface Textual {
+	getText: () => string;
+	getHtmlText: () => string;
+}
+
 export interface ISavedContentBase {
 	isDeleted: boolean;
 	isSelected: boolean;
@@ -46,6 +53,7 @@ export interface ISavedContentBase {
 	category: string;
 	title: string;
 	redditUrl: string;
+	type: PostType;
 }
 
 export type SavedContentType =
@@ -56,12 +64,12 @@ export type SavedContentType =
 	| ISavedGalleryPost
 	| ISavedCommentPost;
 
-export interface ISavedCommentPost extends ISavedContentBase {
+export interface ISavedCommentPost extends ISavedContentBase, Textual {
 	//	metadata: ISavedContent;
 	comment: IComment;
 }
 
-export interface ISavedTextPost extends ISavedContentBase {
+export interface ISavedTextPost extends ISavedContentBase, Textual {
 	//	metadata: ISavedContent;
 	text: IText;
 }
@@ -123,8 +131,14 @@ export function hasMedia<T extends ISavedContentBase>(
 	return isImage(item) || isGallery(item) || isVideo(item);
 }
 
-export function hasText(
-	item: ISavedContentBase,
-): item is ISavedCommentPost | ISavedLinkPost | ISavedLinkPost {
-	return isText(item) || isComment(item) || isLink(item);
+export function hasPreviewMedia<T extends ISavedContentBase>( // tocheck
+	item: T,
+): item is T & Media {
+	return isImage(item) || isGallery(item) || isVideo(item) || isLink(item);
+}
+
+export function hasText<T extends ISavedContentBase>(
+	item: T,
+): item is T & Textual {
+	return isText(item) || isComment(item);
 }
