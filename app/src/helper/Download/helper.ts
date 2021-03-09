@@ -1,8 +1,8 @@
 import {
+	hasText,
 	isGallery,
 	isImage,
 	isLink,
-	isText,
 	isVideo,
 	SavedContentType,
 } from "@/savedContent/ISavedContent";
@@ -38,7 +38,8 @@ export function getSizeInfo(
 }
 
 export function getExt(item: SavedContentType): string {
-	if (isText(item) || isLink(item)) {
+	if (hasText(item) || isLink(item)) {
+		// tocheck link
 		return "txt";
 	}
 	if (isVideo(item) || isImage(item) || isGallery(item)) {
