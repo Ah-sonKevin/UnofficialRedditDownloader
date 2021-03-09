@@ -1,5 +1,4 @@
 import fetch from "node-fetch";
-import { DownloadError } from "../../../app/src/errors/notifError";
 import {
 	isMultiChannel,
 	isOneChannel,
@@ -17,7 +16,7 @@ export async function download(
 	if (res.ok) {
 		return res.body;
 	}
-	throw new DownloadError("Download failed");
+	throw new Error("Download failed"); // tocheck
 }
 
 export async function youtubeDlDownload(

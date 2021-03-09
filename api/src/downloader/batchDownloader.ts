@@ -1,4 +1,4 @@
-import { RedditItem } from "../interface/Item";
+import { RedditItem } from "../interface/IInput";
 import { ItemInfo } from "../interface/itemInfo";
 import { getAllInfo } from "../item";
 import Zipper from "../zipper";
@@ -22,7 +22,7 @@ export function getAllFilesInfo(
 				throw e;
 			}
 		}
-			prepPromiseArray.push(getAllInfoPrep());
+		prepPromiseArray.push(getAllInfoPrep());
 	});
 	return prepPromiseArray;
 }
