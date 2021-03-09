@@ -1,12 +1,7 @@
-/*console.log(process.env.HOST + "  " + process.env.HOST_PORT);
-if (!process.env.HOST || !process.env.HOST_PORT) {
-	throw new Error("Invalid environment");
-}
-
-
-function
-const HOST = process.env.HOST;
-const PORT = process.env.HOST_PORT;
+const HOST = "http://localhost";
+const PORT = "3080";
 
 module.exports = { HOST, PORT };
-*/
+//toremember vuejs local env does not procect secret data
+
+//todo check getHead

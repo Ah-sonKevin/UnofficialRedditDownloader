@@ -5,7 +5,8 @@ module.exports = {
 	devServer: {
 		proxy: {
 			"^/api": {
-				target: `${process.env.HOST}:${process.env.HOST_PORT}`,
+				//tocheck
+				target: `${HOST}:${PORT}`,
 				changeOrigin: true,
 			},
 		},
