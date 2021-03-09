@@ -29,7 +29,8 @@ const makeStore = () =>
 	});
 
 export function generateTypedStore(): StoreTypeTemp {
-	return makeStore() as StoreTypeTemp;
+	store = makeStore() as StoreTypeTemp;
+	return store;
 }
 
 export function getTypedStore(): StoreTypeTemp {
