@@ -1,5 +1,5 @@
-import { ISavedTextPost } from "@/savedContent/ISavedContent";
 import {
+	ISavedTextPost,
 	hasMedia,
 	hasText,
 	ISavedCommentPost,
@@ -13,7 +13,7 @@ import {
 	isLink,
 	isText,
 	isVideo,
-} from "../../savedContent/ISavedContent";
+} from "@/savedContent/ISavedContent";
 
 const video: ISavedVideoPost = {};
 const image: ISavedImagePost = {};

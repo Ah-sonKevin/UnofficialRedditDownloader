@@ -3,6 +3,7 @@
  */
 import { buildContent } from "@/savedContent/ItemBuilder/contentBuilder";
 import SavedContent from "@/savedContent/savedContent";
+import { PostType } from "../../enum/postType";
 import { ISavedImagePost } from "../../savedContent/ISavedContent";
 import comment from "./mockFetchData/soloItem/comment/comment.json";
 import gallery from "./mockFetchData/soloItem/gallery/gallery.json";
@@ -20,15 +21,18 @@ describe("BuildContent function", () => {
 
 	test("Clean name", () => {
 		const TITLE = "a?b*.d";
-		const tmp = new SavedContent({
-			id: "",
-			author: "",
-			title: TITLE,
-			permalink: "",
-			name: "",
-			subreddit: "",
-			created_utc: 0,
-		});
+		const tmp = new SavedContent(
+			{
+				id: "",
+				author: "",
+				title: TITLE,
+				permalink: "",
+				name: "",
+				subreddit: "",
+				created_utc: 0,
+			},
+			PostType.TEXT,
+		);
 		expect(tmp.title).not.toEqual(TITLE);
 		expect(tmp.title).toEqual("a_b_d");
 	});
@@ -84,12 +88,9 @@ By framing the design philosophy to include single-player, where everyone alread
 				redditUrl:
 					"https://www.reddit.com/r/gamedesign/comments/k8e0io/counter_play_receivingend_design_or_why_sniper/",
 				isDeleted: false,
-				isGallery: false,
-				isText: true,
-				hasImage: false,
 				category: "",
 				creationDate: new Date(content.creationDate),
-			} as SavedContent);
+			});
 		});
 	});
 
@@ -131,7 +132,7 @@ https://www.youtube.com/playlist?list=PLfItiEY3o1msEiqMm3FukoGiFFcbAccdp`,
 				category: "",
 
 				creationDate: new Date(content.creationDate),
-			} as SavedContent);
+			});
 		});
 	});
 
@@ -221,7 +222,7 @@ https://www.youtube.com/playlist?list=PLfItiEY3o1msEiqMm3FukoGiFFcbAccdp`,
 				hasImage: true,
 				category: "",
 				creationDate: new Date(content.creationDate),
-			} as SavedContent);
+			});
 		});
 	});
 
@@ -259,7 +260,7 @@ https://www.youtube.com/playlist?list=PLfItiEY3o1msEiqMm3FukoGiFFcbAccdp`,
 
 				redditUrl:
 					"https://www.reddit.com/r/compsci/comments/juw3ud/a_comparison_between_a_few_subdivision_algorithms/",
-			} as SavedContent);
+			});
 		});
 	});
 });

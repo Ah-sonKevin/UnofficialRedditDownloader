@@ -3,177 +3,247 @@
  */
 // eslint-disable-next-line eslint-comments/disable-enable-pair
 /* eslint-disable jest-dom/prefer-in-document */
-import { OAUTH_API } from "@/helper/fetchHelper/fetchHelper";
-import { StoreTypeTemp } from "@/store";
+import * as dataManager from "@/helper/dataManager";
+import { buildContent } from "@/savedContent/ItemBuilder/contentBuilder";
+import { makeCustomTypedStore } from "@/store";
+import User from "@/User/User";
 import Manager from "@/views/Manager.vue";
 import userEvent from "@testing-library/user-event";
-import { getByRole, render, screen } from "@testing-library/vue";
+import {
+	findByRole,
+	getAllByRole,
+	getByRole,
+	getByText,
+	queryByRole,
+	render,
+	screen,
+	waitFor
+} from "@testing-library/vue";
 import ElementPlus from "element-plus";
-import nock from "nock/types";
-import items from "./mockFetchData/items.json";
-import user from "./mockFetchData/user.json";
+import { mocked } from "ts-jest/utils";
+import comment from "./mockFetchData/soloItem/comment/comment.json";
+import gallery from "./mockFetchData/soloItem/gallery/gallery.json";
+import image from "./mockFetchData/soloItem/image/image.json";
+import link from "./mockFetchData/soloItem/link/link.json";
+import text from "./mockFetchData/soloItem/text.json";
+import video from "./mockFetchData/soloItem/video/video.json";
+import { getLongItem } from "./tmp";
+// toremember will not work with resetMock true (will remove mocked implement but not puit jest.fn() , will just be undefined)
 
-const SEARCH_INPUT = "";
-const LINE_ELEMENT = "";
-const SIDE_MENU = "";
-const MAIN = "";
-const EMPTY_MAIN = "";
-const PAGE_NUMBER = "";
-const TOTAL_NUMBER_ITEMS = "";
-const LOADING_TIMEOUT = 1000;
-const renderManager = (store: StoreTypeTemp) =>
+jest.mock(
+	"@/helper/dataManager",
+	() => ({
+		// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+		...(jest.requireActual("@/helper/dataManager") as typeof dataManager),
+		fetchUser: () =>
+			Promise.resolve(new User({ name: "z", id: "a", is_gold: false })),
+
+		fetchCategories: jest.fn(() => Promise.resolve([])),
+		recGetItems: jest.fn(() => {
+			throw new Error();
+		}),
+	}),
+	// tocheck needed
+);
+
+const mockStore = makeCustomTypedStore({});
+const renderManager = () =>
 	render(Manager, {
 		global: {
-			plugins: [ElementPlus, store],
+			plugins: [ElementPlus, mockStore],
 		},
 	});
 
-describe("Home.vue", () => {
-	beforeEach(async () => {
-		jest.resetAllMocks();
-		nock.restore();
-		nock.activate();
-	});
-
-	describe("Empty", () => {
-		beforeAll(() => {
-			nock(OAUTH_API)
-				.get("/api/v1/me")
-				.reply(200, user)
-				.get(/\/user\/\w+\/saved.+$/)
-				.reply(200, {})
-				.get("/api/saved_categories")
-				.reply(200, {})
-				.persist();
-		});
-
-		beforeEach(() => {
-			render(Manager);
-		});
-
-		describe("Initial State", () => {
-			test("Total Number of element (number)", async () => {
-				const el = screen.getByLabelText("nb");
-				expect(el).toHaveTextContent("2");
-			});
-
-			test("Number of element shown", async () => {
-				const el = screen.getByAltText(LINE_ELEMENT);
-				expect(el).not.toBeInTheDocument();
-			});
-
-			test("Empty element", async () => {
-				const main = screen.getByAltText(MAIN);
-				expect(main).not.toBeVisible();
-				const emptyMain = screen.getAllByAltText(EMPTY_MAIN);
-				expect(emptyMain).toBeVisible();
-			});
-		});
+describe("Empty", () => {
+	beforeEach(() => {
+		mocked(dataManager.recGetItems).mockReset();
+		mocked(dataManager.recGetItems).mockImplementationOnce(() =>
+			Promise.resolve([]),
+		);
+		renderManager();
 	});
 
 	describe("Initial State", () => {
-		beforeAll(() => {
-			nock(OAUTH_API)
-				.get("/api/v1/me")
-				.reply(200, user)
-				.get(/\/user\/\w+\/saved.+$/)
-				.reply(200, items)
-				.get("/api/saved_categories")
-				.reply(200, {})
-				.persist();
+		test("Total Number of element (number)", () => {
+			const el = screen.getByText(/you have .* saved items/i); // tocheck make better getter
+			expect(el).toHaveTextContent("0");
 		});
 
-		beforeEach(() => {
-			render(Manager);
+		test("Number of element shown", () => {
+			const main = screen.getByRole("main");
+			const el = queryByRole(main, "list");
+			expect(el).toBeNull();
 		});
 
-		test("Number of element (number)", async () => {
-			const el = screen.getAllByAltText(LINE_ELEMENT);
-			expect(el).toHaveLength(5);
-		});
-
-		test("Empty element", async () => {
-			const emptyMain = screen.getAllByAltText(EMPTY_MAIN);
-			expect(emptyMain).not.toBeVisible();
-			const main = screen.getByAltText(MAIN);
-			expect(main).toBeVisible();
+		test("Empty element", () => {
+			const main = screen.getByRole("main");
+			const list = queryByRole(main, "list");
+			expect(list).toBeNull();
+			const emptyMain = getByText(main, "You don't have any saved content");
+			expect(emptyMain).toBeVisible();
 		});
 	});
+});
 
-	describe("One page", () => {
-		test("Total Number of element (number)", async () => {
-			const el = screen.getAllByAltText(LINE_ELEMENT);
-			expect(el).toHaveLength(5);
-		});
+describe("Initial State", () => {
+	beforeEach(async () => {
+		const mockItem = Promise.resolve([
+			// tocheck beforeAll ?
+			await buildContent(comment),
+			await buildContent(gallery),
+			await buildContent(image),
+			await buildContent(link),
+			await buildContent(text),
+			await buildContent(video),
+		]);
+		mocked(dataManager.recGetItems).mockReset();
+		mocked(dataManager.recGetItems).mockImplementationOnce(() => mockItem);
+		renderManager();
+	});
 
-		test("Number of items shown", async () => {
-			const el = screen.getByLabelText("nb");
-			expect(el).toHaveTextContent("2");
-		});
+	// tocheck toBeVisible => to exist
+	test("Number of element (number)", async () => {
+		const main = screen.getByRole("main");
+		const list = await findByRole(main, "list");
+		const line = getAllByRole(list, "listitem");
+		expect(line).toHaveLength(6);
+	});
+
+	// todo change nock to mock ?
+	test("Empty element", async () => {
+		const main = screen.getByRole("main");
+		const list = await findByRole(main, "list");
+		const emptyMain = screen.queryByText("You don't have any saved content");
+		expect(emptyMain).toBeNull();
+		expect(list).not.toBeNull();
+	});
+});
+
+describe("One page", () => {
+	beforeEach(async () => {
+		const mockItem = Promise.resolve([
+			// tocheck beforeAll ?
+			await buildContent(comment),
+			await buildContent(gallery),
+			await buildContent(image),
+			await buildContent(link),
+			await buildContent(text),
+			await buildContent(video),
+		]);
+		mocked(dataManager.recGetItems).mockReset();
+		mocked(dataManager.recGetItems).mockImplementationOnce(() => mockItem);
+		renderManager();
+	});
+
+	// todo
+	test("Total Number of element (number)", async () => {
+		// todo change place
+		const el = screen.getByText(/you have .* saved items/i);
+		await waitFor(() => expect(el).toHaveTextContent("You have 6 saved items")); // tocheck
+	});
+
+	test("Number of items shown", async () => {
+		const main = screen.getByRole("main");
+		const list = await findByRole(main, "list");
+		const line = getAllByRole(list, "listitem");
+		expect(line).toHaveLength(6);
 	});
 
 	test("Number of pages", async () => {
-		const el = screen.getByLabelText("nb");
-		expect(el).toHaveTextContent("2");
-	});
-
-	test("Change of pages", async () => {
-		const el = screen.getAllByAltText(PAGE_NUMBER);
-		expect(el).toHaveTextContent("1");
+		const info = screen.getByRole("contentinfo");
+		const listPage = getAllByRole(info, "listitem");
+		expect(listPage).toHaveLength(1);
 	});
 });
 
 describe("Multiple Pages", () => {
+	beforeEach(async () => {
+		console.log(getLongItem);
+		const mockItem = Promise.resolve([
+			// tocheck beforeAll ?
+			await buildContent(comment),
+			await buildContent(gallery),
+			await buildContent(image),
+			await buildContent(link),
+			await buildContent(text),
+			await buildContent(video),
+			await buildContent(comment),
+			await buildContent(gallery),
+			await buildContent(image),
+			await buildContent(link),
+			await buildContent(text),
+			await buildContent(video),
+		]);
+		mocked(dataManager.recGetItems).mockReset();
+		mocked(dataManager.recGetItems).mockImplementationOnce(() => mockItem);
+		renderManager(); // toremember : RENDER MUST BE DONE AFTER the mock
+	});
+
 	test("Total Number of element (number)", async () => {
-		const el = screen.getAllByAltText(TOTAL_NUMBER_ITEMS);
-		expect(el).toHaveLength(5);
+		const el = screen.getByText(/you have .* saved items/i);
+		await waitFor(() =>
+			expect(el).toHaveTextContent("You have 12 saved items"),
+		); // tocheck
 	});
 
 	test("Number of items shown", async () => {
-		const el = screen.getAllByAltText(LINE_ELEMENT);
-		expect(el).toHaveTextContent("2");
+		const main = screen.getByRole("main");
+		const list = await findByRole(main, "list");
+		const line = getAllByRole(list, "listitem");
+		expect(line).toHaveLength(10);
 	});
 
 	test("Number of pages", async () => {
-		const el = screen.getAllByAltText(PAGE_NUMBER);
-		expect(el).toHaveTextContent("2");
+		const el = screen.getByText(/you have .* saved items/i);
+		const info = screen.getByRole("contentinfo");
+		await waitFor(() =>
+			expect(el).toHaveTextContent("You have 12 saved items"),
+		);
+		const listPage = getAllByRole(info, "listitem");
+		console.log(listPage);
+		console.log(listPage[0].innerHTML);
+		await waitFor(() => expect(listPage).toHaveLength(2));
 	});
 
-	test("Change of pages", async () => {
+	test.skip("Change of pages", async () => {
 		const button = screen.getByRole("button", { name: "2" });
 		userEvent.click(button);
-		const el = screen.getAllByAltText(PAGE_NUMBER);
+		const el = screen.getAllByAltText("page number");
 		expect(el).toHaveTextContent("2");
 	});
 });
 
-describe("Filed", () => {
+describe.skip("Filed", () => {
 	describe("Search", () => {
 		test("Empty text", async () => {
 			const input = screen.getByRole("input");
 			userEvent.type(input, "eazrfsdgdfg");
-			const lines = screen.getByAltText(LINE_ELEMENT);
+			const lines = screen.getByRole("list");
 			expect(lines).not.toBeInTheDocument();
 		});
 
 		test("Result text", async () => {
 			const input = screen.getByRole("input");
 			userEvent.type(input, "eazrfsdgdfg");
-			const lines = screen.getAllByAltText(LINE_ELEMENT);
+			const lines = screen.getAllByAltText("LINE_ELEMENT");
 			expect(lines).toHaveLength(2);
 		});
 	});
 
 	describe("Elements", () => {
 		test("Unsave", async () => {
-			const line = screen.getAllByAltText(LINE_ELEMENT)[0];
+			const main = screen.getByRole("main");
+			const list = getByRole(main, "list");
+			const line = getAllByRole(list, "listitem")[0];
 			expect(line).toHaveStyle({ opacity: 1 });
 			const button = screen.getByRole("button", { name: "unsave" });
 			userEvent.click(button);
 		});
 
 		test("Undo unsave", async () => {
-			const line = screen.getAllByAltText(LINE_ELEMENT)[0];
+			const main = screen.getByRole("main");
+			const list = getByRole(main, "list");
+			const line = getAllByRole(list, "listitem")[0];
 			expect(line).toHaveStyle({ opacity: 1 });
 			const button = screen.getByRole("button", { name: "unsave" });
 			userEvent.click(button);
@@ -238,7 +308,9 @@ describe("Filed", () => {
 		});
 
 		test("Unsave selected", async () => {
-			const line = screen.getAllByAltText(LINE_ELEMENT)[1];
+			const main = screen.getByRole("main");
+			const list = getByRole(main, "list");
+			const line = getAllByRole(list, "listitem")[1];
 			const checkbox = getByRole(line, "checkbox");
 			userEvent.click(checkbox);
 			const button = screen.getByRole("button", { name: "unsave" });
@@ -258,21 +330,21 @@ describe("Filed", () => {
 			test("One Result", async () => {
 				const button = screen.getByRole("button", { name: "FILTER" });
 				userEvent.click(button);
-				const lines = screen.getByAltText(LINE_ELEMENT);
+				const lines = screen.getByRole("list");
 				expect(lines).toHaveLength(1);
 			});
 
 			test("One Multiple", async () => {
 				const button = screen.getByRole("button", { name: "FILTER" });
 				userEvent.click(button);
-				const lines = screen.getByAltText(LINE_ELEMENT);
+				const lines = screen.getByRole("list");
 				expect(lines).toHaveLength(2);
 			});
 		});
 
 		test("Undo filter", async () => {
 			const button = screen.getByRole("button", { name: "FILTER" });
-			const lines = screen.getByAltText(LINE_ELEMENT);
+			const lines = screen.getByRole("list");
 			userEvent.click(button);
 			expect(lines).toHaveLength(2);
 			userEvent.click(button);
@@ -282,11 +354,11 @@ describe("Filed", () => {
 		test("Combine filter", async () => {
 			const filter1 = screen.getByRole("button", { name: "FILTER" });
 			userEvent.click(filter1);
-			const lines = screen.getByAltText(LINE_ELEMENT);
+			const lines = screen.getByRole("list");
 			expect(lines).toHaveLength(3);
 			const filter2 = screen.getByRole("button", { name: "FILTER" });
 			userEvent.click(filter2);
-			const lines2 = screen.getByAltText(LINE_ELEMENT);
+			const lines2 = screen.getByRole("list");
 			expect(lines2).toHaveLength(1);
 		});
 	});
@@ -295,7 +367,9 @@ describe("Filed", () => {
 		test("Sorter 1", () => {
 			const button = screen.getByRole("button", { name: "sorter" });
 			userEvent.click(button);
-			const line = screen.getAllByAltText(LINE_ELEMENT);
+			const main = screen.getByRole("main");
+			const list = getByRole(main, "list");
+			const line = getAllByRole(list, "listitem");
 			expect(true).toBe(false);
 		});
 	});

@@ -46,8 +46,27 @@ describe("Home.vue", () => {
 		expect(mockPush).toHaveBeenCalledTimes(1);
 	});
 
-	test("Hover info", () => {
-		// screen.getByRole
+	describe("Hover", () => {
+		test("Hover info", () => {
+			const tooltip = screen.getByRole("tooltip");
+			const tooltipText = screen.getByRole("text");
+			userEvent.hover(tooltip);
+			expect(tooltipText).toContain("aaaa");
+		});
+
+		test("Hover Appear", () => {
+			const tooltipText = screen.getByRole("text");
+			expect(tooltipText).not.toContain("aaaa");
+		});
+
+		test("Hover Disappear", () => {
+			const tooltip = screen.getByRole("tooltip");
+			const tooltipText = screen.getByRole("text");
+			userEvent.hover(tooltip);
+			expect(tooltipText).toContain("aaaa");
+			userEvent.unhover(tooltip);
+			expect(tooltipText).not.toContain("aaaa");
+		});
 	});
 });
 // Need to await router.isReady ou flushPromise after router.push because rooting is asynchronous
