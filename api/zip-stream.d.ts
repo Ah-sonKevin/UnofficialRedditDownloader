@@ -23,6 +23,7 @@ declare module "zip-stream" {
 			callback: (err: Error) => void,
 		): void;
 		resume(): ZipStreamExternal;
+		pipe(x: Stream.Writable): ZipStream;
 	}
 	export = ZipStreamExternal;
 }

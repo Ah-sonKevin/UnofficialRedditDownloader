@@ -1,3 +1,5 @@
+import Stream from "stream";
+
 export interface ZipStream {
 	finish(): void;
 	pause(): ZipStream;
@@ -8,4 +10,5 @@ export interface ZipStream {
 		callback: (err: Error) => void,
 	): void;
 	resume(): ZipStream;
+	pipe(x: Stream.Writable): ZipStream;
 }
