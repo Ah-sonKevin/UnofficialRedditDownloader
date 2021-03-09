@@ -1116,6 +1116,1119 @@
 					},
 					"is_video": true
 				}
+			},
+			{
+				"kind": "t1",
+				"data": {
+					"total_awards_received": 1,
+					"approved_at_utc": null,
+					"comment_type": null,
+					"awarders": [],
+					"mod_reason_by": null,
+					"banned_by": null,
+					"author_flair_type": "text",
+					"removal_reason": null,
+					"link_id": "t3_g9abr7",
+					"author_flair_template_id": null,
+					"likes": null,
+					"replies": "",
+					"user_reports": [],
+					"saved": true,
+					"id": "fot3ixm",
+					"banned_at_utc": null,
+					"mod_reason_title": null,
+					"gilded": 0,
+					"archived": true,
+					"no_follow": false,
+					"author": "PM_ME_YOUR_SHELLCODE",
+					"num_comments": 420,
+					"edited": false,
+					"can_mod_post": false,
+					"created_utc": 1588043834,
+					"send_replies": true,
+					"parent_id": "t1_fosnle4",
+					"score": 537,
+					"author_fullname": "t2_rcx7f",
+					"over_18": false,
+					"treatment_tags": [],
+					"approved_by": null,
+					"mod_note": null,
+					"all_awardings": [
+						{
+							"giver_coin_reward": 0,
+							"subreddit_id": null,
+							"is_new": false,
+							"days_of_drip_extension": 0,
+							"coin_price": 30,
+							"id": "award_3cf96da4-79da-4127-90ac-84545e1833dc",
+							"penny_donate": 0,
+							"award_sub_type": "GLOBAL",
+							"coin_reward": 0,
+							"icon_url": "https://i.redd.it/award_images/t5_22cerq/qh4pzo76v9p41_HomeTime.png",
+							"days_of_premium": 0,
+							"tiers_by_required_awardings": null,
+							"resized_icons": [
+								{
+									"url": "https://preview.redd.it/award_images/t5_22cerq/qh4pzo76v9p41_HomeTime.png?width=16&amp;height=16&amp;auto=webp&amp;s=e71c3353b0cd8c3cf016f1e37725d033b4722197",
+									"width": 16,
+									"height": 16
+								},
+								{
+									"url": "https://preview.redd.it/award_images/t5_22cerq/qh4pzo76v9p41_HomeTime.png?width=32&amp;height=32&amp;auto=webp&amp;s=06df72aa9b4c008b0ae15ff11f95ff253f85ab74",
+									"width": 32,
+									"height": 32
+								},
+								{
+									"url": "https://preview.redd.it/award_images/t5_22cerq/qh4pzo76v9p41_HomeTime.png?width=48&amp;height=48&amp;auto=webp&amp;s=3fb62803315450661c05e36da2b8d00ba06ad619",
+									"width": 48,
+									"height": 48
+								},
+								{
+									"url": "https://preview.redd.it/award_images/t5_22cerq/qh4pzo76v9p41_HomeTime.png?width=64&amp;height=64&amp;auto=webp&amp;s=c07b21c2158fe3f6bf66a6650f39688ebe4e8c6a",
+									"width": 64,
+									"height": 64
+								},
+								{
+									"url": "https://preview.redd.it/award_images/t5_22cerq/qh4pzo76v9p41_HomeTime.png?width=128&amp;height=128&amp;auto=webp&amp;s=eadedb0c4eab725cd0617196371aecf1f45c636b",
+									"width": 128,
+									"height": 128
+								}
+							],
+							"icon_width": 2048,
+							"static_icon_width": 2048,
+							"start_date": null,
+							"is_enabled": false,
+							"awardings_required_to_grant_benefits": null,
+							"description": "Staying home &amp; being safe when you can",
+							"end_date": null,
+							"subreddit_coin_reward": 0,
+							"count": 1,
+							"static_icon_height": 2048,
+							"name": "Home Time",
+							"resized_static_icons": [
+								{
+									"url": "https://preview.redd.it/award_images/t5_22cerq/qh4pzo76v9p41_HomeTime.png?width=16&amp;height=16&amp;auto=webp&amp;s=e71c3353b0cd8c3cf016f1e37725d033b4722197",
+									"width": 16,
+									"height": 16
+								},
+								{
+									"url": "https://preview.redd.it/award_images/t5_22cerq/qh4pzo76v9p41_HomeTime.png?width=32&amp;height=32&amp;auto=webp&amp;s=06df72aa9b4c008b0ae15ff11f95ff253f85ab74",
+									"width": 32,
+									"height": 32
+								},
+								{
+									"url": "https://preview.redd.it/award_images/t5_22cerq/qh4pzo76v9p41_HomeTime.png?width=48&amp;height=48&amp;auto=webp&amp;s=3fb62803315450661c05e36da2b8d00ba06ad619",
+									"width": 48,
+									"height": 48
+								},
+								{
+									"url": "https://preview.redd.it/award_images/t5_22cerq/qh4pzo76v9p41_HomeTime.png?width=64&amp;height=64&amp;auto=webp&amp;s=c07b21c2158fe3f6bf66a6650f39688ebe4e8c6a",
+									"width": 64,
+									"height": 64
+								},
+								{
+									"url": "https://preview.redd.it/award_images/t5_22cerq/qh4pzo76v9p41_HomeTime.png?width=128&amp;height=128&amp;auto=webp&amp;s=eadedb0c4eab725cd0617196371aecf1f45c636b",
+									"width": 128,
+									"height": 128
+								}
+							],
+							"icon_format": "PNG",
+							"icon_height": 2048,
+							"penny_price": 0,
+							"award_type": "global",
+							"static_icon_url": "https://i.redd.it/award_images/t5_22cerq/qh4pzo76v9p41_HomeTime.png"
+						}
+					],
+					"subreddit_id": "t5_2qhsa",
+					"body": "Since you say it doesn't exist I'm guessing you didn't find one?\n\nHere is one from a youtuber who tried to make a bunch of clear foods.\n\nhttps://barrylewis.net/recipe/clear-lemon-meringue-pie/\n\nAnd just because I found the videos interesting, a Playlist of clear foods:\n\nhttps://www.youtube.com/playlist?list=PLfItiEY3o1msEiqMm3FukoGiFFcbAccdp",
+					"link_title": "Clear lemon pie",
+					"author_flair_css_class": null,
+					"name": "t1_fot3ixm",
+					"author_patreon_flair": false,
+					"downs": 0,
+					"author_flair_richtext": [],
+					"is_submitter": false,
+					"body_html": "&lt;div class=\"md\"&gt;&lt;p&gt;Since you say it doesn&amp;#39;t exist I&amp;#39;m guessing you didn&amp;#39;t find one?&lt;/p&gt;\n\n&lt;p&gt;Here is one from a youtuber who tried to make a bunch of clear foods.&lt;/p&gt;\n\n&lt;p&gt;&lt;a href=\"https://barrylewis.net/recipe/clear-lemon-meringue-pie/\"&gt;https://barrylewis.net/recipe/clear-lemon-meringue-pie/&lt;/a&gt;&lt;/p&gt;\n\n&lt;p&gt;And just because I found the videos interesting, a Playlist of clear foods:&lt;/p&gt;\n\n&lt;p&gt;&lt;a href=\"https://www.youtube.com/playlist?list=PLfItiEY3o1msEiqMm3FukoGiFFcbAccdp\"&gt;https://www.youtube.com/playlist?list=PLfItiEY3o1msEiqMm3FukoGiFFcbAccdp&lt;/a&gt;&lt;/p&gt;\n&lt;/div&gt;",
+					"gildings": {},
+					"collapsed_reason": null,
+					"distinguished": null,
+					"associated_award": null,
+					"stickied": false,
+					"author_premium": false,
+					"can_gild": true,
+					"top_awarded_type": null,
+					"author_flair_text_color": null,
+					"score_hidden": false,
+					"permalink": "/r/interestingasfuck/comments/g9abr7/clear_lemon_pie/fot3ixm/",
+					"num_reports": null,
+					"link_permalink": "https://www.reddit.com/r/interestingasfuck/comments/g9abr7/clear_lemon_pie/",
+					"report_reasons": null,
+					"link_author": "Unicornglitteryblood",
+					"subreddit": "interestingasfuck",
+					"author_flair_text": null,
+					"link_url": "https://i.redd.it/ck2300n8mfv41.jpg",
+					"created": 1588072634,
+					"collapsed": false,
+					"subreddit_name_prefixed": "r/interestingasfuck",
+					"controversiality": 0,
+					"locked": false,
+					"author_flair_background_color": null,
+					"collapsed_because_crowd_control": null,
+					"mod_reports": [],
+					"quarantine": false,
+					"subreddit_type": "public",
+					"ups": 537
+				}
+			},
+			{
+				"kind": "t3",
+				"data": {
+					"approved_at_utc": null,
+					"subreddit": "Unity3D",
+					"selftext": "",
+					"author_fullname": "t2_8tsfdgm4",
+					"saved": true,
+					"mod_reason_title": null,
+					"gilded": 0,
+					"clicked": false,
+					"is_gallery": true,
+					"title": "Ancient Fantasy Village",
+					"link_flair_richtext": [
+						{
+							"e": "text",
+							"t": "Show-Off"
+						}
+					],
+					"subreddit_name_prefixed": "r/Unity3D",
+					"hidden": false,
+					"pwls": 0,
+					"link_flair_css_class": "",
+					"downs": 0,
+					"thumbnail_height": 140,
+					"top_awarded_type": null,
+					"hide_score": false,
+					"media_metadata": {
+						"ywy9xkuxc4161": {
+							"status": "valid",
+							"e": "Image",
+							"m": "image/jpg",
+							"p": [
+								{
+									"y": 108,
+									"x": 108,
+									"u": "https://preview.redd.it/ywy9xkuxc4161.jpg?width=108&amp;crop=smart&amp;auto=webp&amp;s=c17ab5652adb94f3339c29b51c9dc244a95dccb0"
+								},
+								{
+									"y": 216,
+									"x": 216,
+									"u": "https://preview.redd.it/ywy9xkuxc4161.jpg?width=216&amp;crop=smart&amp;auto=webp&amp;s=0f0fdd75393bf8f31c2af90264198ad493ae4d84"
+								},
+								{
+									"y": 320,
+									"x": 320,
+									"u": "https://preview.redd.it/ywy9xkuxc4161.jpg?width=320&amp;crop=smart&amp;auto=webp&amp;s=d57cea5dbfb88609bc61080d1267e1f9ffb16083"
+								},
+								{
+									"y": 640,
+									"x": 640,
+									"u": "https://preview.redd.it/ywy9xkuxc4161.jpg?width=640&amp;crop=smart&amp;auto=webp&amp;s=79c3bc3da7b442e73b646a9ae7341de9772f0956"
+								},
+								{
+									"y": 960,
+									"x": 960,
+									"u": "https://preview.redd.it/ywy9xkuxc4161.jpg?width=960&amp;crop=smart&amp;auto=webp&amp;s=c75776898dba9cb84beaed82143d6e150d720356"
+								},
+								{
+									"y": 1080,
+									"x": 1080,
+									"u": "https://preview.redd.it/ywy9xkuxc4161.jpg?width=1080&amp;crop=smart&amp;auto=webp&amp;s=d544e3e9323dd36a3318c8779c96fb2da36e678a"
+								}
+							],
+							"s": {
+								"y": 1080,
+								"x": 1080,
+								"u": "https://preview.redd.it/ywy9xkuxc4161.jpg?width=1080&amp;format=pjpg&amp;auto=webp&amp;s=9363c571d31a9ef60dce6c231f09688d38916059"
+							},
+							"id": "ywy9xkuxc4161"
+						},
+						"e581qnuxc4161": {
+							"status": "valid",
+							"e": "Image",
+							"m": "image/jpg",
+							"p": [
+								{
+									"y": 108,
+									"x": 108,
+									"u": "https://preview.redd.it/e581qnuxc4161.jpg?width=108&amp;crop=smart&amp;auto=webp&amp;s=d0cbcf3b7a806fb48041d7d614af25cc3b685ae7"
+								},
+								{
+									"y": 216,
+									"x": 216,
+									"u": "https://preview.redd.it/e581qnuxc4161.jpg?width=216&amp;crop=smart&amp;auto=webp&amp;s=010683e6d55037b2fec41b4c3233c517b1049d16"
+								},
+								{
+									"y": 320,
+									"x": 320,
+									"u": "https://preview.redd.it/e581qnuxc4161.jpg?width=320&amp;crop=smart&amp;auto=webp&amp;s=ef6d7904821754e8fce4cf80138f3e05b28e4c82"
+								},
+								{
+									"y": 640,
+									"x": 640,
+									"u": "https://preview.redd.it/e581qnuxc4161.jpg?width=640&amp;crop=smart&amp;auto=webp&amp;s=40f8e2bc14a8d16a246482c95a0c0eafca17f6f5"
+								},
+								{
+									"y": 960,
+									"x": 960,
+									"u": "https://preview.redd.it/e581qnuxc4161.jpg?width=960&amp;crop=smart&amp;auto=webp&amp;s=e63642c97f9d4bedd6696329829cc84e38b87486"
+								},
+								{
+									"y": 1080,
+									"x": 1080,
+									"u": "https://preview.redd.it/e581qnuxc4161.jpg?width=1080&amp;crop=smart&amp;auto=webp&amp;s=136987251043e90fb01615cb8a6945029b634e19"
+								}
+							],
+							"s": {
+								"y": 1080,
+								"x": 1080,
+								"u": "https://preview.redd.it/e581qnuxc4161.jpg?width=1080&amp;format=pjpg&amp;auto=webp&amp;s=dc5cbcbffcf5abc24ad258f447fc84f2eea36a6a"
+							},
+							"id": "e581qnuxc4161"
+						}
+					},
+					"name": "t3_jzyih0",
+					"quarantine": false,
+					"link_flair_text_color": "light",
+					"upvote_ratio": 0.97,
+					"author_flair_background_color": null,
+					"subreddit_type": "public",
+					"ups": 26,
+					"total_awards_received": 0,
+					"media_embed": {},
+					"thumbnail_width": 140,
+					"author_flair_template_id": null,
+					"is_original_content": false,
+					"user_reports": [],
+					"secure_media": null,
+					"is_reddit_media_domain": false,
+					"is_meta": false,
+					"category": null,
+					"secure_media_embed": {},
+					"gallery_data": {
+						"items": [
+							{
+								"caption": "Day",
+								"media_id": "ywy9xkuxc4161",
+								"id": 14194001
+							},
+							{
+								"caption": "Night",
+								"media_id": "e581qnuxc4161",
+								"id": 14194002
+							}
+						]
+					},
+					"link_flair_text": "Show-Off",
+					"can_mod_post": false,
+					"score": 26,
+					"approved_by": null,
+					"author_premium": false,
+					"thumbnail": "https://a.thumbs.redditmedia.com/G-yjP0dRuToDyqN-ICgXZk5H7CWjVbPyijM3XCcFbV8.jpg",
+					"edited": false,
+					"author_flair_css_class": null,
+					"author_flair_richtext": [],
+					"gildings": {},
+					"content_categories": null,
+					"is_self": false,
+					"mod_note": null,
+					"created": 1606222520,
+					"link_flair_type": "richtext",
+					"wls": 0,
+					"removed_by_category": null,
+					"banned_by": null,
+					"author_flair_type": "text",
+					"domain": "reddit.com",
+					"allow_live_comments": false,
+					"selftext_html": null,
+					"likes": null,
+					"suggested_sort": null,
+					"banned_at_utc": null,
+					"url_overridden_by_dest": "https://www.reddit.com/gallery/jzyih0",
+					"view_count": null,
+					"archived": false,
+					"no_follow": false,
+					"is_crosspostable": true,
+					"pinned": false,
+					"over_18": false,
+					"all_awardings": [],
+					"awarders": [],
+					"media_only": false,
+					"link_flair_template_id": "14ada858-4aed-11e5-9227-0e5e20c89e15",
+					"can_gild": true,
+					"spoiler": false,
+					"locked": false,
+					"author_flair_text": null,
+					"treatment_tags": [],
+					"visited": false,
+					"removed_by": null,
+					"num_reports": null,
+					"distinguished": null,
+					"subreddit_id": "t5_2qwj8",
+					"mod_reason_by": null,
+					"removal_reason": null,
+					"link_flair_background_color": "#0aa18f",
+					"id": "jzyih0",
+					"is_robot_indexable": true,
+					"report_reasons": null,
+					"author": "renderisland",
+					"discussion_type": null,
+					"num_comments": 2,
+					"send_replies": true,
+					"whitelist_status": "no_ads",
+					"contest_mode": false,
+					"mod_reports": [],
+					"author_patreon_flair": false,
+					"author_flair_text_color": null,
+					"permalink": "/r/Unity3D/comments/jzyih0/ancient_fantasy_village/",
+					"parent_whitelist_status": "no_ads",
+					"stickied": false,
+					"url": "https://www.reddit.com/gallery/jzyih0",
+					"subreddit_subscribers": 226820,
+					"created_utc": 1606193720,
+					"num_crossposts": 0,
+					"media": null,
+					"is_video": false
+				}
+			},
+			{
+				"kind": "t3",
+				"data": {
+					"approved_at_utc": null,
+					"subreddit": "graphic_design",
+					"selftext": "",
+					"user_reports": [],
+					"saved": false,
+					"mod_reason_title": null,
+					"gilded": 0,
+					"clicked": false,
+					"title": "I designed a support bubble Valentine’s Day card",
+					"link_flair_richtext": [
+						{
+							"e": "text",
+							"t": "Sharing Work (Rule 2/3)"
+						}
+					],
+					"subreddit_name_prefixed": "r/graphic_design",
+					"hidden": false,
+					"pwls": 6,
+					"link_flair_css_class": "",
+					"downs": 0,
+					"thumbnail_height": 140,
+					"top_awarded_type": null,
+					"parent_whitelist_status": "all_ads",
+					"hide_score": false,
+					"name": "t3_kt2slt",
+					"quarantine": false,
+					"link_flair_text_color": "dark",
+					"upvote_ratio": 0.98,
+					"author_flair_background_color": null,
+					"subreddit_type": "public",
+					"ups": 788,
+					"total_awards_received": 2,
+					"media_embed": {},
+					"thumbnail_width": 140,
+					"author_flair_template_id": null,
+					"is_original_content": false,
+					"author_fullname": "t2_4xl18ald",
+					"secure_media": null,
+					"is_reddit_media_domain": true,
+					"is_meta": false,
+					"category": null,
+					"secure_media_embed": {},
+					"link_flair_text": "Sharing Work (Rule 2/3)",
+					"can_mod_post": false,
+					"score": 788,
+					"approved_by": null,
+					"author_premium": false,
+					"thumbnail": "https://b.thumbs.redditmedia.com/LyjSbw4M0_iZ1b3bZf8QyQOInhH3v01D6lmBaRNwJDY.jpg",
+					"edited": false,
+					"author_flair_css_class": null,
+					"author_flair_richtext": [],
+					"gildings": {},
+					"post_hint": "image",
+					"content_categories": null,
+					"is_self": false,
+					"mod_note": null,
+					"created": 1610142661,
+					"link_flair_type": "richtext",
+					"wls": 6,
+					"removed_by_category": null,
+					"banned_by": null,
+					"author_flair_type": "text",
+					"domain": "i.redd.it",
+					"allow_live_comments": false,
+					"selftext_html": null,
+					"likes": null,
+					"suggested_sort": null,
+					"banned_at_utc": null,
+					"url_overridden_by_dest": "https://i.redd.it/nxkfpkbm54a61.jpg",
+					"view_count": null,
+					"archived": false,
+					"no_follow": false,
+					"is_crosspostable": true,
+					"pinned": false,
+					"over_18": false,
+					"preview": {
+						"images": [
+							{
+								"source": {
+									"url": "https://preview.redd.it/nxkfpkbm54a61.jpg?auto=webp&amp;s=78cc3843f18dea4e3adc4717c3cebfeac57c9e45",
+									"width": 4000,
+									"height": 4187
+								},
+								"resolutions": [
+									{
+										"url": "https://preview.redd.it/nxkfpkbm54a61.jpg?width=108&amp;crop=smart&amp;auto=webp&amp;s=c56144304b7303aaa9acd019c598955ccfb3635c",
+										"width": 108,
+										"height": 113
+									},
+									{
+										"url": "https://preview.redd.it/nxkfpkbm54a61.jpg?width=216&amp;crop=smart&amp;auto=webp&amp;s=3565348ee6c01d01ad1710288fc423ab85482a0f",
+										"width": 216,
+										"height": 226
+									},
+									{
+										"url": "https://preview.redd.it/nxkfpkbm54a61.jpg?width=320&amp;crop=smart&amp;auto=webp&amp;s=929a888063cbd682ba8f4e91bbcd751545eb282d",
+										"width": 320,
+										"height": 334
+									},
+									{
+										"url": "https://preview.redd.it/nxkfpkbm54a61.jpg?width=640&amp;crop=smart&amp;auto=webp&amp;s=9893f35047efc4acc6d2fd3dcd5684bfb33418b9",
+										"width": 640,
+										"height": 669
+									},
+									{
+										"url": "https://preview.redd.it/nxkfpkbm54a61.jpg?width=960&amp;crop=smart&amp;auto=webp&amp;s=173dd61d5ee69117ea049cdb5f921caff93468d7",
+										"width": 960,
+										"height": 1004
+									},
+									{
+										"url": "https://preview.redd.it/nxkfpkbm54a61.jpg?width=1080&amp;crop=smart&amp;auto=webp&amp;s=0c1c2cf69748ed3fa90a4824b801464e50f2475e",
+										"width": 1080,
+										"height": 1130
+									}
+								],
+								"variants": {},
+								"id": "U_rFkAyjiIz3YrUgaynCPajFe0MIemIdF6FWysIyZY8"
+							}
+						],
+						"enabled": true
+					},
+					"all_awardings": [
+						{
+							"giver_coin_reward": 0,
+							"subreddit_id": null,
+							"is_new": false,
+							"days_of_drip_extension": 0,
+							"coin_price": 80,
+							"id": "award_8352bdff-3e03-4189-8a08-82501dd8f835",
+							"penny_donate": 0,
+							"coin_reward": 0,
+							"icon_url": "https://i.redd.it/award_images/t5_q0gj4/ks45ij6w05f61_oldHugz.png",
+							"days_of_premium": 0,
+							"icon_height": 2048,
+							"tiers_by_required_awardings": null,
+							"resized_icons": [
+								{
+									"url": "https://preview.redd.it/award_images/t5_q0gj4/ks45ij6w05f61_oldHugz.png?width=16&amp;height=16&amp;auto=webp&amp;s=73a23bf7f08b633508dedf457f2704c522b94a04",
+									"width": 16,
+									"height": 16
+								},
+								{
+									"url": "https://preview.redd.it/award_images/t5_q0gj4/ks45ij6w05f61_oldHugz.png?width=32&amp;height=32&amp;auto=webp&amp;s=50f2f16e71d2929e3d7275060af3ad6b851dbfb1",
+									"width": 32,
+									"height": 32
+								},
+								{
+									"url": "https://preview.redd.it/award_images/t5_q0gj4/ks45ij6w05f61_oldHugz.png?width=48&amp;height=48&amp;auto=webp&amp;s=ca487311563425e195699a4d7e4c57a98cbfde8b",
+									"width": 48,
+									"height": 48
+								},
+								{
+									"url": "https://preview.redd.it/award_images/t5_q0gj4/ks45ij6w05f61_oldHugz.png?width=64&amp;height=64&amp;auto=webp&amp;s=7b4eedcffb1c09a826e7837532c52979760f1d2b",
+									"width": 64,
+									"height": 64
+								},
+								{
+									"url": "https://preview.redd.it/award_images/t5_q0gj4/ks45ij6w05f61_oldHugz.png?width=128&amp;height=128&amp;auto=webp&amp;s=e4d5ab237eb71a9f02bb3bf9ad5ee43741918d6c",
+									"width": 128,
+									"height": 128
+								}
+							],
+							"icon_width": 2048,
+							"static_icon_width": 2048,
+							"start_date": null,
+							"is_enabled": true,
+							"awardings_required_to_grant_benefits": null,
+							"description": "Everything is better with a good hug",
+							"end_date": null,
+							"subreddit_coin_reward": 0,
+							"count": 2,
+							"static_icon_height": 2048,
+							"name": "Hugz",
+							"resized_static_icons": [
+								{
+									"url": "https://preview.redd.it/award_images/t5_q0gj4/fpm0r5ryq1361_PolarHugs.png?width=16&amp;height=16&amp;auto=webp&amp;s=69997ace3ef4ffc099b81d774c2c8f1530602875",
+									"width": 16,
+									"height": 16
+								},
+								{
+									"url": "https://preview.redd.it/award_images/t5_q0gj4/fpm0r5ryq1361_PolarHugs.png?width=32&amp;height=32&amp;auto=webp&amp;s=e9519d1999ef9dce5c8a9f59369cb92f52d95319",
+									"width": 32,
+									"height": 32
+								},
+								{
+									"url": "https://preview.redd.it/award_images/t5_q0gj4/fpm0r5ryq1361_PolarHugs.png?width=48&amp;height=48&amp;auto=webp&amp;s=f076c6434fb2d2f9075991810fd845c40fa73fc6",
+									"width": 48,
+									"height": 48
+								},
+								{
+									"url": "https://preview.redd.it/award_images/t5_q0gj4/fpm0r5ryq1361_PolarHugs.png?width=64&amp;height=64&amp;auto=webp&amp;s=85527145e0c4b754306a30df29e584fd16187636",
+									"width": 64,
+									"height": 64
+								},
+								{
+									"url": "https://preview.redd.it/award_images/t5_q0gj4/fpm0r5ryq1361_PolarHugs.png?width=128&amp;height=128&amp;auto=webp&amp;s=b8843cdf82c3b741d7af057c14076dcd2621e811",
+									"width": 128,
+									"height": 128
+								}
+							],
+							"icon_format": "PNG",
+							"award_sub_type": "GLOBAL",
+							"penny_price": 0,
+							"award_type": "global",
+							"static_icon_url": "https://i.redd.it/award_images/t5_q0gj4/fpm0r5ryq1361_PolarHugs.png"
+						}
+					],
+					"awarders": [],
+					"media_only": false,
+					"link_flair_template_id": "f3039f92-5f20-11e7-8c1f-0e8c19beb1c6",
+					"can_gild": true,
+					"spoiler": false,
+					"locked": false,
+					"author_flair_text": null,
+					"treatment_tags": [],
+					"visited": false,
+					"removed_by": null,
+					"num_reports": null,
+					"distinguished": null,
+					"subreddit_id": "t5_2qmtk",
+					"mod_reason_by": null,
+					"removal_reason": null,
+					"link_flair_background_color": "#46d160",
+					"id": "kt2slt",
+					"is_robot_indexable": true,
+					"num_duplicates": 0,
+					"report_reasons": null,
+					"author": "NaomiScrafton",
+					"discussion_type": null,
+					"num_comments": 31,
+					"send_replies": true,
+					"media": null,
+					"contest_mode": false,
+					"author_patreon_flair": false,
+					"author_flair_text_color": null,
+					"permalink": "/r/graphic_design/comments/kt2slt/i_designed_a_support_bubble_valentines_day_card/",
+					"whitelist_status": "all_ads",
+					"stickied": false,
+					"url": "https://i.redd.it/nxkfpkbm54a61.jpg",
+					"subreddit_subscribers": 582135,
+					"created_utc": 1610113861,
+					"num_crossposts": 0,
+					"mod_reports": [],
+					"is_video": false
+				}
+			},
+			{
+				"kind": "t3",
+				"data": {
+					"approved_at_utc": null,
+					"subreddit": "lisp",
+					"selftext": "",
+					"author_fullname": "t2_ptn2u",
+					"saved": true,
+					"mod_reason_title": null,
+					"gilded": 0,
+					"clicked": false,
+					"title": "Why I still Lisp (and you should too!)",
+					"link_flair_richtext": [],
+					"subreddit_name_prefixed": "r/lisp",
+					"hidden": false,
+					"pwls": 6,
+					"link_flair_css_class": null,
+					"downs": 0,
+					"thumbnail_height": 138,
+					"top_awarded_type": null,
+					"hide_score": false,
+					"name": "t3_l98aft",
+					"quarantine": false,
+					"link_flair_text_color": "dark",
+					"upvote_ratio": 0.99,
+					"author_flair_background_color": "#dadada",
+					"subreddit_type": "public",
+					"ups": 88,
+					"total_awards_received": 0,
+					"media_embed": {},
+					"thumbnail_width": 140,
+					"author_flair_template_id": "b3916e2a-9901-11e5-af2e-0e2f4ead9f7b",
+					"is_original_content": false,
+					"user_reports": [],
+					"secure_media": null,
+					"is_reddit_media_domain": false,
+					"is_meta": false,
+					"category": null,
+					"secure_media_embed": {},
+					"link_flair_text": null,
+					"can_mod_post": false,
+					"score": 88,
+					"approved_by": null,
+					"author_premium": false,
+					"thumbnail": "default",
+					"edited": false,
+					"author_flair_css_class": "lisplizard",
+					"author_flair_richtext": [
+						{
+							"e": "text",
+							"t": "lisp lizard"
+						}
+					],
+					"gildings": {},
+					"post_hint": "link",
+					"content_categories": null,
+					"is_self": false,
+					"mod_note": null,
+					"created": 1612110921,
+					"link_flair_type": "text",
+					"wls": 6,
+					"removed_by_category": null,
+					"banned_by": null,
+					"author_flair_type": "richtext",
+					"domain": "mendhekar.medium.com",
+					"allow_live_comments": false,
+					"selftext_html": null,
+					"likes": null,
+					"suggested_sort": null,
+					"banned_at_utc": null,
+					"url_overridden_by_dest": "https://mendhekar.medium.com/why-i-still-lisp-and-you-should-too-18a2ae36bd8",
+					"view_count": null,
+					"archived": false,
+					"no_follow": false,
+					"is_crosspostable": true,
+					"pinned": false,
+					"over_18": false,
+					"preview": {
+						"images": [
+							{
+								"source": {
+									"url": "https://external-preview.redd.it/t7QzIsW7WXX5Bd-7oFT3Jz_PysF-noKWekEFaafbbK0.jpg?auto=webp&amp;s=a1466dd73008fba5c8551d46bada1a0ba9db95be",
+									"width": 811,
+									"height": 805
+								},
+								"resolutions": [
+									{
+										"url": "https://external-preview.redd.it/t7QzIsW7WXX5Bd-7oFT3Jz_PysF-noKWekEFaafbbK0.jpg?width=108&amp;crop=smart&amp;auto=webp&amp;s=a9307f542ce7ec762ea74327e49ad86d182855aa",
+										"width": 108,
+										"height": 107
+									},
+									{
+										"url": "https://external-preview.redd.it/t7QzIsW7WXX5Bd-7oFT3Jz_PysF-noKWekEFaafbbK0.jpg?width=216&amp;crop=smart&amp;auto=webp&amp;s=ba132df0e1dfcee971691bc6240533d7ca04d4b6",
+										"width": 216,
+										"height": 214
+									},
+									{
+										"url": "https://external-preview.redd.it/t7QzIsW7WXX5Bd-7oFT3Jz_PysF-noKWekEFaafbbK0.jpg?width=320&amp;crop=smart&amp;auto=webp&amp;s=c971e88b2b3b053c962d0f4269d77a90e8c36088",
+										"width": 320,
+										"height": 317
+									},
+									{
+										"url": "https://external-preview.redd.it/t7QzIsW7WXX5Bd-7oFT3Jz_PysF-noKWekEFaafbbK0.jpg?width=640&amp;crop=smart&amp;auto=webp&amp;s=a13dbbc491cc3f6e2197f1057809b109b02bd243",
+										"width": 640,
+										"height": 635
+									}
+								],
+								"variants": {},
+								"id": "3TPHaZtjUkrqmKuEIUGnpQY_um_VFZ6kRqBuelLPTag"
+							}
+						],
+						"enabled": false
+					},
+					"all_awardings": [],
+					"awarders": [],
+					"media_only": false,
+					"can_gild": true,
+					"spoiler": false,
+					"locked": false,
+					"author_flair_text": "lisp lizard",
+					"treatment_tags": [],
+					"visited": false,
+					"removed_by": null,
+					"num_reports": null,
+					"distinguished": null,
+					"subreddit_id": "t5_2qh35",
+					"mod_reason_by": null,
+					"removal_reason": null,
+					"link_flair_background_color": "",
+					"id": "l98aft",
+					"is_robot_indexable": true,
+					"report_reasons": null,
+					"author": "flaming_bird",
+					"discussion_type": null,
+					"num_comments": 11,
+					"send_replies": true,
+					"whitelist_status": "all_ads",
+					"contest_mode": false,
+					"mod_reports": [],
+					"author_patreon_flair": false,
+					"author_flair_text_color": "dark",
+					"permalink": "/r/lisp/comments/l98aft/why_i_still_lisp_and_you_should_too/",
+					"parent_whitelist_status": "all_ads",
+					"stickied": false,
+					"url": "https://mendhekar.medium.com/why-i-still-lisp-and-you-should-too-18a2ae36bd8",
+					"subreddit_subscribers": 30772,
+					"created_utc": 1612082121,
+					"num_crossposts": 0,
+					"media": null,
+					"is_video": false
+				}
+			},
+			{
+				"text": "[Extra Credits made a video on this back in 2012.](https://youtu.be/BRBcjsOt0_g) In it, Dan explained a multiplayer design concept by Riot Game's Tom Cadwell called \"counter play.\"\n\n&gt;On a basic level, it's the idea that in a multiplayer game, when designing an ability or mechanic, you can't only be thinking of about how to make that ability or mechanic interesting for the player who gets to use it. You also have to think about how it's interesting for the players who it gets used on. On a more rigorous level, it's the idea that a mechanic or ability in a multiplayer game should increase the number of meaningful choices available both to the player using it and a player it's being used on.\n\nEven back then I noticed a lot of people didn't fully understand the concept [which you can see from my from my cringeworthy post](https://i.imgur.com/nhHj52y.png) at the time [on Penny Arcade's comment section](https://www.penny-arcade.com/patv/episode/counter-play) (I'm so sorry at how iamverysmart I sounded back then). The design philosophy is sometimes still being misunderstood —probably because the design theory has the word \"counter\" in its name— so I'd like to explain counter play in another way:\n\n####The core concept of counter play is that you design an opponent so that they are fun for the player to fight against.\n\nYou may have realized that I didn't even say \"multiplayer.\" This is because game designers already understand counter play on a fundamental level when it comes to single-player games. We design enemies and bosses to be fun not for the CPU, but for the player to fight against.\n\nSo I'm taking the definition a little further than James and Dan of Extra Credits did. Counter play is to design an opponent's attacks so that *it's fun to be on the receiving end.* Boss encounters are usually great examples of counter play, as a lot of the battle is dealing with their onslaught. A multiplayer example of this is the 1v3 minigames in Mario Party, in which one lucky player gets to be like a boss enemy with all the power... and yet it's somehow *still* fun to be one of the three players on the receiving end of the onslaught. Those minigames have great counter play or \"receiving-end\" design. It's as much fun to deal with the attacks as it is to make the attacks.\n\nI don't want to divorce \"counter play\" from its links to single-player design because in the end it's the same design philosophy. Counter play in multiplayer is an extension of a design philosophy that game developers already have when designing enemies and bosses. \"How will this enemy attack be fun for the player,\" is something we don't need to ask ourselves because we were always considering the player from the start. We only need to apply that logic to the opponent in our multiplayer games. \"How will this attack be fun for the opponent?\" After all, we don't want every weapon to be a one-shot sniper rifle.\n\nAnd so we arrive at the dreaded sniper rifle.\n\nFor a long time the notorious sniper rifle was the prime example of bad counter play. You could be playing mindfully, when without warning —BLAM!— respawn next round. It's fun to snipe but not so much to get snipped. Single-player games deal with this by giving enemy snipers a [bright laser](https://static.wikia.nocookie.net/uncharted/images/5/5b/Race_to_the_Rescue_gameplay_1.png/revision/latest?cb=20200619082629) which gives the player something tangible to play against, and they wouldn't one-shot you at full health. In multiplayer games however, you could drop dead at random.\n\nIt's not always bad of course. Knowing there's a sniper on you, trying to juke him, zig zagging to cover and risking a counterattack are all super thrilling. Simply knowing where the sniper is adds counter play. Modern games have gotten a lot better at giving counter play to the sniper role. Scope glare (a mechanic that lets you spot where a sniper is if they are aiming in your direction) has been a game-changing addition: Before, you were getting snipped; now, you're *dealing with* a sniper. It's a subtle but important difference.\n\n****\n\nCounter play is a broad, important design philosophy. It's not just about hitscan weapons. It's not just about strategic counters and expanding \"meaningful options\" either. It *can* include challenge of execution like you'd find in action games or multiplayer fighting games. It's not even just about multiplayer. If you've ever fought an unfair enemy with attacks that stun lock you or don't telegraph, or a boring damage-sponge boss that doesn't challenge you with tricky attacks... that's bad counter play in single player.\n\nAt it's most basic definition, counter play is to design offense to be fun for the defense.\n\nBy framing the design philosophy to include single-player, where everyone already understands it on a \"no duh\" level, it's easier to see how it applies equally to multiplayer. Being stuck on the 3-person team in a 1v3 Mario Party minigame would not be fun without wonderful, delicious counter play.",
+				"kind": "t3",
+				"data": {
+					"approved_at_utc": null,
+					"subreddit": "gamedesign",
+					"selftext": "[Extra Credits made a video on this back in 2012.](https://youtu.be/BRBcjsOt0_g) In it, Dan explained a multiplayer design concept by Riot Game's Tom Cadwell called \"counter play.\"\n\n&gt;On a basic level, it's the idea that in a multiplayer game, when designing an ability or mechanic, you can't only be thinking of about how to make that ability or mechanic interesting for the player who gets to use it. You also have to think about how it's interesting for the players who it gets used on. On a more rigorous level, it's the idea that a mechanic or ability in a multiplayer game should increase the number of meaningful choices available both to the player using it and a player it's being used on.\n\nEven back then I noticed a lot of people didn't fully understand the concept [which you can see from my from my cringeworthy post](https://i.imgur.com/nhHj52y.png) at the time [on Penny Arcade's comment section](https://www.penny-arcade.com/patv/episode/counter-play) (I'm so sorry at how iamverysmart I sounded back then). The design philosophy is sometimes still being misunderstood —probably because the design theory has the word \"counter\" in its name— so I'd like to explain counter play in another way:\n\n####The core concept of counter play is that you design an opponent so that they are fun for the player to fight against.\n\nYou may have realized that I didn't even say \"multiplayer.\" This is because game designers already understand counter play on a fundamental level when it comes to single-player games. We design enemies and bosses to be fun not for the CPU, but for the player to fight against.\n\nSo I'm taking the definition a little further than James and Dan of Extra Credits did. Counter play is to design an opponent's attacks so that *it's fun to be on the receiving end.* Boss encounters are usually great examples of counter play, as a lot of the battle is dealing with their onslaught. A multiplayer example of this is the 1v3 minigames in Mario Party, in which one lucky player gets to be like a boss enemy with all the power... and yet it's somehow *still* fun to be one of the three players on the receiving end of the onslaught. Those minigames have great counter play or \"receiving-end\" design. It's as much fun to deal with the attacks as it is to make the attacks.\n\nI don't want to divorce \"counter play\" from its links to single-player design because in the end it's the same design philosophy. Counter play in multiplayer is an extension of a design philosophy that game developers already have when designing enemies and bosses. \"How will this enemy attack be fun for the player,\" is something we don't need to ask ourselves because we were always considering the player from the start. We only need to apply that logic to the opponent in our multiplayer games. \"How will this attack be fun for the opponent?\" After all, we don't want every weapon to be a one-shot sniper rifle.\n\nAnd so we arrive at the dreaded sniper rifle.\n\nFor a long time the notorious sniper rifle was the prime example of bad counter play. You could be playing mindfully, when without warning —BLAM!— respawn next round. It's fun to snipe but not so much to get snipped. Single-player games deal with this by giving enemy snipers a [bright laser](https://static.wikia.nocookie.net/uncharted/images/5/5b/Race_to_the_Rescue_gameplay_1.png/revision/latest?cb=20200619082629) which gives the player something tangible to play against, and they wouldn't one-shot you at full health. In multiplayer games however, you could drop dead at random.\n\nIt's not always bad of course. Knowing there's a sniper on you, trying to juke him, zig zagging to cover and risking a counterattack are all super thrilling. Simply knowing where the sniper is adds counter play. Modern games have gotten a lot better at giving counter play to the sniper role. Scope glare (a mechanic that lets you spot where a sniper is if they are aiming in your direction) has been a game-changing addition: Before, you were getting snipped; now, you're *dealing with* a sniper. It's a subtle but important difference.\n\n****\n\nCounter play is a broad, important design philosophy. It's not just about hitscan weapons. It's not just about strategic counters and expanding \"meaningful options\" either. It *can* include challenge of execution like you'd find in action games or multiplayer fighting games. It's not even just about multiplayer. If you've ever fought an unfair enemy with attacks that stun lock you or don't telegraph, or a boring damage-sponge boss that doesn't challenge you with tricky attacks... that's bad counter play in single player.\n\nAt it's most basic definition, counter play is to design offense to be fun for the defense.\n\nBy framing the design philosophy to include single-player, where everyone already understands it on a \"no duh\" level, it's easier to see how it applies equally to multiplayer. Being stuck on the 3-person team in a 1v3 Mario Party minigame would not be fun without wonderful, delicious counter play.",
+					"author_fullname": "t2_mymtl",
+					"saved": true,
+					"mod_reason_title": null,
+					"gilded": 0,
+					"clicked": false,
+					"title": "Counter Play, \"Receiving-End Design\" —or— Why Sniper Rifles in Multiplayer Games Usually Suck",
+					"link_flair_richtext": [],
+					"subreddit_name_prefixed": "r/gamedesign",
+					"hidden": false,
+					"pwls": 6,
+					"link_flair_css_class": "lightblue",
+					"downs": 0,
+					"thumbnail_height": null,
+					"top_awarded_type": null,
+					"hide_score": false,
+					"name": "t3_k8e0io",
+					"quarantine": false,
+					"link_flair_text_color": "dark",
+					"upvote_ratio": 0.97,
+					"author_flair_background_color": null,
+					"subreddit_type": "public",
+					"ups": 193,
+					"total_awards_received": 0,
+					"media_embed": {},
+					"thumbnail_width": null,
+					"author_flair_template_id": null,
+					"is_original_content": false,
+					"user_reports": [],
+					"secure_media": null,
+					"is_reddit_media_domain": false,
+					"is_meta": false,
+					"category": null,
+					"secure_media_embed": {},
+					"link_flair_text": "Discussion",
+					"can_mod_post": false,
+					"score": 193,
+					"approved_by": null,
+					"author_premium": false,
+					"thumbnail": "self",
+					"edited": 1607350061,
+					"author_flair_css_class": null,
+					"author_flair_richtext": [],
+					"gildings": {},
+					"post_hint": "self",
+					"content_categories": null,
+					"is_self": true,
+					"mod_note": null,
+					"created": 1607364818,
+					"link_flair_type": "text",
+					"wls": 6,
+					"removed_by_category": null,
+					"banned_by": null,
+					"author_flair_type": "text",
+					"domain": "self.gamedesign",
+					"allow_live_comments": false,
+					"selftext_html": "&lt;!-- SC_OFF --&gt;&lt;div class=\"md\"&gt;&lt;p&gt;&lt;a href=\"https://youtu.be/BRBcjsOt0_g\"&gt;Extra Credits made a video on this back in 2012.&lt;/a&gt; In it, Dan explained a multiplayer design concept by Riot Game&amp;#39;s Tom Cadwell called &amp;quot;counter play.&amp;quot;&lt;/p&gt;\n\n&lt;blockquote&gt;\n&lt;p&gt;On a basic level, it&amp;#39;s the idea that in a multiplayer game, when designing an ability or mechanic, you can&amp;#39;t only be thinking of about how to make that ability or mechanic interesting for the player who gets to use it. You also have to think about how it&amp;#39;s interesting for the players who it gets used on. On a more rigorous level, it&amp;#39;s the idea that a mechanic or ability in a multiplayer game should increase the number of meaningful choices available both to the player using it and a player it&amp;#39;s being used on.&lt;/p&gt;\n&lt;/blockquote&gt;\n\n&lt;p&gt;Even back then I noticed a lot of people didn&amp;#39;t fully understand the concept &lt;a href=\"https://i.imgur.com/nhHj52y.png\"&gt;which you can see from my from my cringeworthy post&lt;/a&gt; at the time &lt;a href=\"https://www.penny-arcade.com/patv/episode/counter-play\"&gt;on Penny Arcade&amp;#39;s comment section&lt;/a&gt; (I&amp;#39;m so sorry at how iamverysmart I sounded back then). The design philosophy is sometimes still being misunderstood —probably because the design theory has the word &amp;quot;counter&amp;quot; in its name— so I&amp;#39;d like to explain counter play in another way:&lt;/p&gt;\n\n&lt;h4&gt;The core concept of counter play is that you design an opponent so that they are fun for the player to fight against.&lt;/h4&gt;\n\n&lt;p&gt;You may have realized that I didn&amp;#39;t even say &amp;quot;multiplayer.&amp;quot; This is because game designers already understand counter play on a fundamental level when it comes to single-player games. We design enemies and bosses to be fun not for the CPU, but for the player to fight against.&lt;/p&gt;\n\n&lt;p&gt;So I&amp;#39;m taking the definition a little further than James and Dan of Extra Credits did. Counter play is to design an opponent&amp;#39;s attacks so that &lt;em&gt;it&amp;#39;s fun to be on the receiving end.&lt;/em&gt; Boss encounters are usually great examples of counter play, as a lot of the battle is dealing with their onslaught. A multiplayer example of this is the 1v3 minigames in Mario Party, in which one lucky player gets to be like a boss enemy with all the power... and yet it&amp;#39;s somehow &lt;em&gt;still&lt;/em&gt; fun to be one of the three players on the receiving end of the onslaught. Those minigames have great counter play or &amp;quot;receiving-end&amp;quot; design. It&amp;#39;s as much fun to deal with the attacks as it is to make the attacks.&lt;/p&gt;\n\n&lt;p&gt;I don&amp;#39;t want to divorce &amp;quot;counter play&amp;quot; from its links to single-player design because in the end it&amp;#39;s the same design philosophy. Counter play in multiplayer is an extension of a design philosophy that game developers already have when designing enemies and bosses. &amp;quot;How will this enemy attack be fun for the player,&amp;quot; is something we don&amp;#39;t need to ask ourselves because we were always considering the player from the start. We only need to apply that logic to the opponent in our multiplayer games. &amp;quot;How will this attack be fun for the opponent?&amp;quot; After all, we don&amp;#39;t want every weapon to be a one-shot sniper rifle.&lt;/p&gt;\n\n&lt;p&gt;And so we arrive at the dreaded sniper rifle.&lt;/p&gt;\n\n&lt;p&gt;For a long time the notorious sniper rifle was the prime example of bad counter play. You could be playing mindfully, when without warning —BLAM!— respawn next round. It&amp;#39;s fun to snipe but not so much to get snipped. Single-player games deal with this by giving enemy snipers a &lt;a href=\"https://static.wikia.nocookie.net/uncharted/images/5/5b/Race_to_the_Rescue_gameplay_1.png/revision/latest?cb=20200619082629\"&gt;bright laser&lt;/a&gt; which gives the player something tangible to play against, and they wouldn&amp;#39;t one-shot you at full health. In multiplayer games however, you could drop dead at random.&lt;/p&gt;\n\n&lt;p&gt;It&amp;#39;s not always bad of course. Knowing there&amp;#39;s a sniper on you, trying to juke him, zig zagging to cover and risking a counterattack are all super thrilling. Simply knowing where the sniper is adds counter play. Modern games have gotten a lot better at giving counter play to the sniper role. Scope glare (a mechanic that lets you spot where a sniper is if they are aiming in your direction) has been a game-changing addition: Before, you were getting snipped; now, you&amp;#39;re &lt;em&gt;dealing with&lt;/em&gt; a sniper. It&amp;#39;s a subtle but important difference.&lt;/p&gt;\n\n&lt;hr/&gt;\n\n&lt;p&gt;Counter play is a broad, important design philosophy. It&amp;#39;s not just about hitscan weapons. It&amp;#39;s not just about strategic counters and expanding &amp;quot;meaningful options&amp;quot; either. It &lt;em&gt;can&lt;/em&gt; include challenge of execution like you&amp;#39;d find in action games or multiplayer fighting games. It&amp;#39;s not even just about multiplayer. If you&amp;#39;ve ever fought an unfair enemy with attacks that stun lock you or don&amp;#39;t telegraph, or a boring damage-sponge boss that doesn&amp;#39;t challenge you with tricky attacks... that&amp;#39;s bad counter play in single player.&lt;/p&gt;\n\n&lt;p&gt;At it&amp;#39;s most basic definition, counter play is to design offense to be fun for the defense.&lt;/p&gt;\n\n&lt;p&gt;By framing the design philosophy to include single-player, where everyone already understands it on a &amp;quot;no duh&amp;quot; level, it&amp;#39;s easier to see how it applies equally to multiplayer. Being stuck on the 3-person team in a 1v3 Mario Party minigame would not be fun without wonderful, delicious counter play.&lt;/p&gt;\n&lt;/div&gt;&lt;!-- SC_ON --&gt;",
+					"likes": null,
+					"suggested_sort": null,
+					"banned_at_utc": null,
+					"view_count": null,
+					"archived": false,
+					"no_follow": false,
+					"is_crosspostable": true,
+					"pinned": false,
+					"over_18": false,
+					"preview": {
+						"images": [
+							{
+								"source": {
+									"url": "https://external-preview.redd.it/NIDGxnKE_m_bEsgwNF9K7hzODGa2tPLWBfFBzrfLXaI.png?auto=webp&amp;s=aac43c4d578a35ee5bf7579e79ed391c2ada56fe",
+									"width": 766,
+									"height": 759
+								},
+								"resolutions": [
+									{
+										"url": "https://external-preview.redd.it/NIDGxnKE_m_bEsgwNF9K7hzODGa2tPLWBfFBzrfLXaI.png?width=108&amp;crop=smart&amp;auto=webp&amp;s=0fbcc192c0ded786db590d752e0b2078427a35a0",
+										"width": 108,
+										"height": 107
+									},
+									{
+										"url": "https://external-preview.redd.it/NIDGxnKE_m_bEsgwNF9K7hzODGa2tPLWBfFBzrfLXaI.png?width=216&amp;crop=smart&amp;auto=webp&amp;s=31849d013ab0aa2da942e0da4a2a77f541bf0cf5",
+										"width": 216,
+										"height": 214
+									},
+									{
+										"url": "https://external-preview.redd.it/NIDGxnKE_m_bEsgwNF9K7hzODGa2tPLWBfFBzrfLXaI.png?width=320&amp;crop=smart&amp;auto=webp&amp;s=ecaa90411b108d38d02b0b5a3bf43aa7de7e0cfe",
+										"width": 320,
+										"height": 317
+									},
+									{
+										"url": "https://external-preview.redd.it/NIDGxnKE_m_bEsgwNF9K7hzODGa2tPLWBfFBzrfLXaI.png?width=640&amp;crop=smart&amp;auto=webp&amp;s=cf75e50660f5c16c277e318e23a123fc319c72d5",
+										"width": 640,
+										"height": 634
+									}
+								],
+								"variants": {},
+								"id": "enipSSurmeDwpvnGj0SuUuoaxDOg3wA1SIRxM6xWYm0"
+							}
+						],
+						"enabled": false
+					},
+					"all_awardings": [],
+					"awarders": [],
+					"media_only": false,
+					"link_flair_template_id": "505fbfc0-03ee-11e6-8ee2-0e43b37a78c1",
+					"can_gild": true,
+					"spoiler": false,
+					"locked": false,
+					"author_flair_text": null,
+					"treatment_tags": [],
+					"visited": false,
+					"removed_by": null,
+					"num_reports": null,
+					"distinguished": null,
+					"subreddit_id": "t5_2qimq",
+					"mod_reason_by": null,
+					"removal_reason": null,
+					"link_flair_background_color": "",
+					"id": "k8e0io",
+					"is_robot_indexable": true,
+					"report_reasons": null,
+					"author": "elheber",
+					"discussion_type": null,
+					"num_comments": 59,
+					"send_replies": true,
+					"whitelist_status": "all_ads",
+					"contest_mode": false,
+					"mod_reports": [],
+					"author_patreon_flair": false,
+					"author_flair_text_color": null,
+					"permalink": "/r/gamedesign/comments/k8e0io/counter_play_receivingend_design_or_why_sniper/",
+					"parent_whitelist_status": "all_ads",
+					"stickied": false,
+					"url": "https://www.reddit.com/r/gamedesign/comments/k8e0io/counter_play_receivingend_design_or_why_sniper/",
+					"subreddit_subscribers": 135260,
+					"created_utc": 1607336018,
+					"num_crossposts": 1,
+					"media": null,
+					"is_video": false
+				}
+			},
+			{
+				"text": "",
+				"kind": "t3",
+				"data": {
+					"approved_at_utc": null,
+					"subreddit": "compsci",
+					"selftext": "",
+					"author_fullname": "t2_80sz07ui",
+					"saved": true,
+					"mod_reason_title": null,
+					"gilded": 0,
+					"clicked": false,
+					"title": "A comparison between a few subdivision algorithms (Catmull-Clark, Doo-Sabin, and Midedge). Source code in comments",
+					"link_flair_richtext": [],
+					"subreddit_name_prefixed": "r/compsci",
+					"hidden": false,
+					"pwls": 6,
+					"link_flair_css_class": null,
+					"downs": 0,
+					"thumbnail_height": 140,
+					"top_awarded_type": null,
+					"hide_score": false,
+					"name": "t3_juw3ud",
+					"quarantine": false,
+					"link_flair_text_color": "dark",
+					"upvote_ratio": 0.99,
+					"author_flair_background_color": null,
+					"subreddit_type": "public",
+					"ups": 984,
+					"total_awards_received": 0,
+					"media_embed": {},
+					"thumbnail_width": 140,
+					"author_flair_template_id": null,
+					"is_original_content": false,
+					"user_reports": [],
+					"secure_media": {
+						"reddit_video": {
+							"fallback_url": "https://v.redd.it/pp2u78wtohz51/DASH_1080.mp4?source=fallback",
+							"height": 1080,
+							"width": 1080,
+							"scrubber_media_url": "https://v.redd.it/pp2u78wtohz51/DASH_96.mp4",
+							"dash_url": "https://v.redd.it/pp2u78wtohz51/DASHPlaylist.mpd?a=1610019120%2CZjNjNGVmNzQwZWY3ZDI2YWZmY2ZjYTVmZjVkYmVmNTFlYWNmYTRhMWU4ODY0ZTFlYTY1MjdiM2JhZWM1M2Y0YQ%3D%3D&amp;v=1&amp;f=sd",
+							"duration": 15,
+							"hls_url": "https://v.redd.it/pp2u78wtohz51/HLSPlaylist.m3u8?a=1610019120%2COTYxZWE4NmFmYTExNTFlZWU0ODI2ZGRmYWI0ZWNmZjZkOTk3MzUwMzYzOGMyNzI0N2RlODRhNzhjYjAwYzk3Yw%3D%3D&amp;v=1&amp;f=sd",
+							"is_gif": false,
+							"transcoding_status": "completed"
+						}
+					},
+					"is_reddit_media_domain": true,
+					"is_meta": false,
+					"category": null,
+					"secure_media_embed": {},
+					"link_flair_text": null,
+					"can_mod_post": false,
+					"score": 984,
+					"approved_by": null,
+					"author_premium": false,
+					"thumbnail": "default",
+					"edited": false,
+					"author_flair_css_class": null,
+					"author_flair_richtext": [],
+					"gildings": {},
+					"post_hint": "hosted:video",
+					"content_categories": null,
+					"is_self": false,
+					"mod_note": null,
+					"created": 1605512239,
+					"link_flair_type": "text",
+					"wls": 6,
+					"removed_by_category": null,
+					"banned_by": null,
+					"author_flair_type": "text",
+					"domain": "v.redd.it",
+					"allow_live_comments": true,
+					"selftext_html": null,
+					"likes": null,
+					"suggested_sort": null,
+					"banned_at_utc": null,
+					"url_overridden_by_dest": "https://v.redd.it/pp2u78wtohz51",
+					"view_count": null,
+					"archived": false,
+					"no_follow": false,
+					"is_crosspostable": true,
+					"pinned": false,
+					"over_18": false,
+					"preview": {
+						"images": [
+							{
+								"source": {
+									"url": "https://external-preview.redd.it/a4nKpG1GNFA_mFnQXgzsRKyrh4vpHbCvuOZ4X5FCblM.png?format=pjpg&amp;auto=webp&amp;s=d24dd49f78ecdac7103d03d3e4096539f1c34a93",
+									"width": 2160,
+									"height": 2160
+								},
+								"resolutions": [
+									{
+										"url": "https://external-preview.redd.it/a4nKpG1GNFA_mFnQXgzsRKyrh4vpHbCvuOZ4X5FCblM.png?width=108&amp;crop=smart&amp;format=pjpg&amp;auto=webp&amp;s=173af2e8f477a739c666bab0544615185f512923",
+										"width": 108,
+										"height": 108
+									},
+									{
+										"url": "https://external-preview.redd.it/a4nKpG1GNFA_mFnQXgzsRKyrh4vpHbCvuOZ4X5FCblM.png?width=216&amp;crop=smart&amp;format=pjpg&amp;auto=webp&amp;s=80b4ea8a117bb4d992620e1bc28f4403e6953756",
+										"width": 216,
+										"height": 216
+									},
+									{
+										"url": "https://external-preview.redd.it/a4nKpG1GNFA_mFnQXgzsRKyrh4vpHbCvuOZ4X5FCblM.png?width=320&amp;crop=smart&amp;format=pjpg&amp;auto=webp&amp;s=3a6ebf022051e5e00e1f9c1b179bb82d5953b306",
+										"width": 320,
+										"height": 320
+									},
+									{
+										"url": "https://external-preview.redd.it/a4nKpG1GNFA_mFnQXgzsRKyrh4vpHbCvuOZ4X5FCblM.png?width=640&amp;crop=smart&amp;format=pjpg&amp;auto=webp&amp;s=6bf6512662aaec61b60ce7e619a6e4dbecb9f93f",
+										"width": 640,
+										"height": 640
+									},
+									{
+										"url": "https://external-preview.redd.it/a4nKpG1GNFA_mFnQXgzsRKyrh4vpHbCvuOZ4X5FCblM.png?width=960&amp;crop=smart&amp;format=pjpg&amp;auto=webp&amp;s=9424348e1f44d33c2bf70a93f7c96eefea9c6a53",
+										"width": 960,
+										"height": 960
+									},
+									{
+										"url": "https://external-preview.redd.it/a4nKpG1GNFA_mFnQXgzsRKyrh4vpHbCvuOZ4X5FCblM.png?width=1080&amp;crop=smart&amp;format=pjpg&amp;auto=webp&amp;s=b7c7297b36adf0542a084b49c07e905127aef7e7",
+										"width": 1080,
+										"height": 1080
+									}
+								],
+								"variants": {},
+								"id": "6xRO06XIujuzPw2m5RieZ_TTwxmFhZcoFBgUqz6Vo9c"
+							}
+						],
+						"enabled": false
+					},
+					"all_awardings": [],
+					"awarders": [],
+					"media_only": false,
+					"can_gild": true,
+					"spoiler": false,
+					"locked": false,
+					"author_flair_text": null,
+					"treatment_tags": [],
+					"visited": false,
+					"removed_by": null,
+					"num_reports": null,
+					"distinguished": null,
+					"subreddit_id": "t5_2qhmr",
+					"mod_reason_by": null,
+					"removal_reason": null,
+					"link_flair_background_color": "",
+					"id": "juw3ud",
+					"is_robot_indexable": true,
+					"report_reasons": null,
+					"author": "rvizzz",
+					"discussion_type": null,
+					"num_comments": 29,
+					"send_replies": true,
+					"whitelist_status": "all_ads",
+					"contest_mode": false,
+					"mod_reports": [],
+					"author_patreon_flair": false,
+					"author_flair_text_color": null,
+					"permalink": "/r/compsci/comments/juw3ud/a_comparison_between_a_few_subdivision_algorithms/",
+					"parent_whitelist_status": "all_ads",
+					"stickied": false,
+					"url": "https://v.redd.it/pp2u78wtohz51",
+					"subreddit_subscribers": 1208363,
+					"created_utc": 1605483439,
+					"num_crossposts": 1,
+					"media": {
+						"reddit_video": {
+							"fallback_url": "https://v.redd.it/pp2u78wtohz51/DASH_1080.mp4?source=fallback",
+							"height": 1080,
+							"width": 1080,
+							"scrubber_media_url": "https://v.redd.it/pp2u78wtohz51/DASH_96.mp4",
+							"dash_url": "https://v.redd.it/pp2u78wtohz51/DASHPlaylist.mpd?a=1610019120%2CZjNjNGVmNzQwZWY3ZDI2YWZmY2ZjYTVmZjVkYmVmNTFlYWNmYTRhMWU4ODY0ZTFlYTY1MjdiM2JhZWM1M2Y0YQ%3D%3D&amp;v=1&amp;f=sd",
+							"duration": 15,
+							"hls_url": "https://v.redd.it/pp2u78wtohz51/HLSPlaylist.m3u8?a=1610019120%2COTYxZWE4NmFmYTExNTFlZWU0ODI2ZGRmYWI0ZWNmZjZkOTk3MzUwMzYzOGMyNzI0N2RlODRhNzhjYjAwYzk3Yw%3D%3D&amp;v=1&amp;f=sd",
+							"is_gif": false,
+							"transcoding_status": "completed"
+						}
+					},
+					"is_video": true
+				}
 			}
 		],
 		"after": null,
