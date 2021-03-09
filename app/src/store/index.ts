@@ -25,9 +25,9 @@ const makeStore = () =>
 			}),
 		],
 
-		strict: process.env.NODE_ENV !== "production",
+		strict: false,
 	});
-
+// todo check vue3 env variable
 export function generateTypedStore(): StoreTypeTemp {
 	store = makeStore() as StoreTypeTemp;
 	return store;

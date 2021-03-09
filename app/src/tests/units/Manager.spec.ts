@@ -200,8 +200,6 @@ describe("Multiple Pages", () => {
 			expect(el).toHaveTextContent("You have 12 saved items"),
 		);
 		const listPage = getAllByRole(info, "listitem");
-		console.log(listPage);
-		console.log(listPage[0].innerHTML);
 		await waitFor(() => expect(listPage).toHaveLength(2));
 	});
 

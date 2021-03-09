@@ -130,6 +130,7 @@ export default defineComponent({
 		}
 
 		async function downloadPost(json: RawItem[]) {
+			console.log("DOWNLOAD POST");
 			const content = json[0].data.children[0];
 			const item = await buildContent({
 				kind: content.kind,
@@ -152,20 +153,29 @@ export default defineComponent({
 			}
 		}
 
+		// eslint-disable-next-line max-statements
 		async function downloadItem() {
+			console.log("CALL");
 			checkValidity();
+			console.log(`CHEKCK VALIDITY ${validity.isValid}`);
 			if (validity.isValid) {
 				try {
 					const url = getRedditUrl(urlInput.value);
+					console.log(urlInput.value);
 					const el = await fetch(`${url}.json`);
 					if (!el.ok) {
 						throw new BadLinkError(`-- Couldn't access link  ${url}`);
 					}
+					console.log("OK");
 					const json: unknown = await el.json();
-
+					console.log("JSON");
+					console.log(json)
+					console.log(`aa ${isRawItemArray(json)} `);
+					console.log(`bb  ${isValidRedditPost(json as RawItem[])}`);
 					if (!isRawItemArray(json) || !isValidRedditPost(json)) {
 						throw new DownloadError(`INVALID POST ${url}`);
 					}
+					console.log("IS ARRAY");
 					await downloadPost(json);
 					// tocheck when to throw ? add error handler ? add popup ?
 				} catch (err) {
