@@ -112,7 +112,7 @@ module.exports = {
 	//reporters: [["jest-silent-reporter", { showWarnings: true }]],
 
 	// Automatically reset mock state between every test
-	resetMocks: true, 
+	resetMocks: false,
 
 	// Reset the module registry before running each individual test
 	// resetModules: false,
