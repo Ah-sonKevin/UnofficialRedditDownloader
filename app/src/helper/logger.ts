@@ -1,7 +1,6 @@
 import "setimmediate";
 import winston from "winston";
 import HttpStreamTransport from "winston-transport-http-stream";
-import { HOST, PORT } from "../info/serverInfo";
 
 export const logger = winston.createLogger({
 	format: winston.format.combine(
@@ -13,7 +12,7 @@ export const logger = winston.createLogger({
 	transports: [
 		// eslint-disable-next-line @typescript-eslint/no-unsafe-call
 		new HttpStreamTransport({
-			url: `${HOST}:${PORT}/api/logError/`,
+			url: `${process.env.HOST}:${process.env.HOST_PORT}/api/logError/`,
 		}),
 		new winston.transports.Console(),
 	],
