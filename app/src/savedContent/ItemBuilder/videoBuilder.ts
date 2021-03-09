@@ -1,7 +1,5 @@
 // change video interface to add IImage
 
-import { postOapi } from "@/helper/fetchHelper/fetchHelper";
-import { Couple } from "@/helper/fetchHelper/requestArgument";
 import { PostType } from "../../enum/postType";
 import { ISavedVideoPost } from "../ISavedContent";
 import { RedditRawData } from "../redditDataInterface";
@@ -9,14 +7,19 @@ import SavedContent from "../savedContent";
 import { cleanURL, getImage } from "./helper";
 
 export async function isDownloadable(url: string): Promise<boolean> {
+	// tocheck
 	const authHeaders = new Headers();
-	authHeaders.append("Content-Type", "application/x-www-form-urlencoded");
-	const res = await postOapi("/api/getHead/", [
-		new Couple("url", cleanURL(url)),
-	]);
+	authHeaders.append("Content-Type", "application/json");
+	const res = await fetch("/api/getHead/", {
+		// tocheck
+		method: "POST",
+		body: `{ url': ${cleanURL(url)} }`,
+		headers: authHeaders,
+	});
 
 	if (res) {
-		const txt = res as boolean;
+		const txt = (await res.json()) as boolean;
+		console.log(res);
 		return txt;
 	}
 	return false;
@@ -52,7 +55,7 @@ export function returnVideoMedia({
 		externalUrl: cleanURL(url),
 		imageLink: cleanURL(getImage(data)),
 		needYtDl,
-		embeddedUrl: cleanURL(embedString),
+		embeddedUrl: embedString, // tocheck toremember no need cleanURL for embed
 	});
 }
 
@@ -77,7 +80,7 @@ export function buildVideoPost(
 			externalUrl: cleanURL(externalUrl),
 			needYtDl,
 			imageLink: cleanURL(imageLink),
-			embeddedUrl: cleanURL(embeddedUrl),
+			embeddedUrl,
 		},
 		getMediaUrl: () => externalUrl,
 		getImageUrl: () => imageLink,
