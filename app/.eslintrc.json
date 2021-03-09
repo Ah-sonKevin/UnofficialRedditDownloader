@@ -137,7 +137,15 @@
 				},
 				"allowChildren": false
 			}
-		]
+		],
+		"vuejs-accessibility/media-has-caption": [
+			"warn",
+			{
+			  "audio": ["Audio"],
+			  "video": ["Video"],
+			  "track": ["Track"]
+			}
+		  ]
 	},
 	"overrides": [
 		{
