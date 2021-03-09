@@ -1,7 +1,6 @@
 import { DataNotFoundError, NetworkError } from "@/errors/restartError";
-import { getRouter } from "@/router";
 import { getTypedStore } from "@/store";
-import "isomorphic-fetch";
+import "isomorphic-fetch"; // detail
 import { RedditItem } from "../../savedContent/serverInputInterface";
 import { MutationsNames } from "../../store/authStore/authStoreMutationTypes";
 import { Couple } from "./requestArgument";
@@ -65,7 +64,7 @@ export async function refreshAccessToken(): Promise<void> {
 			store.commit(MutationsNames.SET_TOKEN, res.access_token);
 		} else {
 			store.commit(MutationsNames.RESET_TOKEN, undefined);
-			void getRouter().push({ name: "Home" });
+			// tocheck mixin		void getRouter().push({ name: "Home" });
 		}
 	} else {
 		throw new DataNotFoundError("Refresh Token Not Found ");
