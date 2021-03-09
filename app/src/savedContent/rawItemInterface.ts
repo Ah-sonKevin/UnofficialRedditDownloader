@@ -13,9 +13,11 @@ export interface RawItemUnit {
 }
 
 export function isRawItemArray(item: unknown): item is RawItem[] {
-	const tmp = item as RawItem[];
-	const x = tmp[0];
-	return x && isRawItem(x);
+	if (Array.isArray(item) && item.length > 0) {
+		const x: unknown = item[0];
+		return x !== undefined && isRawItem(x);
+	}
+	return false;
 }
 
 export function isRawItem(item: unknown): item is RawItem {
