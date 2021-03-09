@@ -58,8 +58,8 @@
 </template>
 
 <script lang="ts">
+import { PostType } from "@/enum/postType";
 import { defineComponent, PropType, useContext } from "vue";
-import { postType } from "@/enum/postType";
 
 export default defineComponent({
 	name: "ManagerSideMenu",
@@ -91,7 +91,7 @@ export default defineComponent({
 	},
 	emits: ["changeFilter"],
 	setup() {
-		const type: string[] = Object.values(postType);
+		const type: string[] = Object.values(PostType);
 		const context = useContext();
 
 		function changeFilter(el: string, list: string[]) {
@@ -111,7 +111,7 @@ export default defineComponent({
 
 		return {
 			type,
-			postType,
+			PostType,
 			isSelected,
 			changeFilter,
 			tellMeCall,
