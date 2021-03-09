@@ -37,10 +37,11 @@ describe("BuildContent function", () => {
 		expect(tmp.title).toEqual("a_b_d");
 	});
 
+	// todo toMatchObject ignore function (would not be equal)
 	describe("Text", () => {
 		test("Text", async () => {
 			const content = await buildContent(text);
-			expect(content).toEqual({
+			expect(content).toMatchObject({
 				author: "elheber",
 				id: "k8e0io",
 				fullname: "t3_k8e0io",
@@ -80,10 +81,8 @@ By framing the design philosophy to include single-player, where everyone alread
 </div><!-- SC_ON -->`,
 				},
 				title:
-					'Counter Play, "Receiving-End Design" —or— Why Sniper Rifles in Multiplayer Games Usually Suck',
-				isVideo: false,
+					"Counter_Play_Receiving_End_Design_or_Why_Sniper_Rifles_in_Multiplayer_Games_Usually_Suck",
 				type: "Text",
-				isLink: false,
 				isSelected: false,
 				redditUrl:
 					"https://www.reddit.com/r/gamedesign/comments/k8e0io/counter_play_receivingend_design_or_why_sniper/",
@@ -97,16 +96,14 @@ By framing the design philosophy to include single-player, where everyone alread
 	describe("Comment", () => {
 		test("Comment", async () => {
 			const content = await buildContent(comment);
-			expect(content).toEqual({
+			expect(content).toMatchObject({
 				author: "PM_ME_YOUR_SHELLCODE",
 				id: "fot3ixm",
 				fullname: "t1_fot3ixm",
 				subreddit: "interestingasfuck",
 				type: "Comment",
-				isLink: false,
 				isSelected: false,
-				title: "Clear lemon pie",
-				isVideo: false,
+				title: "Clear_lemon_pie",
 				comment: {
 					htmlText: `<div class="md"><p>Since you say it doesn&#39;t exist I&#39;m guessing you didn&#39;t find one?</p>
 <p>Here is one from a youtuber who tried to make a bunch of clear foods.</p>
@@ -122,15 +119,10 @@ https://barrylewis.net/recipe/clear-lemon-meringue-pie/
 And just because I found the videos interesting, a Playlist of clear foods:
 https://www.youtube.com/playlist?list=PLfItiEY3o1msEiqMm3FukoGiFFcbAccdp`,
 				},
-
 				redditUrl:
 					"https://www.reddit.com/r/interestingasfuck/comments/g9abr7/clear_lemon_pie/fot3ixm/",
 				isDeleted: false,
-				isGallery: false,
-				isText: true,
-				hasImage: false,
 				category: "",
-
 				creationDate: new Date(content.creationDate),
 			});
 		});
@@ -150,19 +142,13 @@ https://www.youtube.com/playlist?list=PLfItiEY3o1msEiqMm3FukoGiFFcbAccdp`,
 						"https://external-preview.redd.it/t7QzIsW7WXX5Bd-7oFT3Jz_PysF-noKWekEFaafbbK0.jpg?auto=webp&s=a1466dd73008fba5c8551d46bada1a0ba9db95be",
 				},
 				fullname: "t3_l98aft",
-				hasImage: true,
 				id: "l98aft",
 				isDeleted: false,
-				isGallery: false,
-				isLink: true,
 				isSelected: false,
-				isText: false,
-				isVideo: false,
-
 				redditUrl:
 					"https://www.reddit.com/r/lisp/comments/l98aft/why_i_still_lisp_and_you_should_too/",
 				subreddit: "lisp",
-				title: "Why I still Lisp (and you should too!)",
+				title: "Why_I_still_Lisp_and_you_should_too",
 				type: "Link",
 			});
 		});
@@ -176,7 +162,7 @@ https://www.youtube.com/playlist?list=PLfItiEY3o1msEiqMm3FukoGiFFcbAccdp`,
 				id: "kt2slt",
 				fullname: "t3_kt2slt",
 				subreddit: "graphic_design",
-				title: "I designed a support bubble Valentine’s Day card",
+				title: "I_designed_a_support_bubble_Valentine_s_Day_card",
 				redditUrl:
 					"https://www.reddit.com/r/graphic_design/comments/kt2slt/i_designed_a_support_bubble_valentines_day_card/",
 				isDeleted: false,
@@ -198,9 +184,7 @@ https://www.youtube.com/playlist?list=PLfItiEY3o1msEiqMm3FukoGiFFcbAccdp`,
 				id: "jzyih0",
 				fullname: "t3_jzyih0",
 				subreddit: "Unity3D",
-				title: "Ancient Fantasy Village",
-				isVideo: false,
-				isGallery: true,
+				title: "Ancient_Fantasy_Village",
 				type: "Image", // change type to enum
 				redditUrl:
 					"https://www.reddit.com/r/Unity3D/comments/jzyih0/ancient_fantasy_village/",
@@ -208,9 +192,7 @@ https://www.youtube.com/playlist?list=PLfItiEY3o1msEiqMm3FukoGiFFcbAccdp`,
 					imageLink: "https://i.redd.it/ywy9xkuxc4161.jpg",
 				},
 				isDeleted: false,
-				isLink: false,
 				isSelected: false,
-				isText: false,
 				gallery: {
 					galleryURLs: [
 						"https://i.redd.it/ywy9xkuxc4161.jpg",
@@ -219,7 +201,6 @@ https://www.youtube.com/playlist?list=PLfItiEY3o1msEiqMm3FukoGiFFcbAccdp`,
 				},
 				//		getImageUrl: () => "https://i.redd.it/ywy9xkuxc4161.jpg",
 				//		getMediaUrl: () => "https://i.redd.it/ywy9xkuxc4161.jpg",
-				hasImage: true,
 				category: "",
 				creationDate: new Date(content.creationDate),
 			});
@@ -238,8 +219,7 @@ https://www.youtube.com/playlist?list=PLfItiEY3o1msEiqMm3FukoGiFFcbAccdp`,
 				fullname: "t3_juw3ud",
 				subreddit: "compsci",
 				title:
-					"A comparison between a few subdivision algorithms (Catmull-Clark, Doo-Sabin, and Midedge). Source code in comments",
-				isVideo: true,
+					"A_comparison_between_a_few_subdivision_algorithms_Catmull_Clark_Doo_Sabin_and_Midedge_Source_code_in",
 				type: "Video",
 				category: "",
 				creationDate: new Date(content.creationDate),
@@ -251,13 +231,7 @@ https://www.youtube.com/playlist?list=PLfItiEY3o1msEiqMm3FukoGiFFcbAccdp`,
 					imageLink:
 						"https://external-preview.redd.it/a4nKpG1GNFA_mFnQXgzsRKyrh4vpHbCvuOZ4X5FCblM.png?format=pjpg&auto=webp&s=d24dd49f78ecdac7103d03d3e4096539f1c34a93",
 				},
-				hasImage: true,
 				isDeleted: false,
-				isGallery: false,
-				isLink: false,
-				isSelected: false,
-				isText: false,
-
 				redditUrl:
 					"https://www.reddit.com/r/compsci/comments/juw3ud/a_comparison_between_a_few_subdivision_algorithms/",
 			});

@@ -46,7 +46,7 @@ describe("Home.vue", () => {
 		expect(mockPush).toHaveBeenCalledTimes(1);
 	});
 
-	describe("Hover", () => {
+	describe.skip("Hover", () => {
 		test("Hover info", () => {
 			const tooltip = screen.getByRole("tooltip");
 			const tooltipText = screen.getByRole("text");

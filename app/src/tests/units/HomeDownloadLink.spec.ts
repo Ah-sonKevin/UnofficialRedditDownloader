@@ -13,7 +13,7 @@ import item from "./mockFetchData/soloItem.json";
 
 jest.mock("@/helper/Download/objectDownloader");
 
-describe("HomeDownloadLink", () => {
+describe.skip("HomeDownloadLink", () => {
 	const BASE_URL = "www.reddit.com";
 	const TEST_URL = "/r/URL";
 	const badlyStructuredUrl = `red.com${TEST_URL}`;

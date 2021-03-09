@@ -1,12 +1,9 @@
+/**
+ * @jest-environment jsdom
+ */
 import {
-	ISavedTextPost,
 	hasMedia,
 	hasText,
-	ISavedCommentPost,
-	ISavedGalleryPost,
-	ISavedImagePost,
-	ISavedLinkPost,
-	ISavedVideoPost,
 	isComment,
 	isGallery,
 	isImage,
@@ -14,18 +11,35 @@ import {
 	isText,
 	isVideo,
 } from "@/savedContent/ISavedContent";
+import { buildContent } from "@/savedContent/ItemBuilder/contentBuilder";
+import { SavedContentType } from "../../savedContent/ISavedContent";
+import _comment from "./mockFetchData/soloItem/comment/comment.json";
+import _gallery from "./mockFetchData/soloItem/gallery/gallery.json";
+import _image from "./mockFetchData/soloItem/image/image.json";
+import _link from "./mockFetchData/soloItem/link/link.json";
+import _text from "./mockFetchData/soloItem/text.json";
+import _video from "./mockFetchData/soloItem/video/video.json";
 
-const video: ISavedVideoPost = {};
-const image: ISavedImagePost = {};
-const text: ISavedTextPost = {};
-const comment: ISavedCommentPost = {};
-const link: ISavedLinkPost = {};
-const gallery: ISavedGalleryPost = {};
+let video: SavedContentType;
+let image: SavedContentType;
+let text: SavedContentType;
+let comment: SavedContentType;
+let link: SavedContentType;
+let gallery: SavedContentType;
+
+beforeAll(async () => {
+	video = await buildContent(_video);
+	image = await buildContent(_image);
+	comment = await buildContent(_comment);
+	text = await buildContent(_text);
+	link = await buildContent(_link);
+	gallery = await buildContent(_gallery);
+});
 
 describe("type guard", () => {
 	test("isComment", () => {
-		expect(isText(comment)).toBe(true);
-		expect(isComment(comment)).toBe(false);
+		expect(isText(comment)).toBe(false);
+		expect(isComment(comment)).toBe(true);
 		expect(isImage(comment)).toBe(false);
 		expect(isVideo(comment)).toBe(false);
 		expect(isGallery(comment)).toBe(false);
@@ -44,7 +58,7 @@ describe("type guard", () => {
 	test("isGallery", () => {
 		expect(isText(gallery)).toBe(false);
 		expect(isComment(gallery)).toBe(false);
-		expect(isImage(gallery)).toBe(false);
+		expect(isImage(gallery)).toBe(true); // tocheck
 		expect(isVideo(gallery)).toBe(false);
 		expect(isGallery(gallery)).toBe(true);
 		expect(isLink(gallery)).toBe(false);
@@ -83,7 +97,7 @@ describe("type guard", () => {
 			expect(hasMedia(image)).toBe(true);
 			expect(hasMedia(text)).toBe(false);
 			expect(hasMedia(comment)).toBe(false);
-			expect(hasMedia(link)).toBe(true);
+			expect(hasMedia(link)).toBe(false); // tocheck
 			expect(hasMedia(gallery)).toBe(true);
 		});
 
