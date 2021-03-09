@@ -114,8 +114,6 @@ import {
 	save,
 	unsave,
 } from "@/helper/dataManager";
-import { UnauthorizedAccess } from "@/errors/restartError";
-import SavedContent from "@/savedContent/savedContent";
 import {
 	filterItems,
 	searchByText,
@@ -261,6 +259,7 @@ export default defineComponent({
 					return categoriesList;
 				})
 				.catch((err) => {
+					console.log(err);
 					throw err;
 				})
 				.finally(() => {
@@ -269,6 +268,8 @@ export default defineComponent({
 				});
 		});
 
+		// nextRelease
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		function changeCategory(): void {
 			void postOapi("/api/saved_categories", []);
 		}
