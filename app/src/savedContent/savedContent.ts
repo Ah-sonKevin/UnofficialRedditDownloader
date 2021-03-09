@@ -1,4 +1,5 @@
 import { cleanString } from "@/helper/stringHelper";
+import { PostType } from "../enum/postType";
 import { ISavedContentBase } from "./ISavedContent";
 import { RedditRawData } from "./redditDataInterface";
 
@@ -23,7 +24,9 @@ export default class SavedContent implements ISavedContentBase {
 
 	redditUrl: string;
 
-	constructor(data: RedditRawData) {
+	type: PostType;
+
+	constructor(data: RedditRawData, _type: PostType) {
 		const getTitle = (): string => {
 			if (data.title) {
 				return cleanString(data.title);
@@ -33,6 +36,7 @@ export default class SavedContent implements ISavedContentBase {
 			}
 			return "";
 		};
+		this.type = _type;
 		this.author = data.author;
 		this.id = data.id;
 		this.fullname = data.name;
