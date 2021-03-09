@@ -1,5 +1,10 @@
 <template>
-	<div>Build with VueJs GitHub : <a href=""></a></div>
+	<div>
+		Build with VueJs
+		<a href="https://github.com/Ah-sonKevin/UnofficialRedditDownloader"
+			>GitHub
+		</a>
+	</div>
 </template>
 
 <script lang="ts">
