@@ -1,13 +1,8 @@
 import { DownloadError } from "@/errors/notifError";
-import {
-	ISavedVideoPost,
-	isVideo,
-	SavedContentType,
-} from "@/savedContent/ISavedContent";
+import { isVideo, Media, SavedContentType } from "@/savedContent/ISavedContent";
 import { RedditItem } from "@/savedContent/serverInputInterface";
 import { ElLoading } from "element-plus";
 import { ILoadingInstance } from "element-plus/lib/el-loading/src/loading.type";
-import { ISavedImagePost } from "../../savedContent/ISavedContent";
 import { fetchMedia } from "../fetchHelper/fetchHelper";
 import { notify } from "../notifierHelper";
 import {
@@ -19,9 +14,7 @@ import {
 
 const SPINNER_UPDATE_FREQUENCY = 1000;
 
-export function getItemInfo(
-	item: ISavedImagePost | ISavedVideoPost,
-): RedditItem {
+export function getItemInfo(item: SavedContentType & Media): RedditItem {
 	return {
 		url: item.getMediaUrl(),
 		name: item.title,
@@ -29,7 +22,7 @@ export function getItemInfo(
 	};
 }
 export async function downloadMedia(
-	item: SavedContentType,
+	item: SavedContentType & Media,
 ): Promise<{ blob: Blob; name: string }> {
 	const downloadIndicator = ElLoading.service({
 		fullscreen: true,
@@ -40,7 +33,7 @@ export async function downloadMedia(
 
 	try {
 		const x = await fetchMedia(
-			{ url: itemInfo.url, needYtdl: itemInfo.needYtdl },
+			{ url: itemInfo.url, needYtdl: itemInfo.needYtdl, name: "" }, // todo
 			cancelController.signal,
 		);
 
@@ -51,9 +44,9 @@ export async function downloadMedia(
 		if ((err as Error).name === "AbortError") {
 			downloadIndicator.close();
 			notify("Download has been Canceled");
-		} else {
-			throw err;
+			throw err; // tocheck
 		}
+		throw err;
 	}
 }
 

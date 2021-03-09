@@ -1,6 +1,10 @@
 import { PartialDownloadError } from "@/errors/notifError";
 import { NetworkError } from "@/errors/restartError";
-import { isGallery, SavedContentType } from "@/savedContent/ISavedContent";
+import {
+	isGallery,
+	Media,
+	SavedContentType,
+} from "@/savedContent/ISavedContent";
 import { SuccessList } from "@/savedContent/ItemInterface";
 import { RedditItem } from "@/savedContent/serverInputInterface";
 import { ElLoading } from "element-plus";
@@ -11,7 +15,8 @@ import { cleanString } from "../stringHelper";
 import { cancelController, getName } from "./helper";
 import { fetchData, getItemInfo } from "./mediaDownloader";
 
-function batchGetItemInfo(item: SavedContentType): RedditItem[] {
+function batchGetItemInfo(item: SavedContentType & Media): RedditItem[] {
+	// tocheck type
 	if (isGallery(item)) {
 		const title = cleanString(item.title);
 		return item.gallery.galleryURLs.map((el, index) => ({
@@ -20,14 +25,14 @@ function batchGetItemInfo(item: SavedContentType): RedditItem[] {
 				`${title}_${String(index + 1)}`,
 				el.split(".").slice(-1)[0],
 			)}`,
-			needYtDl: false,
+			needYtdl: false,
 		}));
 	}
 	return [getItemInfo(item)];
 }
 
 export async function getMediaArchive(
-	items: SavedContentType[],
+	items: (SavedContentType & Media)[], // tocheck type
 ): Promise<JSZip> {
 	if (items.length > 0) {
 		const blob = await batchDownloadMedia(items);
@@ -39,7 +44,7 @@ export async function getMediaArchive(
 }
 
 export async function batchDownloadMedia(
-	items: SavedContentType[],
+	items: (SavedContentType & Media)[], // tocheck type
 ): Promise<Blob | null> {
 	const downloadIndicator = ElLoading.service({
 		fullscreen: true,

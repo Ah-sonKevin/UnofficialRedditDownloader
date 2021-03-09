@@ -1,14 +1,15 @@
-import { postType } from "@/enum/postType";
-import { ISavedTextPost } from "@/savedContent/ISavedContent";
+import { PostType } from "@/enum/postType";
+import { SavedContentType, Textual } from "../../savedContent/ISavedContent";
 
-export function getText(item: ISavedTextPost): string {
+export function getText(item: SavedContentType & Textual): string {
+	// tocheck type
 	const parser = new DOMParser();
 
-	const parsedContent = parser.parseFromString(item.text.htmlText, "text/html");
+	const parsedContent = parser.parseFromString(item.getHtmlText(), "text/html");
 	const stringContent = parsedContent.documentElement.textContent;
 
 	let res = "";
-	if (item.type === postType.COMMENT) {
+	if (item.type === PostType.COMMENT) {
 		res = `${item.redditUrl} \n\n A comment  by '${item.author}' of the post '${
 			item.title
 		}' by '${item.author}' from
@@ -23,7 +24,7 @@ export function getText(item: ISavedTextPost): string {
 	return res;
 }
 
-export function downloadPageAsText(item: ISavedTextPost): Blob {
+export function downloadPageAsText(item: SavedContentType & Textual): Blob {
 	const res = getText(item);
 	return new Blob([res]);
 }

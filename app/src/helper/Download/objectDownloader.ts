@@ -1,13 +1,11 @@
 import {
 	hasMedia,
 	hasText,
-	ISavedTextPost,
-	isComment,
 	isGallery,
-	isImage,
-	isText,
-	isVideo,
+	isLink,
+	Media,
 	SavedContentType,
+	Textual,
 } from "../../savedContent/ISavedContent";
 import { exhaustivenessCheck } from "../exhaustivenessChecker";
 import { getMediaArchive } from "./batchDownload";
@@ -18,7 +16,6 @@ import { downloadPageAsText, getText } from "./textDownloader";
 export function cancelDownload(): void {
 	cancelController.abort();
 }
-
 
 export function downloadObject(object: Blob, nom: string): void {
 	const img = URL.createObjectURL(object);
@@ -50,13 +47,16 @@ export async function download(
 async function batchDownload(
 	items: SavedContentType[],
 ): Promise<{ blob: Blob; name: string }> {
-	const medias: SavedContentType[] = [];
-	const texts: ISavedTextPost[] = [];
+	const medias: (SavedContentType & Media)[] = [];
+	const texts: (SavedContentType & Textual)[] = [];
 	items.forEach((item) => {
 		if (hasMedia(item)) {
 			medias.push(item);
 		} else if (hasText(item)) {
 			texts.push(item);
+		} else if (isLink(item)) {
+			// tocheck
+			throw new Error();
 		} else {
 			exhaustivenessCheck(item);
 		}
@@ -74,20 +74,24 @@ async function batchDownload(
 	return { blob: new Blob([zip]), name: getName("archive", "zip") };
 }
 
-async function singleDownload(
+async function singleDownload( // tocheck link
 	item: SavedContentType,
 ): Promise<{ blob: Blob; name: string }> {
 	if (isGallery(item)) {
 		return batchDownload([item]);
 	}
-	if (isText(item) || isComment(item)) {
+	if (hasText(item)) {
 		return {
 			blob: downloadPageAsText(item),
 			name: getName(item.title, "html"),
 		};
 	}
-	if (isImage(item) || isVideo(item)) {
+	if (hasMedia(item)) {
 		return downloadMedia(item);
+	}
+	if (isLink(item)) {
+		// tocheck
+		throw new Error();
 	}
 	return exhaustivenessCheck(item);
 }
