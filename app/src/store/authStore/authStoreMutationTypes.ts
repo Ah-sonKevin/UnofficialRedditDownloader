@@ -47,13 +47,13 @@ export const mutations: MutationTree<AuthStoreState> & MutationsTypes = {
 		const authSecret: string = globalThis.AUTH_SECRET;
 		const authLink = `https://www.reddit.com/api/v1/authorize?client_id=${authID}&response_type=code&
 				state=${authString}&redirect_uri=${authRedirect}&duration=permanent&scope=${AUTH_SCOPE}`;
-		state.rawAuth = new Auth(
-			authID,
+		state.rawAuth = new Auth({
+			id: authID,
 			authString,
-			AUTH_SCOPE,
-			authRedirect,
-			authSecret,
-			authLink,
-		);
+			scope: AUTH_SCOPE,
+			redirects: authRedirect,
+			secret: authSecret,
+			link: authLink,
+		});
 	},
 };
