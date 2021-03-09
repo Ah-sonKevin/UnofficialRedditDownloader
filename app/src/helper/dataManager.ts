@@ -4,7 +4,6 @@ import { buildContent } from "@/savedContent/ItemBuilder/contentBuilder";
 import User from "@/User/User";
 import { PartialRedditFetchError } from "../errors/notifError";
 import { isRawItem, RawItemUnit } from "../savedContent/rawItemInterface";
-import itemsLong from "../tests/units/mockFetchData/soloItemLong.json";
 import { fetchOapi, postOapi } from "./fetchHelper/fetchHelper";
 import { Couple } from "./fetchHelper/requestArgument";
 import { logger } from "./logger";
@@ -22,8 +21,8 @@ export async function recGetItems(
 	if (!res.ok) {
 		throw new NetworkError(res.statusText);
 	}
-	// const result: unknown = await res.json();
-	const result: unknown = itemsLong;
+	const result: unknown = await res.json();
+
 	if (!isRawItem(result)) {
 		throw new Error("Invalid Result");
 	}
@@ -46,10 +45,7 @@ export async function recGetItems(
 	if (result.data.after) {
 		return recGetItems(username, result.data.after, items);
 	}
-	console.log("///");
-	console.log(JSON.stringify(items));
-	return [];
-	// todo return items;
+	return items;
 }
 
 export async function fetchUser(): Promise<User> {
