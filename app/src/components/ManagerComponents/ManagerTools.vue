@@ -15,7 +15,6 @@
 <script lang="ts">
 import { useContext, defineComponent, PropType } from "vue";
 import { ElMessage } from "element-plus";
-import SavedContent from "@/savedContent/savedContent";
 import { download, downloadObject } from "@/helper/Download/objectDownloader";
 import { SavedContentType } from "@/savedContent/ISavedContent";
 
@@ -24,7 +23,7 @@ export default defineComponent({
 	props: {
 		selectedItem: {
 			required: true,
-			type: Array as PropType<SavedContent[]>,
+			type: Array as PropType<SavedContentType[]>,
 		},
 		isGold: {
 			required: true,
@@ -41,7 +40,7 @@ export default defineComponent({
 				ElMessage.error("Selection is empty");
 				return;
 			}
-			download(props.selectedItem);
+			void download(props.selectedItem);
 			unselectAll();
 		}
 

@@ -1,5 +1,5 @@
 <template>
-	<ul v-if="items">
+	<ul v-if="items.length > 0">
 		<li v-for="item in items" :key="item.id">
 			<ManagerListLine :item="item" :is-gold="isGold" />
 		</li>
@@ -9,8 +9,8 @@
 
 <script lang="ts">
 import ManagerListLine from "@managerComponents/ManagerListLine.vue";
-import SavedContent from "@/savedContent/savedContent";
 import { defineComponent, PropType } from "vue";
+import { SavedContentType } from "@/savedContent/ISavedContent";
 
 export default defineComponent({
 	name: "ManagerList",
@@ -20,7 +20,7 @@ export default defineComponent({
 	props: {
 		items: {
 			required: true,
-			type: Array as PropType<SavedContent[]>,
+			type: Array as PropType<SavedContentType[]>,
 		},
 		isGold: {
 			required: true,

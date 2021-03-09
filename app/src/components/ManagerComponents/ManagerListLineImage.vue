@@ -17,7 +17,7 @@
 import { defineComponent, PropType } from "vue";
 import {
 	isGallery,
-	isMedia,
+	hasMedia,
 	SavedContentType,
 } from "@/savedContent/ISavedContent";
 
@@ -37,7 +37,7 @@ export default defineComponent({
 		const THUMBNAIL_SIZE = "140px";
 
 		function getImage(): string {
-			if (isMedia(props.item)) {
+			if (hasMedia(props.item)) {
 				return props.item.getImageUrl();
 			}
 			return "https://static.thenounproject.com/png/1134418-200.png";
@@ -47,7 +47,7 @@ export default defineComponent({
 			if (isGallery(props.item)) {
 				return props.item.gallery.galleryURLs;
 			}
-			if (isMedia(props.item)) {
+			if (hasMedia(props.item)) {
 				return [getImage()];
 			}
 			return [];

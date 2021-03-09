@@ -18,7 +18,6 @@ import {
 	PropType,
 	useContext,
 } from "vue";
-import SavedContent from "@/savedContent/savedContent";
 import { SavedContentType } from "@/savedContent/ISavedContent";
 
 export default defineComponent({
@@ -26,7 +25,7 @@ export default defineComponent({
 	props: {
 		filteredItems: {
 			required: true,
-			type: Array as PropType<SavedContent[]>,
+			type: Array as PropType<SavedContentType[]>,
 		},
 		searchInput: {
 			required: true,

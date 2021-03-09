@@ -12,7 +12,6 @@
 
 <script lang="ts">
 import { PropType, defineComponent, computed } from "vue";
-import SavedContent from "@/savedContent/savedContent";
 import { SavedContentType } from "@/savedContent/ISavedContent";
 
 export default defineComponent({
@@ -24,7 +23,7 @@ export default defineComponent({
 		},
 		selectedItem: {
 			required: true,
-			type: Array as PropType<SavedContent[]>,
+			type: Array as PropType<SavedContentType[]>,
 		},
 	},
 	emits: ["changeShowSelectedDialog", "unselect"],

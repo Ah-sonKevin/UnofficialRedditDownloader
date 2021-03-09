@@ -5,7 +5,14 @@
 		:class="{ deleted: item.isDeleted, collapsed: isCollapsed }"
 	>
 		<el-aside width="auto" class="checkboxArea">
-			<input v-model="isChecked" type="checkbox" class="checkbox" />
+			<label :for="item.id">
+				<input
+					:id="item.id"
+					v-model="isChecked"
+					type="checkbox"
+					class="checkbox"
+				/>
+			</label>
 		</el-aside>
 		<transition name="leftImage">
 			<el-aside
@@ -35,15 +42,15 @@
 						</el-select>
 						<el-button>Add category</el-button>
 					</div>
-					<template v-if="item.isText">
+					<template v-if="hasText(item)">
 						<div class="textArea">
-							{{ item.text }}
+							{{ item.getText() }}
 						</div>
 					</template>
 					<template v-else-if="isCollapsed && !item.isDeleted">
-						<template v-if="item.isVideo && item.embeddedUrl">
+						<template v-if="isVideo(item) && item.video.embeddedUrl">
 							<video class="videoArea" style="margin: auto" controls>
-								<source :src="item.embeddedUrl" />
+								<source :src="item.video.embeddedUrl" />
 							</video>
 						</template>
 						<ManagerListLineImage
@@ -58,7 +65,8 @@
 			<el-footer height="auto" class="buttonGroup">
 				<template v-if="!item.isDeleted">
 					<el-button @click="unsave">Unsave</el-button>
-					<el-button v-if="item.isLink" @click="openLink">
+					//tocheck
+					<el-button v-if="isLink(item)" @click="openLink">
 						Open link
 					</el-button>
 					<el-button v-else @click="download"> Download </el-button>
@@ -84,7 +92,17 @@ import {
 	ref,
 	nextTick,
 } from "vue";
-import SavedContent from "@/savedContent/savedContent";
+import {
+	isVideo,
+	isLink,
+	hasText,
+	hasMedia,
+	SavedContentType,
+	ISavedLinkPost,
+	ISavedCommentPost,
+	isComment,
+	Textual,
+} from "@/savedContent/ISavedContent";
 import ManagerListLineImage from "./ManagerListLineImage.vue";
 
 export default defineComponent({
@@ -93,7 +111,7 @@ export default defineComponent({
 	props: {
 		item: {
 			required: true,
-			type: Object as PropType<SavedContent>,
+			type: Object as PropType<SavedContentType>,
 		},
 		isGold: {
 			required: true,
@@ -156,8 +174,8 @@ export default defineComponent({
 			context.emit("download", props.item);
 		}
 
-		function openLink() {
-			window.open(props.item.externalUrl);
+		function openLink(item: ISavedLinkPost) {
+			window.open(item.link.externalUrl);
 		}
 
 		return {
@@ -172,6 +190,11 @@ export default defineComponent({
 
 			collapseMessage,
 			itemCategory,
+
+			isVideo,
+			isLink,
+			hasText,
+			hasMedia,
 		};
 	},
 });
