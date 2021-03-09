@@ -21,6 +21,8 @@ import Zipper from "./zipper";
 require("body-parser");
 require("express-zip");
 
+console.log("Starting Server");
+
 const app = express();
 app.use(compression());
 app.use(express.static("media"));
