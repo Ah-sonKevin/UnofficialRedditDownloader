@@ -1,11 +1,11 @@
-import { postType } from "@/enum/postType";
+import { PostType } from "@/enum/postType";
 import { ISavedLinkPost } from "../ISavedContent";
 import { RedditRawData } from "../redditDataInterface";
 import SavedContent from "../savedContent";
 import { cleanURL, getImage } from "./helper";
 
 export function buildLinkPost(data: RedditRawData): ISavedLinkPost {
-	const content = new SavedContent(data);
+	const content = new SavedContent(data, PostType.LINK);
 
 	if (!data.url_overridden_by_dest) {
 		throw new Error();

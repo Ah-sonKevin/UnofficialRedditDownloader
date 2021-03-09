@@ -47,5 +47,3 @@ export function getExtension(url: string): string {
 export function clearText(text: string): string {
 	return text.replace(/\n\n/g, "\n");
 }
-
-

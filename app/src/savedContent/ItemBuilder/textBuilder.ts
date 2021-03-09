@@ -1,4 +1,4 @@
-import { postType } from "@/enum/postType";
+import { PostType } from "@/enum/postType";
 import { ISavedTextPost } from "../ISavedContent";
 import { RedditRawData } from "../redditDataInterface";
 import SavedContent from "../savedContent";
@@ -8,15 +8,19 @@ export function buildTextPost(
 	kind: string,
 	data: RedditRawData,
 ): ISavedTextPost {
-	const content = new SavedContent(data);
+	const content = new SavedContent(data, PostType.TEXT);
 	if (!data.selftext || !data.selftext_html) {
 		throw new Error();
 	}
+	const text = clearText(data.selftext);
+	const htmlText = clearText(decodeHtml(data.selftext_html));
 	return {
 		...content,
 		text: {
-			text: clearText(data.selftext),
-			htmlText: clearText(decodeHtml(data.selftext_html)),
+			text,
+			htmlText,
 		},
+		getText: () => text,
+		getHtmlText: () => htmlText,
 	};
 }

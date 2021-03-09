@@ -2,6 +2,7 @@
 
 import { postOapi } from "@/helper/fetchHelper/fetchHelper";
 import { Couple } from "@/helper/fetchHelper/requestArgument";
+import { PostType } from "../../enum/postType";
 import { ISavedVideoPost } from "../ISavedContent";
 import { RedditRawData } from "../redditDataInterface";
 import SavedContent from "../savedContent";
@@ -69,7 +70,7 @@ export function buildVideoPost(
 		embeddedUrl: string;
 	},
 ): ISavedVideoPost {
-	const content = new SavedContent(data);
+	const content = new SavedContent(data, PostType.VIDEO);
 	return {
 		...content,
 		video: {
