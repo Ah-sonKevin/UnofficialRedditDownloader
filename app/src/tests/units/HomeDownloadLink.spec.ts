@@ -256,5 +256,4 @@ describe("HomeDownloadLink", () => {
 		});
 	});
 
-	describe.skip("Download Error", () => {});
 });
